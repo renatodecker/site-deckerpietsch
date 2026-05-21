@@ -166,13 +166,13 @@ img { display: block; max-width: 100%; }
 }
 
 .hero__inner {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 80px;
-  align-items: center;
-  padding-top: 80px;
-  padding-bottom: 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding-top: 100px;
+  padding-bottom: 100px;
   position: relative;
+  max-width: 680px;
 }
 
 .hero__eyebrow {
@@ -201,23 +201,6 @@ img { display: block; max-width: 100%; }
   max-width: 480px;
   margin-bottom: 40px;
   line-height: 1.75;
-}
-
-/* Logo graphic on hero */
-.hero__graphic {
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.hero__logo-img {
-  width: 260px;
-  height: auto;
-  filter: brightness(0) invert(1);
-  opacity: .14;
-  pointer-events: none;
-  user-select: none;
 }
 
 /* Buttons */
@@ -572,13 +555,6 @@ img { display: block; max-width: 100%; }
    RESPONSIVE
    ============================================================ */
 @media (max-width: 960px) {
-  .hero__inner {
-    grid-template-columns: 1fr;
-    text-align: center;
-  }
-  .hero__graphic { display: none; }
-  .hero__subtitle { margin-left: auto; margin-right: auto; }
-
   .about__grid { grid-template-columns: 1fr; gap: 40px; }
   .activities__grid { grid-template-columns: 1fr; }
   .activity-card--main { order: -1; }

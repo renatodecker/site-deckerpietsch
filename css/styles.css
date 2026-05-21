@@ -166,13 +166,13 @@ img { display: block; max-width: 100%; }
 }
 
 .hero__inner {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 80px;
+  align-items: center;
   padding-top: 100px;
   padding-bottom: 100px;
   position: relative;
-  max-width: 680px;
 }
 
 .hero__eyebrow {
@@ -201,6 +201,21 @@ img { display: block; max-width: 100%; }
   max-width: 480px;
   margin-bottom: 40px;
   line-height: 1.75;
+}
+
+/* Logo card no hero */
+.hero__graphic {
+  flex-shrink: 0;
+}
+
+.hero__logo-img {
+  width: 280px;
+  height: auto;
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  padding: 32px;
+  box-shadow: 0 8px 48px rgba(0,0,0,.28);
+  display: block;
 }
 
 /* Buttons */
@@ -555,6 +570,9 @@ img { display: block; max-width: 100%; }
    RESPONSIVE
    ============================================================ */
 @media (max-width: 960px) {
+  .hero__inner { grid-template-columns: 1fr; }
+  .hero__graphic { display: none; }
+
   .about__grid { grid-template-columns: 1fr; gap: 40px; }
   .activities__grid { grid-template-columns: 1fr; }
   .activity-card--main { order: -1; }

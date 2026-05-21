@@ -206,14 +206,16 @@ img { display: block; max-width: 100%; }
 /* Logo card no hero */
 .hero__graphic {
   flex-shrink: 0;
+  align-self: center;
 }
 
 .hero__logo-img {
-  width: 280px;
-  height: auto;
+  width: 200px;
+  height: 200px;
+  object-fit: contain;
   background: var(--white);
   border-radius: var(--radius-lg);
-  padding: 32px;
+  padding: 24px;
   box-shadow: 0 8px 48px rgba(0,0,0,.28);
   display: block;
 }
@@ -555,12 +557,17 @@ img { display: block; max-width: 100%; }
   text-align: center;
 }
 
+.footer__logo-wrap {
+  background: var(--white);
+  border-radius: var(--radius-md);
+  padding: 16px 28px;
+  margin-bottom: 8px;
+}
+
 .footer__logo {
   height: 56px;
   width: auto;
-  filter: brightness(0) invert(1);
-  opacity: .85;
-  margin-bottom: 4px;
+  display: block;
 }
 
 .footer__meta { font-size: .85rem; }

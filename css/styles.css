@@ -515,11 +515,16 @@ img { display: block; max-width: 100%; }
    CONTACT
    ============================================================ */
 .contact__grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+  display: flex;
+  flex-wrap: wrap;
   gap: 24px;
+  justify-content: center;
   max-width: 840px;
   margin: 0 auto;
+}
+
+.contact-item {
+  flex: 0 1 360px;
 }
 
 .contact-item {

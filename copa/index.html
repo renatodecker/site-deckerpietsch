@@ -42,6 +42,7 @@
       <nav class="nav" id="nav">
         <a href="#formato" class="nav__link">Formato</a>
         <a href="#grupos" class="nav__link">Grupos</a>
+        <a href="#terceiros" class="nav__link">Melhores 3ºs</a>
         <a href="#jogos" class="nav__link">Jogos</a>
         <a href="#mata-mata" class="nav__link">Mata-mata</a>
         <a href="#artilharia" class="nav__link">Artilharia</a>
@@ -113,6 +114,28 @@
     </div>
   </section>
 
+  <!-- MELHORES TERCEIROS -->
+  <section class="section" id="terceiros">
+    <div class="container">
+      <div class="section__header">
+        <span class="section__tag">Classificação</span>
+        <h2 class="section__title">Melhores Terceiros</h2>
+        <p class="section__desc">
+          Os 8 melhores terceiros colocados avançam para a fase de 32. Ranking atualizado conforme os jogos da fase de grupos acontecem.
+        </p>
+      </div>
+      <div class="third-placed" id="thirdPlacedWrap">
+        <!-- preenchido via JS a partir de data/groups.json -->
+      </div>
+      <div class="standings-legend">
+        <span class="standings-legend__item">
+          <span class="standings-legend__swatch standings-legend__swatch--qualified"></span>
+          Classificado para a fase de 32 (8 melhores)
+        </span>
+      </div>
+    </div>
+  </section>
+
   <!-- JOGOS -->
   <section class="section" id="jogos">
     <div class="container">
@@ -144,6 +167,14 @@
       </div>
       <div class="bracket" id="bracket">
         <!-- preenchido via JS a partir de data/matches.json -->
+      </div>
+      <div class="bracket-note">
+        <p>
+          <strong>Vagas em formato "1A", "2B" etc.</strong> indicam 1º ou 2º colocado do grupo correspondente; quando o grupo já tem jogos disputados, a seleção atualmente nessa posição é exibida (ex: "EUA (1D)").
+        </p>
+        <p>
+          <strong>Vagas "Melhor 3º (grupos)"</strong> mostram os grupos que ainda podem fornecer o 3º colocado classificado para aquele confronto. A definição de qual seleção vai para qual chave segue a tabela oficial da FIFA (Anexo C), divulgada apenas após o fim da fase de grupos — o cruzamento exato será atualizado aqui assim que confirmado.
+        </p>
       </div>
     </div>
   </section>

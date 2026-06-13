@@ -85,18 +85,49 @@
     { "id": 72, "date": "2026-06-27", "group": "L", "home": "Croácia", "away": "Gana", "venue": "Filadélfia", "status": "scheduled", "time": "17h" }
   ],
   "knockout": {
-    "r32": [],
-    "r16": [],
-    "qf": [],
+    "r32": [
+      { "id": 73, "date": "2026-06-28", "venue": "Inglewood", "status": "scheduled", "home": null, "away": null, "homeSource": "2A", "awaySource": "2B" },
+      { "id": 74, "date": "2026-06-28", "venue": "Foxborough", "status": "scheduled", "home": null, "away": null, "homeSource": "1E", "awaySource": "3:A,B,C,D,F" },
+      { "id": 75, "date": "2026-06-29", "venue": "Houston", "status": "scheduled", "home": null, "away": null, "homeSource": "1C", "awaySource": "2F" },
+      { "id": 76, "date": "2026-06-30", "venue": "Monterrey", "status": "scheduled", "home": null, "away": null, "homeSource": "1F", "awaySource": "2C" },
+      { "id": 77, "date": "2026-06-30", "venue": "Dallas", "status": "scheduled", "home": null, "away": null, "homeSource": "2E", "awaySource": "2I" },
+      { "id": 78, "date": "2026-06-30", "venue": "East Rutherford (NY/NJ)", "status": "scheduled", "home": null, "away": null, "homeSource": "1I", "awaySource": "3:C,D,F,G,H" },
+      { "id": 79, "date": "2026-06-30", "venue": "Cidade do México", "status": "scheduled", "home": null, "away": null, "homeSource": "1A", "awaySource": "3:C,E,F,H,I" },
+      { "id": 80, "date": "2026-07-01", "venue": "Atlanta", "status": "scheduled", "home": null, "away": null, "homeSource": "1L", "awaySource": "3:E,H,I,J,K" },
+      { "id": 81, "date": "2026-07-01", "venue": "Santa Clara", "status": "scheduled", "home": null, "away": null, "homeSource": "1D", "awaySource": "3:B,E,F,I,J" },
+      { "id": 82, "date": "2026-07-01", "venue": "Seattle", "status": "scheduled", "home": null, "away": null, "homeSource": "1G", "awaySource": "3:A,E,H,I,J" },
+      { "id": 83, "date": "2026-07-02", "venue": "Toronto", "status": "scheduled", "home": null, "away": null, "homeSource": "2K", "awaySource": "2L" },
+      { "id": 84, "date": "2026-07-02", "venue": "Inglewood", "status": "scheduled", "home": null, "away": null, "homeSource": "1H", "awaySource": "2J" },
+      { "id": 85, "date": "2026-07-02", "venue": "Vancouver", "status": "scheduled", "home": null, "away": null, "homeSource": "1B", "awaySource": "3:E,F,G,I,J" },
+      { "id": 86, "date": "2026-07-03", "venue": "Miami", "status": "scheduled", "home": null, "away": null, "homeSource": "1J", "awaySource": "2H" },
+      { "id": 87, "date": "2026-07-03", "venue": "Kansas City", "status": "scheduled", "home": null, "away": null, "homeSource": "1K", "awaySource": "3:D,E,I,J,L" },
+      { "id": 88, "date": "2026-07-03", "venue": "Dallas", "status": "scheduled", "home": null, "away": null, "homeSource": "2D", "awaySource": "2G" }
+    ],
+    "r16": [
+      { "id": 89, "date": "2026-07-04", "venue": "Filadélfia", "status": "scheduled", "home": null, "away": null, "homeSource": "W74", "awaySource": "W77" },
+      { "id": 90, "date": "2026-07-04", "venue": "Houston", "status": "scheduled", "home": null, "away": null, "homeSource": "W73", "awaySource": "W75" },
+      { "id": 91, "date": "2026-07-05", "venue": "East Rutherford (NY/NJ)", "status": "scheduled", "home": null, "away": null, "homeSource": "W76", "awaySource": "W78" },
+      { "id": 92, "date": "2026-07-05", "venue": "Cidade do México", "status": "scheduled", "home": null, "away": null, "homeSource": "W79", "awaySource": "W80" },
+      { "id": 93, "date": "2026-07-06", "venue": "Dallas", "status": "scheduled", "home": null, "away": null, "homeSource": "W83", "awaySource": "W84" },
+      { "id": 94, "date": "2026-07-06", "venue": "Seattle", "status": "scheduled", "home": null, "away": null, "homeSource": "W81", "awaySource": "W82" },
+      { "id": 95, "date": "2026-07-07", "venue": "Atlanta", "status": "scheduled", "home": null, "away": null, "homeSource": "W86", "awaySource": "W88" },
+      { "id": 96, "date": "2026-07-07", "venue": "Vancouver", "status": "scheduled", "home": null, "away": null, "homeSource": "W85", "awaySource": "W87" }
+    ],
+    "qf": [
+      { "id": 97, "date": "2026-07-09", "venue": "Foxborough", "status": "scheduled", "home": null, "away": null, "homeSource": "W89", "awaySource": "W90" },
+      { "id": 98, "date": "2026-07-10", "venue": "Inglewood", "status": "scheduled", "home": null, "away": null, "homeSource": "W93", "awaySource": "W94" },
+      { "id": 99, "date": "2026-07-11", "venue": "Miami", "status": "scheduled", "home": null, "away": null, "homeSource": "W91", "awaySource": "W92" },
+      { "id": 100, "date": "2026-07-11", "venue": "Kansas City", "status": "scheduled", "home": null, "away": null, "homeSource": "W95", "awaySource": "W96" }
+    ],
     "sf": [
-      { "id": "sf1", "home": null, "away": null, "date": "2026-07-14", "venue": "Dallas", "status": "scheduled" },
-      { "id": "sf2", "home": null, "away": null, "date": "2026-07-15", "venue": "Atlanta", "status": "scheduled" }
+      { "id": 101, "date": "2026-07-14", "venue": "Dallas", "status": "scheduled", "home": null, "away": null, "homeSource": "W97", "awaySource": "W98" },
+      { "id": 102, "date": "2026-07-15", "venue": "Atlanta", "status": "scheduled", "home": null, "away": null, "homeSource": "W99", "awaySource": "W100" }
     ],
     "third": [
-      { "id": "3rd", "home": null, "away": null, "date": "2026-07-18", "venue": "Miami", "status": "scheduled" }
+      { "id": 103, "date": "2026-07-18", "venue": "Miami", "status": "scheduled", "home": null, "away": null, "homeSource": "L101", "awaySource": "L102" }
     ],
     "final": [
-      { "id": "final", "home": null, "away": null, "date": "2026-07-19", "venue": "East Rutherford (NY/NJ)", "status": "scheduled" }
+      { "id": 104, "date": "2026-07-19", "venue": "East Rutherford (NY/NJ)", "status": "scheduled", "home": null, "away": null, "homeSource": "W101", "awaySource": "W102" }
     ]
   }
 }

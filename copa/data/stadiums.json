@@ -6,7 +6,9 @@
     "image": "https://commons.wikimedia.org/wiki/Special:FilePath/Toronto_-_ON_-_BMO_Field.jpg?width=640",
     "credit": "https://commons.wikimedia.org/wiki/File:Toronto_-_ON_-_BMO_Field.jpg" },
 
-  { "id": "seattle", "name": "Lumen Field", "city": "Seattle", "country": "Estados Unidos", "flag": "🇺🇸", "capacity": "69.000", "lat": 47.5952, "lon": -122.3316, "timezone": "America/Los_Angeles" },
+  { "id": "seattle", "name": "Lumen Field", "city": "Seattle", "country": "Estados Unidos", "flag": "🇺🇸", "capacity": "69.000", "lat": 47.5952, "lon": -122.3316, "timezone": "America/Los_Angeles",
+    "image": "https://commons.wikimedia.org/wiki/Special:FilePath/CenturyLink_Field_Sounders_layout.jpg?width=640",
+    "credit": "https://commons.wikimedia.org/wiki/File:CenturyLink_Field_Sounders_layout.jpg" },
   { "id": "santaclara", "name": "Levi's Stadium", "city": "Santa Clara", "country": "Estados Unidos", "flag": "🇺🇸", "capacity": "68.500", "lat": 37.4033, "lon": -121.9694, "timezone": "America/Los_Angeles",
     "image": "https://commons.wikimedia.org/wiki/Special:FilePath/Levi%27s_Stadium_from_air.jpg?width=640",
     "credit": "https://commons.wikimedia.org/wiki/File:Levi's_Stadium_from_air.jpg" },

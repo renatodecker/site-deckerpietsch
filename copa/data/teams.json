@@ -78,7 +78,7 @@
   },
   {
     "name": "Escócia",
-    "flag": "🏴",
+    "flag": "🏴󠁧󠁢󠁳󠁣󠁴󠁿",
     "group": "C",
     "navy": "#0065BF",
     "gold": "#FDB927"
@@ -309,7 +309,7 @@
   },
   {
     "name": "Inglaterra",
-    "flag": "🏴",
+    "flag": "🏴󠁧󠁢󠁥󠁮󠁧󠁿",
     "group": "L",
     "navy": "#1A1A1A",
     "gold": "#CE1124"

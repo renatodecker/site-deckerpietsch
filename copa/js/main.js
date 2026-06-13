@@ -152,22 +152,87 @@ function compareStandings(a, b) {
   return b.gp - a.gp;
 }
 
-function renderGroups(groups) {
+// Jogos da fase de grupos que estão em andamento agora
+function getLiveGroupMatches(matches) {
+  if (!matches || !matches.groupStage) return [];
+  return matches.groupStage.filter(m => m.status === 'live');
+}
+
+// Aplica o placar de jogos em andamento à classificação, como se o jogo
+// tivesse terminado agora (provisório, times afetados ganham `live: true`)
+function applyLiveProvisional(teams, liveMatches) {
+  if (!liveMatches || liveMatches.length === 0) return teams;
+
+  const map = {};
+  teams.forEach(t => { map[t.team] = { ...t }; });
+
+  liveMatches.forEach(m => {
+    const home = map[m.home];
+    const away = map[m.away];
+    if (!home || !away || m.homeScore == null || m.awayScore == null) return;
+
+    [[home, m.homeScore, m.awayScore], [away, m.awayScore, m.homeScore]].forEach(([team, gf, ga]) => {
+      team.pj += 1;
+      team.gp += gf;
+      team.gc += ga;
+      team.sg = team.gp - team.gc;
+      if (gf > ga) { team.v += 1; team.pts += 3; }
+      else if (gf === ga) { team.e += 1; team.pts += 1; }
+      else { team.d += 1; }
+      team.live = true;
+    });
+  });
+
+  return Object.values(map);
+}
+
+/* ============================================================
+   AO VIVO (banner de jogos em andamento)
+   ============================================================ */
+function renderLiveBanner(matches) {
+  const wrap = document.getElementById('liveBanner');
+  if (!wrap) return;
+
+  const liveMatches = getLiveGroupMatches(matches);
+
+  if (liveMatches.length === 0) {
+    wrap.hidden = true;
+    wrap.innerHTML = '';
+    return;
+  }
+
+  wrap.hidden = false;
+  wrap.innerHTML = liveMatches.map(m => `
+    <div class="live-banner__item">
+      <span class="live-dot" title="Jogo em andamento"></span>
+      <span class="live-banner__label">Em andamento</span>
+      <span class="live-banner__teams">
+        ${teamFlagHTML(m.home)}${m.home} <strong>${m.homeScore} - ${m.awayScore}</strong> ${teamFlagHTML(m.away)}${m.away}
+      </span>
+      <span class="live-banner__meta">Grupo ${m.group} · ${m.venue}</span>
+    </div>
+  `).join('');
+}
+
+function renderGroups(groups, matches) {
   const wrap = document.getElementById('groupsGrid');
   if (!groups || Object.keys(groups).length === 0) {
     wrap.innerHTML = '<div class="empty-state">Classificação ainda não disponível.</div>';
     return;
   }
 
+  const liveMatches = getLiveGroupMatches(matches);
+
   wrap.innerHTML = Object.keys(groups).sort().map(letter => {
-    const teams = [...groups[letter]].sort(compareStandings);
+    const groupLive = liveMatches.filter(m => m.group === letter);
+    const teams = [...applyLiveProvisional(groups[letter], groupLive)].sort(compareStandings);
 
     const rows = teams.map((t, i) => {
       const cls = i < 2 ? 'qualified' : (i === 2 ? 'qualified-3rd' : '');
       return `
         <tr class="${cls}">
           <td>${i + 1}</td>
-          <td class="team-cell"><span class="team-flag">${t.flag || ''}</span>${t.team}</td>
+          <td class="team-cell"><span class="team-flag">${t.flag || ''}</span>${t.team}${t.live ? '<span class="live-dot" title="Jogo em andamento"></span>' : ''}</td>
           <td>${t.pj}</td>
           <td>${t.v}</td>
           <td>${t.e}</td>
@@ -181,10 +246,10 @@ function renderGroups(groups) {
     }).join('');
 
     return `
-      <div class="group-card">
+      <div class="group-card ${groupLive.length ? 'group-card--live' : ''}">
         <div class="group-card__header">
           Grupo ${letter}
-          <span>Classificação</span>
+          <span>${groupLive.length ? 'Em andamento' : 'Classificação'}</span>
         </div>
         <table class="standings-table">
           <thead>
@@ -197,6 +262,7 @@ function renderGroups(groups) {
           </thead>
           <tbody>${rows}</tbody>
         </table>
+        ${groupLive.length ? '<div class="group-card__note">Classificação provisória: considera o placar parcial do jogo em andamento.</div>' : ''}
       </div>
     `;
   }).join('');
@@ -205,22 +271,24 @@ function renderGroups(groups) {
 /* ============================================================
    MELHORES TERCEIROS
    ============================================================ */
-function getThirdPlacedTeams(groups) {
+function getThirdPlacedTeams(groups, matches) {
   if (!groups) return [];
+  const liveMatches = getLiveGroupMatches(matches);
   return Object.keys(groups).sort().map(letter => {
-    const teams = [...groups[letter]].sort(compareStandings);
+    const groupLive = liveMatches.filter(m => m.group === letter);
+    const teams = [...applyLiveProvisional(groups[letter], groupLive)].sort(compareStandings);
     return { ...teams[2], group: letter };
   }).sort(compareStandings);
 }
 
-function renderThirdPlaced(groups) {
+function renderThirdPlaced(groups, matches) {
   const wrap = document.getElementById('thirdPlacedWrap');
   if (!groups || Object.keys(groups).length === 0) {
     wrap.innerHTML = '<div class="empty-state">Classificação ainda não disponível.</div>';
     return;
   }
 
-  const ranked = getThirdPlacedTeams(groups);
+  const ranked = getThirdPlacedTeams(groups, matches);
 
   const rows = ranked.map((t, i) => {
     const cls = i < 8 ? 'qualified' : 'not-qualified';
@@ -228,7 +296,7 @@ function renderThirdPlaced(groups) {
       <tr class="${cls}">
         <td>${i + 1}</td>
         <td class="group-cell">${t.group}</td>
-        <td class="team-cell"><span class="team-flag">${t.flag || ''}</span>${t.team}</td>
+        <td class="team-cell"><span class="team-flag">${t.flag || ''}</span>${t.team}${t.live ? '<span class="live-dot" title="Jogo em andamento"></span>' : ''}</td>
         <td>${t.pj}</td>
         <td>${t.v}</td>
         <td>${t.e}</td>
@@ -394,7 +462,7 @@ function matchCardHTML(match, groups, knockoutFlat, venueIndex) {
   if (isFinished) {
     statusHTML = '<span class="match-card__status match-card__status--finished">Encerrado</span>';
   } else if (isLive) {
-    statusHTML = '<span class="match-card__status match-card__status--live">Em andamento</span>';
+    statusHTML = '<span class="match-card__status match-card__status--live"><span class="live-dot"></span>Em andamento</span>';
   } else {
     const times = formatMatchTimes(match, stadium);
     if (times) {
@@ -965,11 +1033,12 @@ async function refreshData() {
   if (matches) currentMatches = matches;
   if (stadiums) currentStadiums = stadiums;
 
-  renderGroups(currentGroups);
-  renderThirdPlaced(currentGroups);
+  renderGroups(currentGroups, currentMatches);
+  renderThirdPlaced(currentGroups, currentMatches);
   renderMatches(currentMatches, currentGroups, currentStadiums);
   renderBracket(currentMatches, currentGroups, currentStadiums);
   renderRecentUpcoming(currentMatches, currentGroups);
+  renderLiveBanner(currentMatches);
   renderScorers(scorers);
   renderStadiums(currentStadiums);
   renderLastUpdated();
@@ -999,8 +1068,9 @@ async function refreshData() {
   teamFlagIndex = buildTeamFlagIndex(teams);
 
   renderInfo(info);
-  renderGroups(groups);
-  renderThirdPlaced(groups);
+  renderGroups(groups, matches);
+  renderThirdPlaced(groups, matches);
+  renderLiveBanner(matches);
   renderMatches(matches, groups, stadiums);
   renderBracket(matches, groups, stadiums);
   renderRecentUpcoming(matches, groups);

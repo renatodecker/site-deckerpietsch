@@ -223,6 +223,59 @@ img { display: block; max-width: 100%; }
 
 .hero__meta-item strong { color: var(--gold-400); }
 
+.live-banner {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.live-banner__item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  background: rgba(220,38,38,.12);
+  border: 1px solid rgba(220,38,38,.35);
+  border-radius: var(--radius-sm);
+  padding: 10px 18px;
+  font-size: .9rem;
+  color: var(--white);
+}
+
+.live-banner__label {
+  font-size: .68rem;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--red-500);
+}
+
+.live-banner__teams strong {
+  color: var(--gold-400);
+  margin: 0 4px;
+}
+
+.live-banner__meta {
+  font-size: .78rem;
+  color: rgba(255,255,255,.65);
+}
+
+.live-dot {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--red-500);
+  animation: live-pulse 1.4s ease-in-out infinite;
+}
+
+@keyframes live-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: .4; transform: scale(.75); }
+}
+
 /* ============================================================
    FLAG BAR (seletor de tema por seleção)
    ============================================================ */
@@ -499,6 +552,26 @@ img { display: block; max-width: 100%; }
   letter-spacing: .1em;
 }
 
+.group-card--live .group-card__header {
+  background: var(--red-500);
+}
+
+.group-card--live .group-card__header span {
+  color: var(--white);
+}
+
+.group-card__note {
+  padding: 8px 18px 12px;
+  font-size: .74rem;
+  font-style: italic;
+  color: var(--gray-500);
+}
+
+.team-cell .live-dot {
+  margin-left: 6px;
+  vertical-align: middle;
+}
+
 .standings-table {
   width: 100%;
   border-collapse: collapse;
@@ -685,6 +758,11 @@ img { display: block; max-width: 100%; }
 .match-card__status--live {
   background: rgba(220,38,38,.1);
   color: var(--red-500);
+}
+
+.match-card__status--live .live-dot {
+  margin-right: 4px;
+  vertical-align: middle;
 }
 
 .match-card__status--finished {

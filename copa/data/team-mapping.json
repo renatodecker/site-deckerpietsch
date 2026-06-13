@@ -1,3 +1,0 @@
-{
-  "_comment": "Mapeamento time (nome usado neste site) -> { apiId, apiName } na API-Football. Gerado/atualizado por 'node scripts/update-copa-data.mjs --bootstrap-teams'. Times não encontrados automaticamente ficam de fora e precisam ser adicionados manualmente aqui (ajuste team-name-aliases.json e rode o bootstrap novamente, ou edite este arquivo direto)."
-}

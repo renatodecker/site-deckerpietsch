@@ -2,21 +2,10 @@ name: Atualizar dados da Copa 2026
 
 on:
   schedule:
-    # A cada 30 min. O script decide se vale a pena chamar a API
-    # (orçamento diário do plano free da API-Football), então a maioria
-    # dessas execuções não consome nenhuma requisição.
+    # A cada 30 min. O script decide se vale a pena buscar dados (verifica se
+    # estamos dentro do período do torneio) antes de chamar a ESPN.
     - cron: '*/30 * * * *'
   workflow_dispatch:
-    inputs:
-      mode:
-        description: 'Modo de execução'
-        required: false
-        default: 'update'
-        type: choice
-        options:
-          - update
-          - discover
-          - bootstrap-teams
 
 permissions:
   contents: write
@@ -36,15 +25,7 @@ jobs:
           node-version: 20
 
       - name: Executa script de atualização
-        env:
-          API_FOOTBALL_KEY: ${{ secrets.API_FOOTBALL_KEY }}
-          MODE: ${{ github.event.inputs.mode || 'update' }}
-        run: |
-          case "$MODE" in
-            discover) node scripts/update-copa-data.mjs --discover ;;
-            bootstrap-teams) node scripts/update-copa-data.mjs --bootstrap-teams ;;
-            *) node scripts/update-copa-data.mjs ;;
-          esac
+        run: node scripts/update-copa-data.mjs
 
       - name: Commit e push se houver mudanças
         run: |

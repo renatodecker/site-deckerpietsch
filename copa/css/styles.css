@@ -1092,6 +1092,8 @@ body.modal-open { overflow: hidden; }
   padding: 24px;
 }
 
+.modal[hidden] { display: none; }
+
 .modal__overlay {
   position: absolute;
   inset: 0;

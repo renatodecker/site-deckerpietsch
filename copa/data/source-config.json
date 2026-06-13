@@ -1,0 +1,10 @@
+{
+  "_comment": "Configuração da fonte de dados (API-Football / api-sports.io). 'confirmed' só vira true depois de rodar 'node scripts/update-copa-data.mjs --discover' com a API_FOOTBALL_KEY configurada, que confirma o league/season corretos para a Copa do Mundo 2026 e preenche este arquivo automaticamente.",
+  "provider": "api-football",
+  "baseUrl": "https://v3.football.api-sports.io",
+  "league": null,
+  "season": null,
+  "leagueName": null,
+  "confirmed": false,
+  "discoveredAt": null
+}

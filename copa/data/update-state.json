@@ -1,0 +1,7 @@
+{
+  "_comment": "Estado interno do script de atualização automática (controle de orçamento diário de chamadas à API e detecção de mudanças de status). Gerenciado automaticamente por scripts/update-copa-data.mjs.",
+  "date": null,
+  "callsUsed": 0,
+  "lastRun": null,
+  "fixtureStatuses": {}
+}

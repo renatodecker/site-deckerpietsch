@@ -315,15 +315,29 @@ function resolveSlot(source, groups, knockoutFlat) {
   return { team: null, label: source, resolved: false };
 }
 
+// Bandeira (emoji) de cada seleção, indexada pelo nome (data/teams.json)
+let teamFlagIndex = {};
+
+function buildTeamFlagIndex(teams) {
+  const index = {};
+  (teams || []).forEach(t => { index[t.name] = t.flag; });
+  return index;
+}
+
+function teamFlagHTML(name) {
+  const flag = teamFlagIndex[name];
+  return flag ? `<span class="team-flag">${flag}</span>` : '';
+}
+
 // Returns { html, tbd } for a match's home/away side, resolving
 // homeSource/awaySource against current standings when the team isn't set yet.
 function resolveTeamDisplay(match, side, groups, knockoutFlat) {
   const team = match[side];
-  if (team) return { html: team, tbd: false };
+  if (team) return { html: `${teamFlagHTML(team)}${team}`, tbd: false };
 
   const slot = resolveSlot(match[`${side}Source`], groups, knockoutFlat);
   if (!slot) return { html: 'A definir', tbd: true };
-  if (slot.resolved) return { html: `${slot.team} <span class="slot-tag">(${slot.label})</span>`, tbd: false };
+  if (slot.resolved) return { html: `${teamFlagHTML(slot.team)}${slot.team} <span class="slot-tag">(${slot.label})</span>`, tbd: false };
   return { html: slot.label, tbd: true };
 }
 
@@ -506,7 +520,7 @@ function renderMatches(matches, groups, stadiums) {
 /* ============================================================
    CHAVEAMENTO (BRACKET)
    ============================================================ */
-function bracketMatchHTML(match, groups, knockoutFlat) {
+function bracketMatchHTML(match, groups, knockoutFlat, venueIndex) {
   const home = resolveTeamDisplay(match, 'home', groups, knockoutFlat);
   const away = resolveTeamDisplay(match, 'away', groups, knockoutFlat);
   const homeCls = home.tbd ? 'bracket-match__team--tbd' : '';
@@ -514,16 +528,23 @@ function bracketMatchHTML(match, groups, knockoutFlat) {
   const homeScore = match.homeScore ?? '';
   const awayScore = match.awayScore ?? '';
 
+  const stadium = match.venue && venueIndex ? venueIndex[match.venue] : null;
+  const venueHTML = match.venue
+    ? (stadium
+        ? `<button type="button" class="match-card__venue" data-stadium="${stadium.id}">${match.venue}</button>`
+        : `<span class="match-card__venue match-card__venue--plain">${match.venue}</span>`)
+    : '';
+
   return `
     <div class="bracket-match">
       <div class="bracket-match__team ${homeCls}"><span>${home.html}</span><span>${homeScore}</span></div>
       <div class="bracket-match__team ${awayCls}"><span>${away.html}</span><span>${awayScore}</span></div>
-      ${match.date ? `<div class="bracket-match__date">${formatDate(match.date)}${match.venue ? ' · ' + match.venue : ''}</div>` : ''}
+      ${match.date ? `<div class="bracket-match__date">${formatDate(match.date)}${venueHTML ? ' · ' + venueHTML : ''}</div>` : ''}
     </div>
   `;
 }
 
-function renderBracket(matches, groups) {
+function renderBracket(matches, groups, stadiums) {
   const wrap = document.getElementById('bracket');
   const knockout = matches && matches.knockout;
 
@@ -533,14 +554,25 @@ function renderBracket(matches, groups) {
   }
 
   const knockoutFlat = flattenKnockout(knockout);
+  const venueIndex = buildVenueIndex(stadiums);
   const order = ['r32', 'r16', 'qf', 'sf', 'final'];
 
   wrap.innerHTML = order.filter(k => (knockout[k] || []).length > 0).map(k => `
     <div class="bracket__round">
       <div class="bracket__round-title">${KNOCKOUT_LABELS[k]}</div>
-      ${(knockout[k] || []).map(m => bracketMatchHTML(m, groups, knockoutFlat)).join('')}
+      ${(knockout[k] || []).map(m => bracketMatchHTML(m, groups, knockoutFlat, venueIndex)).join('')}
     </div>
   `).join('');
+
+  if (!wrap.dataset.modalBound) {
+    wrap.dataset.modalBound = '1';
+    wrap.addEventListener('click', (e) => {
+      const btn = e.target.closest('.match-card__venue');
+      if (!btn) return;
+      const stadium = (currentStadiums || []).find(s => s.id === btn.dataset.stadium);
+      if (stadium) openStadiumModal(stadium);
+    });
+  }
 }
 
 /* ============================================================
@@ -936,7 +968,7 @@ async function refreshData() {
   renderGroups(currentGroups);
   renderThirdPlaced(currentGroups);
   renderMatches(currentMatches, currentGroups, currentStadiums);
-  renderBracket(currentMatches, currentGroups);
+  renderBracket(currentMatches, currentGroups, currentStadiums);
   renderRecentUpcoming(currentMatches, currentGroups);
   renderScorers(scorers);
   renderStadiums(currentStadiums);
@@ -964,12 +996,13 @@ async function refreshData() {
   currentGroups = groups;
   currentMatches = matches;
   currentStadiums = stadiums;
+  teamFlagIndex = buildTeamFlagIndex(teams);
 
   renderInfo(info);
   renderGroups(groups);
   renderThirdPlaced(groups);
   renderMatches(matches, groups, stadiums);
-  renderBracket(matches, groups);
+  renderBracket(matches, groups, stadiums);
   renderRecentUpcoming(matches, groups);
   renderScorers(scorers);
   renderFlagBar(teams);

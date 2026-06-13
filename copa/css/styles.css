@@ -799,6 +799,11 @@ img { display: block; max-width: 100%; }
   margin-top: 6px;
 }
 
+.bracket-match__date .match-card__venue,
+.bracket-match__date .match-card__venue--plain {
+  font-size: inherit;
+}
+
 .bracket-note {
   margin-top: 28px;
   padding: 16px 20px;

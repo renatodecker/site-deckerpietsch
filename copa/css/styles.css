@@ -728,7 +728,18 @@ img { display: block; max-width: 100%; }
   border: 1px solid var(--gray-300);
 }
 
-.stadium-map svg { display: block; width: 100%; height: auto; }
+.stadium-map svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: #dbeafe;
+}
+
+.map-band {
+  stroke: var(--white);
+  stroke-width: 2;
+  stroke-linejoin: round;
+}
 
 .map-band--ca { fill: var(--navy-100); }
 .map-band--us { fill: var(--gold-50); }
@@ -736,11 +747,12 @@ img { display: block; max-width: 100%; }
 
 .map-label {
   font-family: var(--font);
-  font-size: 22px;
+  font-size: 26px;
   font-weight: 700;
   letter-spacing: .08em;
   fill: var(--navy-800);
-  opacity: .35;
+  opacity: .4;
+  pointer-events: none;
 }
 
 .map-marker { cursor: pointer; }
@@ -774,12 +786,11 @@ img { display: block; max-width: 100%; }
 
 .stadium-card {
   display: flex;
-  gap: 14px;
-  align-items: flex-start;
+  flex-direction: column;
   background: var(--white);
   border: 1px solid var(--gray-300);
   border-radius: var(--radius-md);
-  padding: 18px;
+  overflow: hidden;
   box-shadow: var(--shadow-sm);
   cursor: pointer;
   transition: border-color .15s ease, transform .15s ease;
@@ -792,19 +803,34 @@ img { display: block; max-width: 100%; }
   box-shadow: 0 0 0 2px var(--gold-200);
 }
 
-.stadium-card__icon {
-  width: 40px;
-  height: 40px;
-  flex: none;
-  border-radius: var(--radius-sm);
+.stadium-card__media {
+  position: relative;
+  aspect-ratio: 16 / 10;
   background: var(--navy-900);
-  color: var(--gold-400);
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
 }
 
-.stadium-card__icon svg { width: 26px; height: 20px; }
+.stadium-card__media img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.stadium-card__icon {
+  width: 40%;
+  max-width: 64px;
+  color: var(--gold-400);
+  opacity: .8;
+}
+
+.stadium-card__body {
+  padding: 14px 16px;
+}
 
 .stadium-card__name {
   font-weight: 700;
@@ -823,6 +849,15 @@ img { display: block; max-width: 100%; }
   font-size: .78rem;
   color: var(--gray-500);
 }
+
+.stadium-card__credit {
+  display: inline-block;
+  margin-top: 8px;
+  font-size: .7rem;
+  color: var(--gray-300);
+}
+
+.stadium-card__credit:hover { color: var(--gray-500); }
 
 /* ============================================================
    ARTILHARIA

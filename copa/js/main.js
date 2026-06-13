@@ -576,7 +576,9 @@ function renderFlagBar(teams) {
     return;
   }
 
-  wrap.innerHTML = teams.map(t => `
+  const sorted = [...teams].sort((a, b) => a.name.localeCompare(b.name, 'pt-BR'));
+
+  wrap.innerHTML = sorted.map(t => `
     <button type="button" class="flag-bar__flag" data-team="${t.name}" title="${t.name}" aria-label="${t.name}">
       ${t.flag}
     </button>
@@ -604,7 +606,7 @@ function renderFlagBar(teams) {
    ESTÁDIOS-SEDE
    ============================================================ */
 const STADIUM_ICON = `
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <svg class="stadium-card__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
     <ellipse cx="32" cy="24" rx="30" ry="22" />
     <ellipse cx="32" cy="24" rx="13" ry="9" />
     <path d="M32 2v44" />
@@ -622,11 +624,15 @@ function renderStadiums(stadiums) {
 
   grid.innerHTML = stadiums.map(s => `
     <div class="stadium-card" id="stadium-${s.id}" data-stadium="${s.id}">
-      <div class="stadium-card__icon">${STADIUM_ICON}</div>
+      <div class="stadium-card__media">
+        ${STADIUM_ICON}
+        ${s.image ? `<img src="${s.image}" alt="${s.name}" loading="lazy" onerror="this.remove()" />` : ''}
+      </div>
       <div class="stadium-card__body">
         <p class="stadium-card__name">${s.name}</p>
         <p class="stadium-card__city">${s.flag} ${s.city}, ${s.country}</p>
         <p class="stadium-card__capacity">Capacidade: ${s.capacity}</p>
+        ${s.credit ? `<a class="stadium-card__credit" href="${s.credit}" target="_blank" rel="noopener noreferrer">Foto: Wikimedia Commons</a>` : ''}
       </div>
     </div>
   `).join('');

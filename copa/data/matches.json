@@ -1,133 +1,1064 @@
 {
   "groupStage": [
-    { "id": 1, "date": "2026-06-11", "group": "A", "home": "México", "away": "África do Sul", "venue": "Cidade do México", "status": "finished", "homeScore": 2, "awayScore": 0 },
-    { "id": 2, "date": "2026-06-11", "group": "A", "home": "Coreia do Sul", "away": "Tchéquia", "venue": "Guadalajara", "status": "finished", "homeScore": 2, "awayScore": 1 },
-    { "id": 3, "date": "2026-06-18", "group": "A", "home": "Tchéquia", "away": "África do Sul", "venue": "Atlanta", "status": "scheduled", "time": "12h ET" },
-    { "id": 4, "date": "2026-06-18", "group": "A", "home": "México", "away": "Coreia do Sul", "venue": "Guadalajara", "status": "scheduled", "time": "21h" },
-    { "id": 5, "date": "2026-06-24", "group": "A", "home": "Tchéquia", "away": "México", "venue": "Cidade do México", "status": "scheduled", "time": "19h" },
-    { "id": 6, "date": "2026-06-24", "group": "A", "home": "África do Sul", "away": "Coreia do Sul", "venue": "Monterrey", "status": "scheduled", "time": "19h" },
-
-    { "id": 7, "date": "2026-06-12", "group": "B", "home": "Canadá", "away": "Bósnia e Herzegovina", "venue": "Toronto", "status": "finished", "homeScore": 1, "awayScore": 1 },
-    { "id": 8, "date": "2026-06-13", "group": "B", "home": "Catar", "away": "Suíça", "venue": "Santa Clara", "status": "live", "homeScore": 0, "awayScore": 1 },
-    { "id": 9, "date": "2026-06-18", "group": "B", "home": "Suíça", "away": "Bósnia e Herzegovina", "venue": "Inglewood", "status": "scheduled", "time": "15h ET" },
-    { "id": 10, "date": "2026-06-18", "group": "B", "home": "Canadá", "away": "Catar", "venue": "Vancouver", "status": "scheduled", "time": "18h ET" },
-    { "id": 11, "date": "2026-06-24", "group": "B", "home": "Suíça", "away": "Canadá", "venue": "Vancouver", "status": "scheduled", "time": "15h ET" },
-    { "id": 12, "date": "2026-06-24", "group": "B", "home": "Bósnia e Herzegovina", "away": "Catar", "venue": "Seattle", "status": "scheduled", "time": "15h ET" },
-
-    { "id": 13, "date": "2026-06-13", "group": "C", "home": "Brasil", "away": "Marrocos", "venue": "East Rutherford", "status": "scheduled", "time": "18h ET" },
-    { "id": 14, "date": "2026-06-13", "group": "C", "home": "Haiti", "away": "Escócia", "venue": "Foxborough", "status": "scheduled", "time": "21h ET" },
-    { "id": 15, "date": "2026-06-19", "group": "C", "home": "Escócia", "away": "Marrocos", "venue": "Foxborough", "status": "scheduled", "time": "18h" },
-    { "id": 16, "date": "2026-06-19", "group": "C", "home": "Brasil", "away": "Haiti", "venue": "Filadélfia", "status": "scheduled", "time": "20h30" },
-    { "id": 17, "date": "2026-06-24", "group": "C", "home": "Escócia", "away": "Brasil", "venue": "Miami", "status": "scheduled", "time": "18h" },
-    { "id": 18, "date": "2026-06-24", "group": "C", "home": "Marrocos", "away": "Haiti", "venue": "Atlanta", "status": "scheduled", "time": "18h" },
-
-    { "id": 19, "date": "2026-06-12", "group": "D", "home": "Estados Unidos", "away": "Paraguai", "venue": "Inglewood", "status": "finished", "homeScore": 4, "awayScore": 1 },
-    { "id": 20, "date": "2026-06-12", "group": "D", "home": "Austrália", "away": "Turquia", "venue": "Vancouver", "status": "scheduled", "time": "00h ET (13/06)" },
-    { "id": 21, "date": "2026-06-19", "group": "D", "home": "Estados Unidos", "away": "Austrália", "venue": "Seattle", "status": "scheduled", "time": "15h ET" },
-    { "id": 22, "date": "2026-06-19", "group": "D", "home": "Turquia", "away": "Paraguai", "venue": "Santa Clara", "status": "scheduled", "time": "23h ET" },
-    { "id": 23, "date": "2026-06-25", "group": "D", "home": "Turquia", "away": "Estados Unidos", "venue": "Inglewood", "status": "scheduled", "time": "22h ET" },
-    { "id": 24, "date": "2026-06-25", "group": "D", "home": "Paraguai", "away": "Austrália", "venue": "Santa Clara", "status": "scheduled", "time": "22h ET" },
-
-    { "id": 25, "date": "2026-06-14", "group": "E", "home": "Alemanha", "away": "Curaçao", "venue": "Houston", "status": "scheduled", "time": "13h ET" },
-    { "id": 26, "date": "2026-06-14", "group": "E", "home": "Costa do Marfim", "away": "Equador", "venue": "Filadélfia", "status": "scheduled", "time": "19h ET" },
-    { "id": 27, "date": "2026-06-20", "group": "E", "home": "Alemanha", "away": "Costa do Marfim", "venue": "Toronto", "status": "scheduled", "time": "16h ET" },
-    { "id": 28, "date": "2026-06-20", "group": "E", "home": "Equador", "away": "Curaçao", "venue": "Kansas City", "status": "scheduled", "time": "20h ET" },
-    { "id": 29, "date": "2026-06-25", "group": "E", "home": "Curaçao", "away": "Costa do Marfim", "venue": "Filadélfia", "status": "scheduled", "time": "16h ET" },
-    { "id": 30, "date": "2026-06-25", "group": "E", "home": "Equador", "away": "Alemanha", "venue": "East Rutherford", "status": "scheduled", "time": "16h ET" },
-
-    { "id": 31, "date": "2026-06-14", "group": "F", "home": "Países Baixos", "away": "Japão", "venue": "Arlington", "status": "scheduled", "time": "16h" },
-    { "id": 32, "date": "2026-06-14", "group": "F", "home": "Suécia", "away": "Tunísia", "venue": "Monterrey", "status": "scheduled", "time": "22h" },
-    { "id": 33, "date": "2026-06-20", "group": "F", "home": "Países Baixos", "away": "Suécia", "venue": "Houston", "status": "scheduled", "time": "13h" },
-    { "id": 34, "date": "2026-06-20", "group": "F", "home": "Tunísia", "away": "Japão", "venue": "Monterrey", "status": "scheduled", "time": "00h" },
-    { "id": 35, "date": "2026-06-25", "group": "F", "home": "Japão", "away": "Suécia", "venue": "Arlington", "status": "scheduled", "time": "19h" },
-    { "id": 36, "date": "2026-06-25", "group": "F", "home": "Tunísia", "away": "Países Baixos", "venue": "Kansas City", "status": "scheduled", "time": "19h" },
-
-    { "id": 37, "date": "2026-06-15", "group": "G", "home": "Bélgica", "away": "Egito", "venue": "Seattle", "status": "scheduled", "time": "15h ET" },
-    { "id": 38, "date": "2026-06-15", "group": "G", "home": "Irã", "away": "Nova Zelândia", "venue": "Inglewood", "status": "scheduled", "time": "21h ET" },
-    { "id": 39, "date": "2026-06-21", "group": "G", "home": "Bélgica", "away": "Irã", "venue": "Inglewood", "status": "scheduled", "time": "15h ET" },
-    { "id": 40, "date": "2026-06-21", "group": "G", "home": "Nova Zelândia", "away": "Egito", "venue": "Vancouver", "status": "scheduled", "time": "21h ET" },
-    { "id": 41, "date": "2026-06-26", "group": "G", "home": "Egito", "away": "Irã", "venue": "Seattle", "status": "scheduled", "time": "23h ET" },
-    { "id": 42, "date": "2026-06-26", "group": "G", "home": "Nova Zelândia", "away": "Bélgica", "venue": "Vancouver", "status": "scheduled", "time": "23h ET" },
-
-    { "id": 43, "date": "2026-06-15", "group": "H", "home": "Espanha", "away": "Cabo Verde", "venue": "Atlanta", "status": "scheduled", "time": "12h" },
-    { "id": 44, "date": "2026-06-15", "group": "H", "home": "Arábia Saudita", "away": "Uruguai", "venue": "Miami", "status": "scheduled", "time": "18h" },
-    { "id": 45, "date": "2026-06-21", "group": "H", "home": "Espanha", "away": "Arábia Saudita", "venue": "Atlanta", "status": "scheduled", "time": "12h" },
-    { "id": 46, "date": "2026-06-21", "group": "H", "home": "Uruguai", "away": "Cabo Verde", "venue": "Miami", "status": "scheduled", "time": "18h" },
-    { "id": 47, "date": "2026-06-26", "group": "H", "home": "Cabo Verde", "away": "Arábia Saudita", "venue": "Houston", "status": "scheduled", "time": "20h" },
-    { "id": 48, "date": "2026-06-26", "group": "H", "home": "Uruguai", "away": "Espanha", "venue": "Guadalajara", "status": "scheduled", "time": "20h" },
-
-    { "id": 49, "date": "2026-06-16", "group": "I", "home": "França", "away": "Senegal", "venue": "East Rutherford", "status": "scheduled", "time": "15h" },
-    { "id": 50, "date": "2026-06-16", "group": "I", "home": "Iraque", "away": "Noruega", "venue": "Foxborough", "status": "scheduled", "time": "18h" },
-    { "id": 51, "date": "2026-06-22", "group": "I", "home": "França", "away": "Iraque", "venue": "Filadélfia", "status": "scheduled", "time": "17h" },
-    { "id": 52, "date": "2026-06-22", "group": "I", "home": "Noruega", "away": "Senegal", "venue": "East Rutherford", "status": "scheduled", "time": "20h" },
-    { "id": 53, "date": "2026-06-26", "group": "I", "home": "Noruega", "away": "França", "venue": "Foxborough", "status": "scheduled", "time": "15h" },
-    { "id": 54, "date": "2026-06-26", "group": "I", "home": "Senegal", "away": "Iraque", "venue": "Toronto", "status": "scheduled", "time": "15h" },
-
-    { "id": 55, "date": "2026-06-16", "group": "J", "home": "Argentina", "away": "Argélia", "venue": "Kansas City", "status": "scheduled", "time": "21h ET" },
-    { "id": 56, "date": "2026-06-16", "group": "J", "home": "Áustria", "away": "Jordânia", "venue": "Santa Clara", "status": "scheduled", "time": "00h ET (17/06)" },
-    { "id": 57, "date": "2026-06-22", "group": "J", "home": "Argentina", "away": "Áustria", "venue": "Arlington", "status": "scheduled", "time": "13h ET" },
-    { "id": 58, "date": "2026-06-22", "group": "J", "home": "Jordânia", "away": "Argélia", "venue": "Santa Clara", "status": "scheduled", "time": "23h ET" },
-    { "id": 59, "date": "2026-06-27", "group": "J", "home": "Argélia", "away": "Áustria", "venue": "Kansas City", "status": "scheduled", "time": "22h ET" },
-    { "id": 60, "date": "2026-06-27", "group": "J", "home": "Jordânia", "away": "Argentina", "venue": "Dallas", "status": "scheduled", "time": "—" },
-
-    { "id": 61, "date": "2026-06-17", "group": "K", "home": "Portugal", "away": "RD Congo", "venue": "Houston", "status": "scheduled", "time": "13h ET" },
-    { "id": 62, "date": "2026-06-17", "group": "K", "home": "Uzbequistão", "away": "Colômbia", "venue": "Cidade do México", "status": "scheduled", "time": "22h ET" },
-    { "id": 63, "date": "2026-06-23", "group": "K", "home": "Portugal", "away": "Uzbequistão", "venue": "Houston", "status": "scheduled", "time": "13h ET" },
-    { "id": 64, "date": "2026-06-23", "group": "K", "home": "Colômbia", "away": "RD Congo", "venue": "Guadalajara", "status": "scheduled", "time": "22h ET" },
-    { "id": 65, "date": "2026-06-27", "group": "K", "home": "Colômbia", "away": "Portugal", "venue": "Miami", "status": "scheduled", "time": "19h30 ET" },
-    { "id": 66, "date": "2026-06-27", "group": "K", "home": "RD Congo", "away": "Uzbequistão", "venue": "Atlanta", "status": "scheduled", "time": "—" },
-
-    { "id": 67, "date": "2026-06-17", "group": "L", "home": "Inglaterra", "away": "Croácia", "venue": "Arlington", "status": "scheduled", "time": "16h" },
-    { "id": 68, "date": "2026-06-17", "group": "L", "home": "Gana", "away": "Panamá", "venue": "Toronto", "status": "scheduled", "time": "19h" },
-    { "id": 69, "date": "2026-06-23", "group": "L", "home": "Inglaterra", "away": "Gana", "venue": "Foxborough", "status": "scheduled", "time": "16h" },
-    { "id": 70, "date": "2026-06-23", "group": "L", "home": "Panamá", "away": "Croácia", "venue": "Toronto", "status": "scheduled", "time": "19h" },
-    { "id": 71, "date": "2026-06-27", "group": "L", "home": "Panamá", "away": "Inglaterra", "venue": "East Rutherford", "status": "scheduled", "time": "17h" },
-    { "id": 72, "date": "2026-06-27", "group": "L", "home": "Croácia", "away": "Gana", "venue": "Filadélfia", "status": "scheduled", "time": "17h" }
+    {
+      "id": 1,
+      "date": "2026-06-11",
+      "group": "A",
+      "home": "México",
+      "away": "África do Sul",
+      "venue": "Cidade do México",
+      "status": "finished",
+      "homeScore": 2,
+      "awayScore": 0
+    },
+    {
+      "id": 2,
+      "date": "2026-06-11",
+      "group": "A",
+      "home": "Coreia do Sul",
+      "away": "Tchéquia",
+      "venue": "Guadalajara",
+      "status": "finished",
+      "homeScore": 2,
+      "awayScore": 1
+    },
+    {
+      "id": 3,
+      "date": "2026-06-18",
+      "group": "A",
+      "home": "Tchéquia",
+      "away": "África do Sul",
+      "venue": "Atlanta",
+      "status": "scheduled",
+      "time": "12h ET"
+    },
+    {
+      "id": 4,
+      "date": "2026-06-18",
+      "group": "A",
+      "home": "México",
+      "away": "Coreia do Sul",
+      "venue": "Guadalajara",
+      "status": "scheduled",
+      "time": "21h"
+    },
+    {
+      "id": 5,
+      "date": "2026-06-24",
+      "group": "A",
+      "home": "Tchéquia",
+      "away": "México",
+      "venue": "Cidade do México",
+      "status": "scheduled",
+      "time": "19h"
+    },
+    {
+      "id": 6,
+      "date": "2026-06-24",
+      "group": "A",
+      "home": "África do Sul",
+      "away": "Coreia do Sul",
+      "venue": "Monterrey",
+      "status": "scheduled",
+      "time": "19h"
+    },
+    {
+      "id": 7,
+      "date": "2026-06-12",
+      "group": "B",
+      "home": "Canadá",
+      "away": "Bósnia e Herzegovina",
+      "venue": "Toronto",
+      "status": "finished",
+      "homeScore": 1,
+      "awayScore": 1
+    },
+    {
+      "id": 8,
+      "date": "2026-06-13",
+      "group": "B",
+      "home": "Catar",
+      "away": "Suíça",
+      "venue": "Santa Clara",
+      "status": "finished",
+      "homeScore": 1,
+      "awayScore": 1
+    },
+    {
+      "id": 9,
+      "date": "2026-06-18",
+      "group": "B",
+      "home": "Suíça",
+      "away": "Bósnia e Herzegovina",
+      "venue": "Inglewood",
+      "status": "scheduled",
+      "time": "15h ET"
+    },
+    {
+      "id": 10,
+      "date": "2026-06-18",
+      "group": "B",
+      "home": "Canadá",
+      "away": "Catar",
+      "venue": "Vancouver",
+      "status": "scheduled",
+      "time": "18h ET"
+    },
+    {
+      "id": 11,
+      "date": "2026-06-24",
+      "group": "B",
+      "home": "Suíça",
+      "away": "Canadá",
+      "venue": "Vancouver",
+      "status": "scheduled",
+      "time": "15h ET"
+    },
+    {
+      "id": 12,
+      "date": "2026-06-24",
+      "group": "B",
+      "home": "Bósnia e Herzegovina",
+      "away": "Catar",
+      "venue": "Seattle",
+      "status": "scheduled",
+      "time": "15h ET"
+    },
+    {
+      "id": 13,
+      "date": "2026-06-13",
+      "group": "C",
+      "home": "Brasil",
+      "away": "Marrocos",
+      "venue": "East Rutherford",
+      "status": "live",
+      "homeScore": 0,
+      "awayScore": 0
+    },
+    {
+      "id": 14,
+      "date": "2026-06-13",
+      "group": "C",
+      "home": "Haiti",
+      "away": "Escócia",
+      "venue": "Foxborough",
+      "status": "scheduled",
+      "time": "21h ET"
+    },
+    {
+      "id": 15,
+      "date": "2026-06-19",
+      "group": "C",
+      "home": "Escócia",
+      "away": "Marrocos",
+      "venue": "Foxborough",
+      "status": "scheduled",
+      "time": "18h"
+    },
+    {
+      "id": 16,
+      "date": "2026-06-19",
+      "group": "C",
+      "home": "Brasil",
+      "away": "Haiti",
+      "venue": "Filadélfia",
+      "status": "scheduled",
+      "time": "20h30"
+    },
+    {
+      "id": 17,
+      "date": "2026-06-24",
+      "group": "C",
+      "home": "Escócia",
+      "away": "Brasil",
+      "venue": "Miami",
+      "status": "scheduled",
+      "time": "18h"
+    },
+    {
+      "id": 18,
+      "date": "2026-06-24",
+      "group": "C",
+      "home": "Marrocos",
+      "away": "Haiti",
+      "venue": "Atlanta",
+      "status": "scheduled",
+      "time": "18h"
+    },
+    {
+      "id": 19,
+      "date": "2026-06-12",
+      "group": "D",
+      "home": "Estados Unidos",
+      "away": "Paraguai",
+      "venue": "Inglewood",
+      "status": "finished",
+      "homeScore": 4,
+      "awayScore": 1
+    },
+    {
+      "id": 20,
+      "date": "2026-06-12",
+      "group": "D",
+      "home": "Austrália",
+      "away": "Turquia",
+      "venue": "Vancouver",
+      "status": "scheduled",
+      "time": "00h ET (13/06)"
+    },
+    {
+      "id": 21,
+      "date": "2026-06-19",
+      "group": "D",
+      "home": "Estados Unidos",
+      "away": "Austrália",
+      "venue": "Seattle",
+      "status": "scheduled",
+      "time": "15h ET"
+    },
+    {
+      "id": 22,
+      "date": "2026-06-19",
+      "group": "D",
+      "home": "Turquia",
+      "away": "Paraguai",
+      "venue": "Santa Clara",
+      "status": "scheduled",
+      "time": "23h ET"
+    },
+    {
+      "id": 23,
+      "date": "2026-06-25",
+      "group": "D",
+      "home": "Turquia",
+      "away": "Estados Unidos",
+      "venue": "Inglewood",
+      "status": "scheduled",
+      "time": "22h ET"
+    },
+    {
+      "id": 24,
+      "date": "2026-06-25",
+      "group": "D",
+      "home": "Paraguai",
+      "away": "Austrália",
+      "venue": "Santa Clara",
+      "status": "scheduled",
+      "time": "22h ET"
+    },
+    {
+      "id": 25,
+      "date": "2026-06-14",
+      "group": "E",
+      "home": "Alemanha",
+      "away": "Curaçao",
+      "venue": "Houston",
+      "status": "scheduled",
+      "time": "13h ET"
+    },
+    {
+      "id": 26,
+      "date": "2026-06-14",
+      "group": "E",
+      "home": "Costa do Marfim",
+      "away": "Equador",
+      "venue": "Filadélfia",
+      "status": "scheduled",
+      "time": "19h ET"
+    },
+    {
+      "id": 27,
+      "date": "2026-06-20",
+      "group": "E",
+      "home": "Alemanha",
+      "away": "Costa do Marfim",
+      "venue": "Toronto",
+      "status": "scheduled",
+      "time": "16h ET"
+    },
+    {
+      "id": 28,
+      "date": "2026-06-20",
+      "group": "E",
+      "home": "Equador",
+      "away": "Curaçao",
+      "venue": "Kansas City",
+      "status": "scheduled",
+      "time": "20h ET"
+    },
+    {
+      "id": 29,
+      "date": "2026-06-25",
+      "group": "E",
+      "home": "Curaçao",
+      "away": "Costa do Marfim",
+      "venue": "Filadélfia",
+      "status": "scheduled",
+      "time": "16h ET"
+    },
+    {
+      "id": 30,
+      "date": "2026-06-25",
+      "group": "E",
+      "home": "Equador",
+      "away": "Alemanha",
+      "venue": "East Rutherford",
+      "status": "scheduled",
+      "time": "16h ET"
+    },
+    {
+      "id": 31,
+      "date": "2026-06-14",
+      "group": "F",
+      "home": "Países Baixos",
+      "away": "Japão",
+      "venue": "Arlington",
+      "status": "scheduled",
+      "time": "16h"
+    },
+    {
+      "id": 32,
+      "date": "2026-06-14",
+      "group": "F",
+      "home": "Suécia",
+      "away": "Tunísia",
+      "venue": "Monterrey",
+      "status": "scheduled",
+      "time": "22h"
+    },
+    {
+      "id": 33,
+      "date": "2026-06-20",
+      "group": "F",
+      "home": "Países Baixos",
+      "away": "Suécia",
+      "venue": "Houston",
+      "status": "scheduled",
+      "time": "13h"
+    },
+    {
+      "id": 34,
+      "date": "2026-06-20",
+      "group": "F",
+      "home": "Tunísia",
+      "away": "Japão",
+      "venue": "Monterrey",
+      "status": "scheduled",
+      "time": "00h"
+    },
+    {
+      "id": 35,
+      "date": "2026-06-25",
+      "group": "F",
+      "home": "Japão",
+      "away": "Suécia",
+      "venue": "Arlington",
+      "status": "scheduled",
+      "time": "19h"
+    },
+    {
+      "id": 36,
+      "date": "2026-06-25",
+      "group": "F",
+      "home": "Tunísia",
+      "away": "Países Baixos",
+      "venue": "Kansas City",
+      "status": "scheduled",
+      "time": "19h"
+    },
+    {
+      "id": 37,
+      "date": "2026-06-15",
+      "group": "G",
+      "home": "Bélgica",
+      "away": "Egito",
+      "venue": "Seattle",
+      "status": "scheduled",
+      "time": "15h ET"
+    },
+    {
+      "id": 38,
+      "date": "2026-06-15",
+      "group": "G",
+      "home": "Irã",
+      "away": "Nova Zelândia",
+      "venue": "Inglewood",
+      "status": "scheduled",
+      "time": "21h ET"
+    },
+    {
+      "id": 39,
+      "date": "2026-06-21",
+      "group": "G",
+      "home": "Bélgica",
+      "away": "Irã",
+      "venue": "Inglewood",
+      "status": "scheduled",
+      "time": "15h ET"
+    },
+    {
+      "id": 40,
+      "date": "2026-06-21",
+      "group": "G",
+      "home": "Nova Zelândia",
+      "away": "Egito",
+      "venue": "Vancouver",
+      "status": "scheduled",
+      "time": "21h ET"
+    },
+    {
+      "id": 41,
+      "date": "2026-06-26",
+      "group": "G",
+      "home": "Egito",
+      "away": "Irã",
+      "venue": "Seattle",
+      "status": "scheduled",
+      "time": "23h ET"
+    },
+    {
+      "id": 42,
+      "date": "2026-06-26",
+      "group": "G",
+      "home": "Nova Zelândia",
+      "away": "Bélgica",
+      "venue": "Vancouver",
+      "status": "scheduled",
+      "time": "23h ET"
+    },
+    {
+      "id": 43,
+      "date": "2026-06-15",
+      "group": "H",
+      "home": "Espanha",
+      "away": "Cabo Verde",
+      "venue": "Atlanta",
+      "status": "scheduled",
+      "time": "12h"
+    },
+    {
+      "id": 44,
+      "date": "2026-06-15",
+      "group": "H",
+      "home": "Arábia Saudita",
+      "away": "Uruguai",
+      "venue": "Miami",
+      "status": "scheduled",
+      "time": "18h"
+    },
+    {
+      "id": 45,
+      "date": "2026-06-21",
+      "group": "H",
+      "home": "Espanha",
+      "away": "Arábia Saudita",
+      "venue": "Atlanta",
+      "status": "scheduled",
+      "time": "12h"
+    },
+    {
+      "id": 46,
+      "date": "2026-06-21",
+      "group": "H",
+      "home": "Uruguai",
+      "away": "Cabo Verde",
+      "venue": "Miami",
+      "status": "scheduled",
+      "time": "18h"
+    },
+    {
+      "id": 47,
+      "date": "2026-06-26",
+      "group": "H",
+      "home": "Cabo Verde",
+      "away": "Arábia Saudita",
+      "venue": "Houston",
+      "status": "scheduled",
+      "time": "20h"
+    },
+    {
+      "id": 48,
+      "date": "2026-06-26",
+      "group": "H",
+      "home": "Uruguai",
+      "away": "Espanha",
+      "venue": "Guadalajara",
+      "status": "scheduled",
+      "time": "20h"
+    },
+    {
+      "id": 49,
+      "date": "2026-06-16",
+      "group": "I",
+      "home": "França",
+      "away": "Senegal",
+      "venue": "East Rutherford",
+      "status": "scheduled",
+      "time": "15h"
+    },
+    {
+      "id": 50,
+      "date": "2026-06-16",
+      "group": "I",
+      "home": "Iraque",
+      "away": "Noruega",
+      "venue": "Foxborough",
+      "status": "scheduled",
+      "time": "18h"
+    },
+    {
+      "id": 51,
+      "date": "2026-06-22",
+      "group": "I",
+      "home": "França",
+      "away": "Iraque",
+      "venue": "Filadélfia",
+      "status": "scheduled",
+      "time": "17h"
+    },
+    {
+      "id": 52,
+      "date": "2026-06-22",
+      "group": "I",
+      "home": "Noruega",
+      "away": "Senegal",
+      "venue": "East Rutherford",
+      "status": "scheduled",
+      "time": "20h"
+    },
+    {
+      "id": 53,
+      "date": "2026-06-26",
+      "group": "I",
+      "home": "Noruega",
+      "away": "França",
+      "venue": "Foxborough",
+      "status": "scheduled",
+      "time": "15h"
+    },
+    {
+      "id": 54,
+      "date": "2026-06-26",
+      "group": "I",
+      "home": "Senegal",
+      "away": "Iraque",
+      "venue": "Toronto",
+      "status": "scheduled",
+      "time": "15h"
+    },
+    {
+      "id": 55,
+      "date": "2026-06-16",
+      "group": "J",
+      "home": "Argentina",
+      "away": "Argélia",
+      "venue": "Kansas City",
+      "status": "scheduled",
+      "time": "21h ET"
+    },
+    {
+      "id": 56,
+      "date": "2026-06-16",
+      "group": "J",
+      "home": "Áustria",
+      "away": "Jordânia",
+      "venue": "Santa Clara",
+      "status": "scheduled",
+      "time": "00h ET (17/06)"
+    },
+    {
+      "id": 57,
+      "date": "2026-06-22",
+      "group": "J",
+      "home": "Argentina",
+      "away": "Áustria",
+      "venue": "Arlington",
+      "status": "scheduled",
+      "time": "13h ET"
+    },
+    {
+      "id": 58,
+      "date": "2026-06-22",
+      "group": "J",
+      "home": "Jordânia",
+      "away": "Argélia",
+      "venue": "Santa Clara",
+      "status": "scheduled",
+      "time": "23h ET"
+    },
+    {
+      "id": 59,
+      "date": "2026-06-27",
+      "group": "J",
+      "home": "Argélia",
+      "away": "Áustria",
+      "venue": "Kansas City",
+      "status": "scheduled",
+      "time": "22h ET"
+    },
+    {
+      "id": 60,
+      "date": "2026-06-27",
+      "group": "J",
+      "home": "Jordânia",
+      "away": "Argentina",
+      "venue": "Dallas",
+      "status": "scheduled",
+      "time": "—"
+    },
+    {
+      "id": 61,
+      "date": "2026-06-17",
+      "group": "K",
+      "home": "Portugal",
+      "away": "RD Congo",
+      "venue": "Houston",
+      "status": "scheduled",
+      "time": "13h ET"
+    },
+    {
+      "id": 62,
+      "date": "2026-06-17",
+      "group": "K",
+      "home": "Uzbequistão",
+      "away": "Colômbia",
+      "venue": "Cidade do México",
+      "status": "scheduled",
+      "time": "22h ET"
+    },
+    {
+      "id": 63,
+      "date": "2026-06-23",
+      "group": "K",
+      "home": "Portugal",
+      "away": "Uzbequistão",
+      "venue": "Houston",
+      "status": "scheduled",
+      "time": "13h ET"
+    },
+    {
+      "id": 64,
+      "date": "2026-06-23",
+      "group": "K",
+      "home": "Colômbia",
+      "away": "RD Congo",
+      "venue": "Guadalajara",
+      "status": "scheduled",
+      "time": "22h ET"
+    },
+    {
+      "id": 65,
+      "date": "2026-06-27",
+      "group": "K",
+      "home": "Colômbia",
+      "away": "Portugal",
+      "venue": "Miami",
+      "status": "scheduled",
+      "time": "19h30 ET"
+    },
+    {
+      "id": 66,
+      "date": "2026-06-27",
+      "group": "K",
+      "home": "RD Congo",
+      "away": "Uzbequistão",
+      "venue": "Atlanta",
+      "status": "scheduled",
+      "time": "—"
+    },
+    {
+      "id": 67,
+      "date": "2026-06-17",
+      "group": "L",
+      "home": "Inglaterra",
+      "away": "Croácia",
+      "venue": "Arlington",
+      "status": "scheduled",
+      "time": "16h"
+    },
+    {
+      "id": 68,
+      "date": "2026-06-17",
+      "group": "L",
+      "home": "Gana",
+      "away": "Panamá",
+      "venue": "Toronto",
+      "status": "scheduled",
+      "time": "19h"
+    },
+    {
+      "id": 69,
+      "date": "2026-06-23",
+      "group": "L",
+      "home": "Inglaterra",
+      "away": "Gana",
+      "venue": "Foxborough",
+      "status": "scheduled",
+      "time": "16h"
+    },
+    {
+      "id": 70,
+      "date": "2026-06-23",
+      "group": "L",
+      "home": "Panamá",
+      "away": "Croácia",
+      "venue": "Toronto",
+      "status": "scheduled",
+      "time": "19h"
+    },
+    {
+      "id": 71,
+      "date": "2026-06-27",
+      "group": "L",
+      "home": "Panamá",
+      "away": "Inglaterra",
+      "venue": "East Rutherford",
+      "status": "scheduled",
+      "time": "17h"
+    },
+    {
+      "id": 72,
+      "date": "2026-06-27",
+      "group": "L",
+      "home": "Croácia",
+      "away": "Gana",
+      "venue": "Filadélfia",
+      "status": "scheduled",
+      "time": "17h"
+    }
   ],
   "knockout": {
     "r32": [
-      { "id": 73, "date": "2026-06-28", "venue": "Inglewood", "status": "scheduled", "home": null, "away": null, "homeSource": "2A", "awaySource": "2B" },
-      { "id": 74, "date": "2026-06-28", "venue": "Foxborough", "status": "scheduled", "home": null, "away": null, "homeSource": "1E", "awaySource": "3:A,B,C,D,F" },
-      { "id": 75, "date": "2026-06-29", "venue": "Houston", "status": "scheduled", "home": null, "away": null, "homeSource": "1C", "awaySource": "2F" },
-      { "id": 76, "date": "2026-06-30", "venue": "Monterrey", "status": "scheduled", "home": null, "away": null, "homeSource": "1F", "awaySource": "2C" },
-      { "id": 77, "date": "2026-06-30", "venue": "Dallas", "status": "scheduled", "home": null, "away": null, "homeSource": "2E", "awaySource": "2I" },
-      { "id": 78, "date": "2026-06-30", "venue": "East Rutherford (NY/NJ)", "status": "scheduled", "home": null, "away": null, "homeSource": "1I", "awaySource": "3:C,D,F,G,H" },
-      { "id": 79, "date": "2026-06-30", "venue": "Cidade do México", "status": "scheduled", "home": null, "away": null, "homeSource": "1A", "awaySource": "3:C,E,F,H,I" },
-      { "id": 80, "date": "2026-07-01", "venue": "Atlanta", "status": "scheduled", "home": null, "away": null, "homeSource": "1L", "awaySource": "3:E,H,I,J,K" },
-      { "id": 81, "date": "2026-07-01", "venue": "Santa Clara", "status": "scheduled", "home": null, "away": null, "homeSource": "1D", "awaySource": "3:B,E,F,I,J" },
-      { "id": 82, "date": "2026-07-01", "venue": "Seattle", "status": "scheduled", "home": null, "away": null, "homeSource": "1G", "awaySource": "3:A,E,H,I,J" },
-      { "id": 83, "date": "2026-07-02", "venue": "Toronto", "status": "scheduled", "home": null, "away": null, "homeSource": "2K", "awaySource": "2L" },
-      { "id": 84, "date": "2026-07-02", "venue": "Inglewood", "status": "scheduled", "home": null, "away": null, "homeSource": "1H", "awaySource": "2J" },
-      { "id": 85, "date": "2026-07-02", "venue": "Vancouver", "status": "scheduled", "home": null, "away": null, "homeSource": "1B", "awaySource": "3:E,F,G,I,J" },
-      { "id": 86, "date": "2026-07-03", "venue": "Miami", "status": "scheduled", "home": null, "away": null, "homeSource": "1J", "awaySource": "2H" },
-      { "id": 87, "date": "2026-07-03", "venue": "Kansas City", "status": "scheduled", "home": null, "away": null, "homeSource": "1K", "awaySource": "3:D,E,I,J,L" },
-      { "id": 88, "date": "2026-07-03", "venue": "Dallas", "status": "scheduled", "home": null, "away": null, "homeSource": "2D", "awaySource": "2G" }
+      {
+        "id": 73,
+        "date": "2026-06-28",
+        "venue": "Inglewood",
+        "status": "scheduled",
+        "home": null,
+        "away": null,
+        "homeSource": "2A",
+        "awaySource": "2B"
+      },
+      {
+        "id": 74,
+        "date": "2026-06-28",
+        "venue": "Foxborough",
+        "status": "scheduled",
+        "home": null,
+        "away": null,
+        "homeSource": "1E",
+        "awaySource": "3:A,B,C,D,F"
+      },
+      {
+        "id": 75,
+        "date": "2026-06-29",
+        "venue": "Houston",
+        "status": "scheduled",
+        "home": null,
+        "away": null,
+        "homeSource": "1C",
+        "awaySource": "2F"
+      },
+      {
+        "id": 76,
+        "date": "2026-06-30",
+        "venue": "Monterrey",
+        "status": "scheduled",
+        "home": null,
+        "away": null,
+        "homeSource": "1F",
+        "awaySource": "2C"
+      },
+      {
+        "id": 77,
+        "date": "2026-06-30",
+        "venue": "Dallas",
+        "status": "scheduled",
+        "home": null,
+        "away": null,
+        "homeSource": "2E",
+        "awaySource": "2I"
+      },
+      {
+        "id": 78,
+        "date": "2026-06-30",
+        "venue": "East Rutherford (NY/NJ)",
+        "status": "scheduled",
+        "home": null,
+        "away": null,
+        "homeSource": "1I",
+        "awaySource": "3:C,D,F,G,H"
+      },
+      {
+        "id": 79,
+        "date": "2026-06-30",
+        "venue": "Cidade do México",
+        "status": "scheduled",
+        "home": null,
+        "away": null,
+        "homeSource": "1A",
+        "awaySource": "3:C,E,F,H,I"
+      },
+      {
+        "id": 80,
+        "date": "2026-07-01",
+        "venue": "Atlanta",
+        "status": "scheduled",
+        "home": null,
+        "away": null,
+        "homeSource": "1L",
+        "awaySource": "3:E,H,I,J,K"
+      },
+      {
+        "id": 81,
+        "date": "2026-07-01",
+        "venue": "Santa Clara",
+        "status": "scheduled",
+        "home": null,
+        "away": null,
+        "homeSource": "1D",
+        "awaySource": "3:B,E,F,I,J"
+      },
+      {
+        "id": 82,
+        "date": "2026-07-01",
+        "venue": "Seattle",
+        "status": "scheduled",
+        "home": null,
+        "away": null,
+        "homeSource": "1G",
+        "awaySource": "3:A,E,H,I,J"
+      },
+      {
+        "id": 83,
+        "date": "2026-07-02",
+        "venue": "Toronto",
+        "status": "scheduled",
+        "home": null,
+        "away": null,
+        "homeSource": "2K",
+        "awaySource": "2L"
+      },
+      {
+        "id": 84,
+        "date": "2026-07-02",
+        "venue": "Inglewood",
+        "status": "scheduled",
+        "home": null,
+        "away": null,
+        "homeSource": "1H",
+        "awaySource": "2J"
+      },
+      {
+        "id": 85,
+        "date": "2026-07-02",
+        "venue": "Vancouver",
+        "status": "scheduled",
+        "home": null,
+        "away": null,
+        "homeSource": "1B",
+        "awaySource": "3:E,F,G,I,J"
+      },
+      {
+        "id": 86,
+        "date": "2026-07-03",
+        "venue": "Miami",
+        "status": "scheduled",
+        "home": null,
+        "away": null,
+        "homeSource": "1J",
+        "awaySource": "2H"
+      },
+      {
+        "id": 87,
+        "date": "2026-07-03",
+        "venue": "Kansas City",
+        "status": "scheduled",
+        "home": null,
+        "away": null,
+        "homeSource": "1K",
+        "awaySource": "3:D,E,I,J,L"
+      },
+      {
+        "id": 88,
+        "date": "2026-07-03",
+        "venue": "Dallas",
+        "status": "scheduled",
+        "home": null,
+        "away": null,
+        "homeSource": "2D",
+        "awaySource": "2G"
+      }
     ],
     "r16": [
-      { "id": 89, "date": "2026-07-04", "venue": "Filadélfia", "status": "scheduled", "home": null, "away": null, "homeSource": "W74", "awaySource": "W77" },
-      { "id": 90, "date": "2026-07-04", "venue": "Houston", "status": "scheduled", "home": null, "away": null, "homeSource": "W73", "awaySource": "W75" },
-      { "id": 91, "date": "2026-07-05", "venue": "East Rutherford (NY/NJ)", "status": "scheduled", "home": null, "away": null, "homeSource": "W76", "awaySource": "W78" },
-      { "id": 92, "date": "2026-07-05", "venue": "Cidade do México", "status": "scheduled", "home": null, "away": null, "homeSource": "W79", "awaySource": "W80" },
-      { "id": 93, "date": "2026-07-06", "venue": "Dallas", "status": "scheduled", "home": null, "away": null, "homeSource": "W83", "awaySource": "W84" },
-      { "id": 94, "date": "2026-07-06", "venue": "Seattle", "status": "scheduled", "home": null, "away": null, "homeSource": "W81", "awaySource": "W82" },
-      { "id": 95, "date": "2026-07-07", "venue": "Atlanta", "status": "scheduled", "home": null, "away": null, "homeSource": "W86", "awaySource": "W88" },
-      { "id": 96, "date": "2026-07-07", "venue": "Vancouver", "status": "scheduled", "home": null, "away": null, "homeSource": "W85", "awaySource": "W87" }
+      {
+        "id": 89,
+        "date": "2026-07-04",
+        "venue": "Filadélfia",
+        "status": "scheduled",
+        "home": null,
+        "away": null,
+        "homeSource": "W74",
+        "awaySource": "W77"
+      },
+      {
+        "id": 90,
+        "date": "2026-07-04",
+        "venue": "Houston",
+        "status": "scheduled",
+        "home": null,
+        "away": null,
+        "homeSource": "W73",
+        "awaySource": "W75"
+      },
+      {
+        "id": 91,
+        "date": "2026-07-05",
+        "venue": "East Rutherford (NY/NJ)",
+        "status": "scheduled",
+        "home": null,
+        "away": null,
+        "homeSource": "W76",
+        "awaySource": "W78"
+      },
+      {
+        "id": 92,
+        "date": "2026-07-05",
+        "venue": "Cidade do México",
+        "status": "scheduled",
+        "home": null,
+        "away": null,
+        "homeSource": "W79",
+        "awaySource": "W80"
+      },
+      {
+        "id": 93,
+        "date": "2026-07-06",
+        "venue": "Dallas",
+        "status": "scheduled",
+        "home": null,
+        "away": null,
+        "homeSource": "W83",
+        "awaySource": "W84"
+      },
+      {
+        "id": 94,
+        "date": "2026-07-06",
+        "venue": "Seattle",
+        "status": "scheduled",
+        "home": null,
+        "away": null,
+        "homeSource": "W81",
+        "awaySource": "W82"
+      },
+      {
+        "id": 95,
+        "date": "2026-07-07",
+        "venue": "Atlanta",
+        "status": "scheduled",
+        "home": null,
+        "away": null,
+        "homeSource": "W86",
+        "awaySource": "W88"
+      },
+      {
+        "id": 96,
+        "date": "2026-07-07",
+        "venue": "Vancouver",
+        "status": "scheduled",
+        "home": null,
+        "away": null,
+        "homeSource": "W85",
+        "awaySource": "W87"
+      }
     ],
     "qf": [
-      { "id": 97, "date": "2026-07-09", "venue": "Foxborough", "status": "scheduled", "home": null, "away": null, "homeSource": "W89", "awaySource": "W90" },
-      { "id": 98, "date": "2026-07-10", "venue": "Inglewood", "status": "scheduled", "home": null, "away": null, "homeSource": "W93", "awaySource": "W94" },
-      { "id": 99, "date": "2026-07-11", "venue": "Miami", "status": "scheduled", "home": null, "away": null, "homeSource": "W91", "awaySource": "W92" },
-      { "id": 100, "date": "2026-07-11", "venue": "Kansas City", "status": "scheduled", "home": null, "away": null, "homeSource": "W95", "awaySource": "W96" }
+      {
+        "id": 97,
+        "date": "2026-07-09",
+        "venue": "Foxborough",
+        "status": "scheduled",
+        "home": null,
+        "away": null,
+        "homeSource": "W89",
+        "awaySource": "W90"
+      },
+      {
+        "id": 98,
+        "date": "2026-07-10",
+        "venue": "Inglewood",
+        "status": "scheduled",
+        "home": null,
+        "away": null,
+        "homeSource": "W93",
+        "awaySource": "W94"
+      },
+      {
+        "id": 99,
+        "date": "2026-07-11",
+        "venue": "Miami",
+        "status": "scheduled",
+        "home": null,
+        "away": null,
+        "homeSource": "W91",
+        "awaySource": "W92"
+      },
+      {
+        "id": 100,
+        "date": "2026-07-11",
+        "venue": "Kansas City",
+        "status": "scheduled",
+        "home": null,
+        "away": null,
+        "homeSource": "W95",
+        "awaySource": "W96"
+      }
     ],
     "sf": [
-      { "id": 101, "date": "2026-07-14", "venue": "Dallas", "status": "scheduled", "home": null, "away": null, "homeSource": "W97", "awaySource": "W98" },
-      { "id": 102, "date": "2026-07-15", "venue": "Atlanta", "status": "scheduled", "home": null, "away": null, "homeSource": "W99", "awaySource": "W100" }
+      {
+        "id": 101,
+        "date": "2026-07-14",
+        "venue": "Dallas",
+        "status": "scheduled",
+        "home": null,
+        "away": null,
+        "homeSource": "W97",
+        "awaySource": "W98"
+      },
+      {
+        "id": 102,
+        "date": "2026-07-15",
+        "venue": "Atlanta",
+        "status": "scheduled",
+        "home": null,
+        "away": null,
+        "homeSource": "W99",
+        "awaySource": "W100"
+      }
     ],
     "third": [
-      { "id": 103, "date": "2026-07-18", "venue": "Miami", "status": "scheduled", "home": null, "away": null, "homeSource": "L101", "awaySource": "L102" }
+      {
+        "id": 103,
+        "date": "2026-07-18",
+        "venue": "Miami",
+        "status": "scheduled",
+        "home": null,
+        "away": null,
+        "homeSource": "L101",
+        "awaySource": "L102"
+      }
     ],
     "final": [
-      { "id": 104, "date": "2026-07-19", "venue": "East Rutherford (NY/NJ)", "status": "scheduled", "home": null, "away": null, "homeSource": "W101", "awaySource": "W102" }
+      {
+        "id": 104,
+        "date": "2026-07-19",
+        "venue": "East Rutherford (NY/NJ)",
+        "status": "scheduled",
+        "home": null,
+        "away": null,
+        "homeSource": "W101",
+        "awaySource": "W102"
+      }
     ]
   }
 }

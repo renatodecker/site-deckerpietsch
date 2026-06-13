@@ -1,0 +1,77 @@
+{
+  "meta": [
+    { "label": "Período", "value": "11 jun – 19 jul 2026" },
+    { "label": "Seleções", "value": "48" },
+    { "label": "Jogos", "value": "104" },
+    { "label": "Sedes", "value": "🇺🇸 EUA · 🇲🇽 México · 🇨🇦 Canadá" }
+  ],
+  "format": [
+    {
+      "title": "Fase de grupos",
+      "icon": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><rect x='3' y='3' width='8' height='8' rx='1'/><rect x='13' y='3' width='8' height='8' rx='1'/><rect x='3' y='13' width='8' height='8' rx='1'/><rect x='13' y='13' width='8' height='8' rx='1'/></svg>",
+      "desc": "São 12 grupos (A a L) com 4 seleções cada. Cada equipe enfrenta as outras três do seu grupo uma vez, totalizando 72 jogos entre 11 e 27 de junho.",
+      "list": [
+        "Vitória = 3 pontos",
+        "Empate = 1 ponto",
+        "Derrota = 0 pontos"
+      ]
+    },
+    {
+      "title": "Critérios de desempate",
+      "icon": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><path d='M12 3v18'/><path d='M5 7l-3 7a4 4 0 0 0 6 0z'/><path d='M19 7l-3 7a4 4 0 0 0 6 0z'/><path d='M5 7h14'/><path d='M12 3l3 4H9z'/></svg>",
+      "desc": "Em caso de igualdade de pontos, a ordem de critérios é:",
+      "list": [
+        "1. Pontos no confronto direto",
+        "2. Saldo de gols no confronto direto",
+        "3. Gols marcados no confronto direto",
+        "4. Saldo de gols geral na fase de grupos",
+        "5. Gols marcados na fase de grupos",
+        "6. Fair play (cartões)",
+        "7. Posição no Ranking FIFA (novidade 2026)"
+      ]
+    },
+    {
+      "title": "Classificação para o mata-mata",
+      "icon": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><path d='M8 21h8'/><path d='M12 17v4'/><path d='M7 4h10v4a5 5 0 0 1-10 0z'/><path d='M5 4H3v2a4 4 0 0 0 4 4'/><path d='M19 4h2v2a4 4 0 0 1-4 4'/></svg>",
+      "desc": "Avançam 32 seleções para a fase eliminatória:",
+      "list": [
+        "1º e 2º colocados de cada grupo (24 times)",
+        "Os 8 melhores 3ºs colocados entre os 12 grupos (8 times)"
+      ]
+    },
+    {
+      "title": "Fase eliminatória",
+      "icon": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><path d='M4 5h6v4H4z'/><path d='M14 9h6v4h-6z'/><path d='M4 15h6v4H4z'/><path d='M10 7h2v9a2 2 0 0 0 2 2h2'/><path d='M10 17h4'/></svg>",
+      "desc": "Caminho de mata-mata em jogo único até a grande final:",
+      "list": [
+        "Fase de 32: 28/06 a 03/07",
+        "Oitavas de final: 04/07 a 07/07",
+        "Quartas de final: 09/07 a 11/07",
+        "Semifinais: 14 e 15/07",
+        "Disputa de 3º lugar: 18/07",
+        "Final: 19/07"
+      ]
+    },
+    {
+      "title": "Sedes",
+      "icon": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><path d='M12 21s-7-5.5-7-11a7 7 0 0 1 14 0c0 5.5-7 11-7 11z'/><circle cx='12' cy='10' r='2.5'/></svg>",
+      "desc": "16 estádios em 3 países sediam a Copa:",
+      "list": [
+        "🇺🇸 Estados Unidos: 11 estádios",
+        "🇲🇽 México: 3 estádios (Cidade do México, Guadalajara, Monterrey)",
+        "🇨🇦 Canadá: 2 estádios (Toronto, Vancouver)"
+      ]
+    },
+    {
+      "title": "Datas-chave",
+      "icon": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><rect x='3' y='4' width='18' height='18' rx='2'/><path d='M16 2v4'/><path d='M8 2v4'/><path d='M3 10h18'/></svg>",
+      "desc": "Principais marcos do torneio:",
+      "list": [
+        "Abertura: 11/06 — México 2 x 0 África do Sul (Cidade do México)",
+        "Fim da fase de grupos: 27/06",
+        "Final: 19/07 — MetLife Stadium (NY/NJ)"
+      ]
+    }
+  ],
+  "lastUpdated": "13/06/2026 16:10 UTC"
+}

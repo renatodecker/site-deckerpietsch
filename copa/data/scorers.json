@@ -1,0 +1,14 @@
+{
+  "scorers": [
+    { "name": "Folarin Balogun", "country": "🇺🇸 Estados Unidos", "goals": 2 },
+    { "name": "Julián Quiñones", "country": "🇲🇽 México", "goals": 1 },
+    { "name": "Raúl Jiménez", "country": "🇲🇽 México", "goals": 1 },
+    { "name": "Hwang In-beom", "country": "🇰🇷 Coreia do Sul", "goals": 1 },
+    { "name": "Oh Hyeon-gyu", "country": "🇰🇷 Coreia do Sul", "goals": 1 },
+    { "name": "Ladislav Krejčí", "country": "🇨🇿 Tchéquia", "goals": 1 },
+    { "name": "Cyle Larin", "country": "🇨🇦 Canadá", "goals": 1 },
+    { "name": "Lukić", "country": "🇧🇦 Bósnia e Herzegovina", "goals": 1 },
+    { "name": "Mauricio", "country": "🇵🇾 Paraguai", "goals": 1 },
+    { "name": "Gio Reyna", "country": "🇺🇸 Estados Unidos", "goals": 1 }
+  ]
+}

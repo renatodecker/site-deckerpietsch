@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Copa do Mundo FIFA 2026: tabela de jogos, grupos, classificação, artilharia e chaveamento da fase eliminatória, atualizados a cada partida." />
+  <meta name="robots" content="index, follow" />
+  <title>Copa do Mundo FIFA 2026 | Tabela, Grupos e Classificação</title>
+  <link rel="canonical" href="https://deckerpietsch.com.br/copa" />
+  <link rel="icon" href="../assets/logo.png" type="image/png" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://deckerpietsch.com.br/copa" />
+  <meta property="og:title" content="Copa do Mundo FIFA 2026 | Tabela, Grupos e Classificação" />
+  <meta property="og:description" content="Acompanhe a tabela de jogos, grupos, classificação e chaveamento da Copa do Mundo FIFA 2026, atualizados a cada partida." />
+  <meta property="og:locale" content="pt_BR" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-SKL0JMRVYW"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-SKL0JMRVYW');
+  </script>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="header" id="header">
+    <div class="container header__inner">
+      <a href="#topo" class="logo">
+        <img src="../assets/logo.png" alt="Decker Pietsch" class="logo__img" />
+        <span class="logo__title">Copa do Mundo<small>FIFA 2026</small></span>
+      </a>
+      <nav class="nav" id="nav">
+        <a href="#formato" class="nav__link">Formato</a>
+        <a href="#grupos" class="nav__link">Grupos</a>
+        <a href="#jogos" class="nav__link">Jogos</a>
+        <a href="#mata-mata" class="nav__link">Mata-mata</a>
+        <a href="#artilharia" class="nav__link">Artilharia</a>
+        <a href="#simulacao" class="nav__link">Simulação</a>
+      </nav>
+      <button class="nav-toggle" id="navToggle" aria-label="Abrir menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero" id="topo">
+    <div class="container hero__inner">
+      <p class="hero__eyebrow">Estados Unidos · México · Canadá</p>
+      <h1 class="hero__title">Copa do Mundo <span>FIFA 2026</span></h1>
+      <p class="hero__subtitle">
+        Tabela completa de jogos, grupos, classificação, artilharia e chaveamento da fase eliminatória,
+        atualizados a cada partida.
+      </p>
+      <div class="hero__meta" id="heroMeta">
+        <!-- preenchido via JS a partir de data/info.json -->
+      </div>
+    </div>
+  </section>
+
+  <!-- FORMATO / REGRAS -->
+  <section class="section" id="formato">
+    <div class="container">
+      <div class="section__header">
+        <span class="section__tag">Como funciona</span>
+        <h2 class="section__title">Formato e regras</h2>
+        <p class="section__desc">
+          Entenda como funciona a fase de grupos, os critérios de desempate e o caminho até a final.
+        </p>
+      </div>
+      <div class="format__grid" id="formatGrid">
+        <!-- preenchido via JS a partir de data/info.json -->
+      </div>
+    </div>
+  </section>
+
+  <!-- GRUPOS / CLASSIFICAÇÃO -->
+  <section class="section section--alt" id="grupos">
+    <div class="container">
+      <div class="section__header">
+        <span class="section__tag">Classificação</span>
+        <h2 class="section__title">Grupos</h2>
+        <p class="section__desc">
+          Classificação atualizada dos 12 grupos da fase inicial.
+        </p>
+      </div>
+      <div class="updated-badge">
+        <span class="updated-badge__inner" id="lastUpdated">Carregando dados...</span>
+      </div>
+      <div class="groups__grid" id="groupsGrid">
+        <!-- preenchido via JS a partir de data/groups.json -->
+      </div>
+      <div class="standings-legend">
+        <span class="standings-legend__item">
+          <span class="standings-legend__swatch standings-legend__swatch--qualified"></span>
+          Classificado direto (1º e 2º do grupo)
+        </span>
+        <span class="standings-legend__item">
+          <span class="standings-legend__swatch standings-legend__swatch--qualified-3rd"></span>
+          Pode classificar como um dos 8 melhores 3ºs colocados
+        </span>
+      </div>
+    </div>
+  </section>
+
+  <!-- JOGOS -->
+  <section class="section" id="jogos">
+    <div class="container">
+      <div class="section__header">
+        <span class="section__tag">Calendário</span>
+        <h2 class="section__title">Jogos</h2>
+        <p class="section__desc">
+          Todos os confrontos da Copa do Mundo, com placares atualizados.
+        </p>
+      </div>
+      <div class="tabs" id="matchTabs">
+        <!-- preenchido via JS: filtros por grupo / fase -->
+      </div>
+      <div class="matches__list" id="matchesList">
+        <!-- preenchido via JS a partir de data/matches.json -->
+      </div>
+    </div>
+  </section>
+
+  <!-- MATA-MATA -->
+  <section class="section section--alt" id="mata-mata">
+    <div class="container">
+      <div class="section__header">
+        <span class="section__tag">Fase final</span>
+        <h2 class="section__title">Chaveamento</h2>
+        <p class="section__desc">
+          Caminho da fase de 32 até a grande final, atualizado conforme as classificações são definidas.
+        </p>
+      </div>
+      <div class="bracket" id="bracket">
+        <!-- preenchido via JS a partir de data/matches.json -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ARTILHARIA -->
+  <section class="section" id="artilharia">
+    <div class="container">
+      <div class="section__header">
+        <span class="section__tag">Gols</span>
+        <h2 class="section__title">Artilharia</h2>
+        <p class="section__desc">
+          Os maiores goleadores do torneio até o momento.
+        </p>
+      </div>
+      <div id="scorersWrap">
+        <!-- preenchido via JS a partir de data/scorers.json -->
+      </div>
+    </div>
+  </section>
+
+  <!-- SIMULAÇÃO -->
+  <section class="section section--alt" id="simulacao">
+    <div class="container">
+      <div class="section__header">
+        <span class="section__tag">Em breve</span>
+        <h2 class="section__title">Simulação de resultados</h2>
+      </div>
+      <div class="sim-card">
+        <p class="sim-card__title">Faça seus próprios palpites</p>
+        <p class="sim-card__desc">
+          Em breve você poderá simular resultados dos próximos jogos e ver como ficaria
+          a classificação dos grupos e o chaveamento da fase eliminatória.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container footer__inner">
+      <p class="footer__copy">Dados não-oficiais, apenas para fins informativos · Atualizado manualmente a cada rodada.</p>
+      <a href="../index.html" class="footer__back">&larr; Voltar ao site da Decker Pietsch</a>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

@@ -456,14 +456,219 @@ function renderScorers(data) {
 }
 
 /* ============================================================
+   TEMA DINÂMICO (BANDEIRAS DAS SELEÇÕES)
+   ============================================================ */
+function hexToRgb(hex) {
+  const clean = hex.replace('#', '');
+  return {
+    r: parseInt(clean.substring(0, 2), 16),
+    g: parseInt(clean.substring(2, 4), 16),
+    b: parseInt(clean.substring(4, 6), 16)
+  };
+}
+
+function rgbToHsl(r, g, b) {
+  r /= 255; g /= 255; b /= 255;
+  const max = Math.max(r, g, b), min = Math.min(r, g, b);
+  const l = (max + min) / 2;
+  const delta = max - min;
+  let h = 0, s = 0;
+  if (delta !== 0) {
+    s = l > 0.5 ? delta / (2 - max - min) : delta / (max + min);
+    switch (max) {
+      case r: h = ((g - b) / delta) % 6; break;
+      case g: h = (b - r) / delta + 2; break;
+      default: h = (r - g) / delta + 4;
+    }
+    h *= 60;
+    if (h < 0) h += 360;
+  }
+  return { h, s, l };
+}
+
+function hslToRgb(h, s, l) {
+  const c = (1 - Math.abs(2 * l - 1)) * s;
+  const x = c * (1 - Math.abs((h / 60) % 2 - 1));
+  const m = l - c / 2;
+  let r = 0, g = 0, b = 0;
+  if (h < 60) [r, g, b] = [c, x, 0];
+  else if (h < 120) [r, g, b] = [x, c, 0];
+  else if (h < 180) [r, g, b] = [0, c, x];
+  else if (h < 240) [r, g, b] = [0, x, c];
+  else if (h < 300) [r, g, b] = [x, 0, c];
+  else [r, g, b] = [c, 0, x];
+  const toByte = v => Math.round((v + m) * 255);
+  return { r: toByte(r), g: toByte(g), b: toByte(b) };
+}
+
+function rgbToHex(r, g, b) {
+  const toHex = v => Math.max(0, Math.min(255, v)).toString(16).padStart(2, '0');
+  return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
+}
+
+// Regenera uma cor a partir de um hex base, fixando a luminosidade (preservando matiz)
+// e ajustando a saturação por um fator, para montar a escala de variáveis --navy-*/--gold-*.
+function shade(hex, targetL, satFactor = 1) {
+  const { r, g, b } = hexToRgb(hex);
+  const { h, s } = rgbToHsl(r, g, b);
+  const newS = Math.max(0, Math.min(1, s * satFactor));
+  const rgb = hslToRgb(h, newS, targetL);
+  return rgbToHex(rgb.r, rgb.g, rgb.b);
+}
+
+// Alvos de luminosidade/saturação calibrados a partir da escala padrão (Brasil)
+const NAVY_SCALE = [
+  { key: '900', l: 0.0725, sat: 1.06 },
+  { key: '800', l: 0.1216, sat: 1.05 },
+  { key: '700', l: 0.1745, sat: 0.99 },
+  { key: '600', l: 0.2392, sat: 0.91 },
+  { key: '400', l: 0.4922, sat: 0.53 },
+  { key: '100', l: 0.8824, sat: 0.68 },
+  { key: '50',  l: 0.9490, sat: 0.83 }
+];
+
+const GOLD_SCALE = [
+  { key: '700', l: 0.2706, sat: 1 },
+  { key: '600', l: 0.3510, sat: 1 },
+  { key: '500', l: 0.4157, sat: 1 },
+  { key: '400', l: 0.5000, sat: 1 },
+  { key: '200', l: 0.8451, sat: 1 },
+  { key: '50',  l: 0.9647, sat: 1 }
+];
+
+const THEME_STORAGE_KEY = 'copaTheme';
+
+function applyTheme(team) {
+  const root = document.documentElement;
+  NAVY_SCALE.forEach(step => root.style.setProperty(`--navy-${step.key}`, shade(team.navy, step.l, step.sat)));
+  GOLD_SCALE.forEach(step => root.style.setProperty(`--gold-${step.key}`, shade(team.gold, step.l, step.sat)));
+
+  localStorage.setItem(THEME_STORAGE_KEY, team.name);
+  setActiveFlag(team.name);
+
+  const resetBtn = document.getElementById('themeReset');
+  if (resetBtn) resetBtn.hidden = false;
+}
+
+function resetTheme() {
+  const root = document.documentElement;
+  NAVY_SCALE.forEach(step => root.style.removeProperty(`--navy-${step.key}`));
+  GOLD_SCALE.forEach(step => root.style.removeProperty(`--gold-${step.key}`));
+
+  localStorage.removeItem(THEME_STORAGE_KEY);
+  setActiveFlag(null);
+
+  const resetBtn = document.getElementById('themeReset');
+  if (resetBtn) resetBtn.hidden = true;
+}
+
+function setActiveFlag(teamName) {
+  document.querySelectorAll('.flag-bar__flag').forEach(btn => {
+    btn.classList.toggle('flag-bar__flag--active', btn.dataset.team === teamName);
+  });
+}
+
+function renderFlagBar(teams) {
+  const wrap = document.getElementById('flagBar');
+  const resetBtn = document.getElementById('themeReset');
+  if (!teams || teams.length === 0) {
+    wrap.innerHTML = '<div class="empty-state">Seleções ainda não disponíveis.</div>';
+    return;
+  }
+
+  wrap.innerHTML = teams.map(t => `
+    <button type="button" class="flag-bar__flag" data-team="${t.name}" title="${t.name}" aria-label="${t.name}">
+      ${t.flag}
+    </button>
+  `).join('');
+
+  wrap.querySelectorAll('.flag-bar__flag').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const team = teams.find(t => t.name === btn.dataset.team);
+      if (team) applyTheme(team);
+    });
+  });
+
+  if (resetBtn) {
+    resetBtn.addEventListener('click', () => resetTheme());
+  }
+
+  const saved = localStorage.getItem(THEME_STORAGE_KEY);
+  if (saved) {
+    const team = teams.find(t => t.name === saved);
+    if (team) applyTheme(team);
+  }
+}
+
+/* ============================================================
+   ESTÁDIOS-SEDE
+   ============================================================ */
+const STADIUM_ICON = `
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="32" cy="24" rx="30" ry="22" />
+    <ellipse cx="32" cy="24" rx="13" ry="9" />
+    <path d="M32 2v44" />
+  </svg>
+`;
+
+function renderStadiums(stadiums) {
+  const grid = document.getElementById('stadiumGrid');
+  const markers = document.getElementById('stadiumMarkers');
+
+  if (!stadiums || stadiums.length === 0) {
+    grid.innerHTML = '<div class="empty-state">Lista de estádios ainda não disponível.</div>';
+    return;
+  }
+
+  grid.innerHTML = stadiums.map(s => `
+    <div class="stadium-card" id="stadium-${s.id}" data-stadium="${s.id}">
+      <div class="stadium-card__icon">${STADIUM_ICON}</div>
+      <div class="stadium-card__body">
+        <p class="stadium-card__name">${s.name}</p>
+        <p class="stadium-card__city">${s.flag} ${s.city}, ${s.country}</p>
+        <p class="stadium-card__capacity">Capacidade: ${s.capacity}</p>
+      </div>
+    </div>
+  `).join('');
+
+  markers.innerHTML = stadiums.map(s => `
+    <g class="map-marker" data-stadium="${s.id}" transform="translate(${(s.x * 10).toFixed(1)} ${(s.y * 7).toFixed(1)})">
+      <title>${s.name} — ${s.city}</title>
+      <circle r="9" class="map-marker__halo" />
+      <circle r="4" class="map-marker__dot" />
+    </g>
+  `).join('');
+
+  function highlightStadium(id) {
+    document.querySelectorAll('.stadium-card').forEach(c => c.classList.toggle('stadium-card--highlight', c.dataset.stadium === id));
+    document.querySelectorAll('.map-marker').forEach(m => m.classList.toggle('map-marker--active', m.dataset.stadium === id));
+  }
+
+  grid.querySelectorAll('.stadium-card').forEach(card => {
+    card.addEventListener('click', () => highlightStadium(card.dataset.stadium));
+  });
+
+  markers.querySelectorAll('.map-marker').forEach(marker => {
+    marker.addEventListener('click', () => {
+      const id = marker.dataset.stadium;
+      highlightStadium(id);
+      const card = document.getElementById(`stadium-${id}`);
+      if (card) card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
+  });
+}
+
+/* ============================================================
    INIT
    ============================================================ */
 (async function init() {
-  const [info, groups, matches, scorers] = await Promise.all([
+  const [info, groups, matches, scorers, teams, stadiums] = await Promise.all([
     loadJSON('data/info.json'),
     loadJSON('data/groups.json'),
     loadJSON('data/matches.json'),
-    loadJSON('data/scorers.json')
+    loadJSON('data/scorers.json'),
+    loadJSON('data/teams.json'),
+    loadJSON('data/stadiums.json')
   ]);
 
   renderInfo(info);
@@ -472,4 +677,6 @@ function renderScorers(data) {
   renderMatches(matches, groups);
   renderBracket(matches, groups);
   renderScorers(scorers);
+  renderFlagBar(teams);
+  renderStadiums(stadiums);
 })();

@@ -40,6 +40,18 @@
       ]
     },
     {
+      "title": "Ranking dos 3ºs colocados",
+      "icon": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><path d='M3 3v18h18'/><rect x='7' y='11' width='3' height='7'/><rect x='12' y='7' width='3' height='11'/><rect x='17' y='4' width='3' height='14'/></svg>",
+      "desc": "Como os 12 terceiros colocados são comparados entre si para definir os 8 que avançam (sem confronto direto, já que são de grupos diferentes):",
+      "list": [
+        "1. Pontos conquistados na fase de grupos",
+        "2. Saldo de gols geral",
+        "3. Gols marcados",
+        "4. Fair play (cartões)",
+        "5. Posição no Ranking FIFA (novidade 2026)"
+      ]
+    },
+    {
       "title": "Fase eliminatória",
       "icon": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><path d='M4 5h6v4H4z'/><path d='M14 9h6v4h-6z'/><path d='M4 15h6v4H4z'/><path d='M10 7h2v9a2 2 0 0 0 2 2h2'/><path d='M10 17h4'/></svg>",
       "desc": "Caminho de mata-mata em jogo único até a grande final:",

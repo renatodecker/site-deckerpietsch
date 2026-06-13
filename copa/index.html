@@ -45,6 +45,7 @@
         <a href="#terceiros" class="nav__link">Melhores 3ºs</a>
         <a href="#jogos" class="nav__link">Jogos</a>
         <a href="#mata-mata" class="nav__link">Mata-mata</a>
+        <a href="#sedes" class="nav__link">Sedes</a>
         <a href="#artilharia" class="nav__link">Artilharia</a>
         <a href="#simulacao" class="nav__link">Simulação</a>
       </nav>
@@ -65,6 +66,15 @@
       </p>
       <div class="hero__meta" id="heroMeta">
         <!-- preenchido via JS a partir de data/info.json -->
+      </div>
+      <div class="flag-bar">
+        <div class="flag-bar__header">
+          <span class="flag-bar__label">Escolha uma seleção para mudar as cores do site:</span>
+          <button type="button" class="flag-bar__reset" id="themeReset" hidden>Voltar ao tema Brasil</button>
+        </div>
+        <div class="flag-bar__grid" id="flagBar">
+          <!-- preenchido via JS a partir de data/teams.json -->
+        </div>
       </div>
     </div>
   </section>
@@ -175,6 +185,33 @@
         <p>
           <strong>Vagas "Melhor 3º (grupos)"</strong> mostram os grupos que ainda podem fornecer o 3º colocado classificado para aquele confronto. A definição de qual seleção vai para qual chave segue a tabela oficial da FIFA (Anexo C), divulgada apenas após o fim da fase de grupos — o cruzamento exato será atualizado aqui assim que confirmado.
         </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SEDES -->
+  <section class="section" id="sedes">
+    <div class="container">
+      <div class="section__header">
+        <span class="section__tag">Onde acontece</span>
+        <h2 class="section__title">Estádios-Sede</h2>
+        <p class="section__desc">
+          16 estádios em 3 países recebem os jogos da Copa do Mundo de 2026.
+        </p>
+      </div>
+      <div class="stadium-map">
+        <svg viewBox="0 0 1000 700" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <rect x="0" y="0" width="1000" height="140" class="map-band map-band--ca" />
+          <rect x="0" y="140" width="1000" height="315" class="map-band map-band--us" />
+          <rect x="0" y="455" width="1000" height="245" class="map-band map-band--mx" />
+          <text x="16" y="32" class="map-label">CANADÁ</text>
+          <text x="16" y="172" class="map-label">ESTADOS UNIDOS</text>
+          <text x="16" y="487" class="map-label">MÉXICO</text>
+          <g id="stadiumMarkers"></g>
+        </svg>
+      </div>
+      <div class="stadium-grid" id="stadiumGrid">
+        <!-- preenchido via JS a partir de data/stadiums.json -->
       </div>
     </div>
   </section>

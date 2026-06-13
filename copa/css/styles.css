@@ -379,6 +379,58 @@ img { display: block; max-width: 100%; }
 
 .format-card__desc li { margin-bottom: 4px; }
 
+.mini-matches {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.mini-match {
+  border-top: 1px solid var(--gray-100);
+  padding-top: 10px;
+}
+
+.mini-match:first-child {
+  border-top: none;
+  padding-top: 0;
+}
+
+.mini-match__teams {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: .88rem;
+  font-weight: 600;
+  color: var(--navy-800);
+}
+
+.mini-match__team {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mini-match__team:last-child { text-align: right; }
+
+.mini-match__score {
+  flex: none;
+  font-weight: 700;
+  color: var(--navy-900);
+  background: var(--gray-50);
+  border-radius: var(--radius-sm);
+  padding: 2px 8px;
+  font-size: .82rem;
+}
+
+.mini-match__meta {
+  margin-top: 4px;
+  font-size: .72rem;
+  color: var(--gray-300);
+}
+
 /* ============================================================
    FILTROS / TABS
    ============================================================ */
@@ -609,6 +661,10 @@ img { display: block; max-width: 100%; }
 }
 
 .match-card__info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
   font-size: .75rem;
   color: var(--gray-500);
   text-align: right;
@@ -634,6 +690,48 @@ img { display: block; max-width: 100%; }
 .match-card__status--finished {
   background: rgba(22,163,74,.1);
   color: var(--green-500);
+}
+
+.match-card__times {
+  display: flex;
+  gap: 10px;
+}
+
+.match-card__time {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: .82rem;
+  font-weight: 700;
+  color: var(--navy-800);
+  line-height: 1.3;
+}
+
+.match-card__time small {
+  font-size: .62rem;
+  font-weight: 500;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: var(--gray-300);
+}
+
+.match-card__venue {
+  font-size: .72rem;
+  font-weight: 600;
+  color: var(--gold-600);
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  text-decoration: underline;
+  text-align: right;
+}
+
+.match-card__venue:hover { color: var(--gold-700); }
+
+.match-card__venue--plain {
+  font-size: .72rem;
+  color: var(--gray-300);
 }
 
 /* ============================================================
@@ -720,63 +818,48 @@ img { display: block; max-width: 100%; }
    SEDES / ESTÁDIOS
    ============================================================ */
 .stadium-map {
-  max-width: 720px;
+  max-width: 960px;
+  height: 420px;
   margin: 0 auto 40px;
   border-radius: var(--radius-md);
   overflow: hidden;
   box-shadow: var(--shadow-sm);
   border: 1px solid var(--gray-300);
+  background: var(--gray-50);
 }
 
-.stadium-map svg {
-  display: block;
-  width: 100%;
-  height: auto;
-  background: #dbeafe;
+.stadium-tooltip {
+  background: var(--navy-900);
+  color: var(--white);
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: .72rem;
+  font-weight: 600;
+  padding: 3px 8px;
+  box-shadow: var(--shadow-sm);
 }
 
-.map-band {
-  stroke: var(--white);
-  stroke-width: 2;
-  stroke-linejoin: round;
+.stadium-tooltip::before { display: none; }
+
+.stadium-popup .leaflet-popup-content-wrapper {
+  border-radius: var(--radius-md);
+  padding: 0;
+  overflow: hidden;
 }
 
-.map-band--ca { fill: var(--navy-100); }
-.map-band--us { fill: var(--gold-50); }
-.map-band--mx { fill: var(--navy-50); }
-
-.map-label {
-  font-family: var(--font);
-  font-size: 26px;
-  font-weight: 700;
-  letter-spacing: .08em;
-  fill: var(--navy-800);
-  opacity: .4;
-  pointer-events: none;
+.stadium-popup .leaflet-popup-content {
+  margin: 0;
+  width: 220px !important;
 }
 
-.map-marker { cursor: pointer; }
-
-.map-marker__halo {
-  fill: var(--navy-800);
-  opacity: .18;
-  transition: r .15s ease, opacity .15s ease;
+.stadium-popup .stadium-card {
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  cursor: default;
 }
 
-.map-marker__dot {
-  fill: var(--gold-500);
-  stroke: var(--navy-900);
-  stroke-width: 1.5;
-  transition: fill .15s ease;
-}
-
-.map-marker:hover .map-marker__halo,
-.map-marker.map-marker--active .map-marker__halo {
-  r: 13;
-  opacity: .3;
-}
-
-.map-marker.map-marker--active .map-marker__dot { fill: var(--gold-400); }
+.stadium-popup .stadium-card:hover { transform: none; }
 
 .stadium-grid {
   display: grid;
@@ -959,7 +1042,9 @@ img { display: block; max-width: 100%; }
    ============================================================ */
 .updated-badge {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
   margin-bottom: 32px;
 }
 
@@ -972,6 +1057,87 @@ img { display: block; max-width: 100%; }
   padding: 6px 16px;
   border-radius: 999px;
 }
+
+.updated-badge__refresh {
+  background: none;
+  border: none;
+  color: var(--navy-700);
+  font-size: .8rem;
+  font-weight: 600;
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 2px 4px;
+}
+
+.updated-badge__refresh:hover { color: var(--gold-600); }
+
+.updated-badge__refresh:disabled {
+  color: var(--gray-300);
+  cursor: wait;
+  text-decoration: none;
+}
+
+/* ============================================================
+   MODAL (CARD DA SEDE)
+   ============================================================ */
+body.modal-open { overflow: hidden; }
+
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.modal__overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(4, 33, 15, .6);
+}
+
+.modal__dialog {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 320px;
+  background: var(--white);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+}
+
+.modal__close {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 2;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 50%;
+  background: rgba(4, 33, 15, .6);
+  color: var(--white);
+  font-size: 1.2rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.modal__close:hover { background: var(--navy-900); }
+
+.modal__body .stadium-card {
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  cursor: default;
+}
+
+.modal__body .stadium-card:hover { transform: none; }
 
 /* ============================================================
    RESPONSIVE
@@ -1012,5 +1178,19 @@ img { display: block; max-width: 100%; }
     justify-content: center;
     text-align: center;
   }
-  .match-card__info { text-align: center; }
+  .match-card__info {
+    align-items: center;
+    text-align: center;
+  }
+  .match-card__times { justify-content: center; }
+  .match-card__venue { text-align: center; }
+
+  .stadium-map { height: 320px; }
+
+  .third-placed {
+    overflow-x: auto;
+  }
+  .third-placed .standings-table {
+    min-width: 560px;
+  }
 }

@@ -19,6 +19,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css" />
   <link rel="stylesheet" href="css/styles.css" />
 
   <!-- Google tag (gtag.js) -->
@@ -107,6 +108,7 @@
       </div>
       <div class="updated-badge">
         <span class="updated-badge__inner" id="lastUpdated">Carregando dados...</span>
+        <button type="button" class="updated-badge__refresh" id="refreshNow">Atualizar agora</button>
       </div>
       <div class="groups__grid" id="groupsGrid">
         <!-- preenchido via JS a partir de data/groups.json -->
@@ -199,18 +201,7 @@
           16 estádios em 3 países recebem os jogos da Copa do Mundo de 2026.
         </p>
       </div>
-      <div class="stadium-map">
-        <svg viewBox="0 0 1000 700" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <path class="map-band map-band--ca" d="M0.0,0.0 L1000.0,0.0 L1000.0,90.0 L956.9,96.0 L892.3,100.0 L830.8,114.0 L784.6,134.0 L732.3,166.0 L723.1,124.0 L700.0,70.0 L630.8,40.0 L584.6,34.0 L538.5,20.0 L461.5,20.0 L307.7,20.0 L200.0,20.0 L107.7,20.0 L0.0,8.0 Z" />
-          <path class="map-band map-band--us" d="M198.5,350.0 L180.0,322.0 L146.2,308.0 L115.4,244.0 L86.2,192.0 L92.3,76.0 L81.5,40.0 L107.7,20.0 L200.0,20.0 L307.7,20.0 L461.5,20.0 L538.5,20.0 L584.6,34.0 L630.8,40.0 L700.0,70.0 L723.1,124.0 L732.3,166.0 L784.6,134.0 L830.8,114.0 L892.3,100.0 L956.9,96.0 L1000.0,90.0 L953.8,110.0 L923.1,166.0 L861.5,190.0 L838.5,230.0 L838.5,296.0 L753.8,370.0 L767.7,484.0 L741.5,510.0 L729.2,444.0 L684.6,400.0 L646.2,394.0 L623.1,420.0 L541.5,414.0 L501.5,482.0 L469.2,450.0 L430.8,404.0 L361.5,364.0 L292.3,374.0 Z" />
-          <path class="map-band map-band--mx" d="M292.3,374.0 L361.5,364.0 L430.8,404.0 L469.2,450.0 L501.5,482.0 L495.4,556.0 L521.5,616.0 L547.7,638.0 L607.7,604.0 L621.5,580.0 L664.6,576.0 L646.2,634.0 L607.7,680.0 L581.5,700.0 L523.1,686.0 L463.1,664.0 L381.5,588.0 L363.1,536.0 L293.8,442.0 Z" />
-          <path class="map-band map-band--mx" d="M223.1,348.0 L198.5,350.0 L206.2,362.0 L230.8,480.0 L309.2,542.0 L303.1,500.0 L266.2,424.0 Z" />
-          <text x="760" y="55" class="map-label">CANADÁ</text>
-          <text x="230" y="130" class="map-label">ESTADOS UNIDOS</text>
-          <text x="400" y="660" class="map-label">MÉXICO</text>
-          <g id="stadiumMarkers"></g>
-        </svg>
-      </div>
+      <div class="stadium-map" id="stadiumMap"></div>
       <div class="stadium-grid" id="stadiumGrid">
         <!-- preenchido via JS a partir de data/stadiums.json -->
       </div>
@@ -258,6 +249,16 @@
     </div>
   </footer>
 
+  <!-- MODAL: CARD DA SEDE -->
+  <div class="modal" id="stadiumModal" hidden>
+    <div class="modal__overlay" data-modal-close></div>
+    <div class="modal__dialog">
+      <button type="button" class="modal__close" data-modal-close aria-label="Fechar">&times;</button>
+      <div class="modal__body" id="modalStadiumBody"></div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="js/main.js"></script>
 </body>
 </html>

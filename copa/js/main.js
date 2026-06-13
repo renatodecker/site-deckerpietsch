@@ -49,6 +49,69 @@ function formatDayLabel(iso) {
 }
 
 /* ============================================================
+   FUSOS HORÁRIOS
+   ============================================================ */
+// Formata o offset GMT do horário local de quem acessa, ex: "GMT-03:00"
+function gmtOffsetLabel(date) {
+  const offsetMin = -date.getTimezoneOffset();
+  const sign = offsetMin >= 0 ? '+' : '-';
+  const abs = Math.abs(offsetMin);
+  const hh = String(Math.floor(abs / 60)).padStart(2, '0');
+  const mm = String(abs % 60).padStart(2, '0');
+  return `GMT${sign}${hh}:${mm}`;
+}
+
+// Data/horário local de quem acessa, com o offset GMT
+function formatLocalDateTime(date) {
+  const dateStr = date.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' });
+  const timeStr = date.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+  return `${dateStr} às ${timeStr} (${gmtOffsetLabel(date)})`;
+}
+
+// Converte um horário "de parede" (date/hora/minuto) num fuso IANA para um instante UTC real
+function zonedTimeToUtc(dateStr, hour, minute, timeZone) {
+  const naive = new Date(`${dateStr}T${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}:00Z`);
+  const asTz = new Date(naive.toLocaleString('en-US', { timeZone }));
+  const asUtc = new Date(naive.toLocaleString('en-US', { timeZone: 'UTC' }));
+  const diff = asTz.getTime() - asUtc.getTime();
+  return new Date(naive.getTime() - diff);
+}
+
+// Extrai hora/minuto (e eventual data alternativa) de strings como "12h ET", "20h30", "00h ET (13/06)"
+function parseMatchTime(match) {
+  const raw = match.time;
+  if (!raw || raw === '—') return null;
+  const m = raw.match(/^(\d{1,2})h(\d{2})?\s*(ET)?(?:\s*\((\d{2})\/(\d{2})\))?$/);
+  if (!m) return null;
+
+  const hour = Number(m[1]);
+  const minute = m[2] ? Number(m[2]) : 0;
+  const isET = !!m[3];
+  let dateStr = match.date;
+  if (m[4] && m[5]) {
+    const year = match.date.split('-')[0];
+    dateStr = `${year}-${m[5]}-${m[4]}`;
+  }
+  return { hour, minute, isET, dateStr };
+}
+
+// Retorna { local, venue } com os horários formatados no fuso de quem acessa e no fuso da sede
+function formatMatchTimes(match, stadium) {
+  const parsed = parseMatchTime(match);
+  if (!parsed) return null;
+
+  const refTz = parsed.isET ? 'America/New_York' : (stadium ? stadium.timezone : 'America/New_York');
+  const instant = zonedTimeToUtc(parsed.dateStr, parsed.hour, parsed.minute, refTz);
+
+  const local = instant.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+  const venue = stadium
+    ? instant.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit', timeZone: stadium.timezone })
+    : null;
+
+  return { local, venue };
+}
+
+/* ============================================================
    INFO / HERO META / FORMATO
    ============================================================ */
 function renderInfo(info) {
@@ -71,10 +134,13 @@ function renderInfo(info) {
     </div>
   `).join('');
 
+  renderLastUpdated();
+}
+
+// Mostra a data/hora local de quem acessa (com offset GMT) como "última atualização"
+function renderLastUpdated() {
   const lastUpdated = document.getElementById('lastUpdated');
-  lastUpdated.textContent = info.lastUpdated
-    ? `Última atualização: ${info.lastUpdated}`
-    : 'Dados ainda não disponíveis';
+  if (lastUpdated) lastUpdated.textContent = `Última atualização: ${formatLocalDateTime(new Date())}`;
 }
 
 /* ============================================================
@@ -273,7 +339,30 @@ const KNOCKOUT_LABELS = {
   final: 'Final'
 };
 
-function matchCardHTML(match, groups, knockoutFlat) {
+// Alguns nomes de sede na tabela de jogos não casam exatamente com a cidade
+// cadastrada em stadiums.json (ex: "Arlington" é onde fica o AT&T Stadium,
+// listado como sede "Dallas").
+const VENUE_ALIASES = {
+  'East Rutherford': 'eastrutherford',
+  'Foxborough': 'foxborough',
+  'Arlington': 'dallas'
+};
+
+// Monta um índice "nome da sede na tabela de jogos" -> objeto da sede em stadiums.json
+function buildVenueIndex(stadiums) {
+  const byId = {};
+  (stadiums || []).forEach(s => { byId[s.id] = s; });
+
+  const index = {};
+  (stadiums || []).forEach(s => { index[s.city] = s; });
+  Object.keys(VENUE_ALIASES).forEach(venue => {
+    const stadium = byId[VENUE_ALIASES[venue]];
+    if (stadium) index[venue] = stadium;
+  });
+  return index;
+}
+
+function matchCardHTML(match, groups, knockoutFlat, venueIndex) {
   const isFinished = match.status === 'finished';
   const isLive = match.status === 'live';
 
@@ -284,13 +373,34 @@ function matchCardHTML(match, groups, knockoutFlat) {
     scoreHTML = `<span class="match-card__score match-card__score--pending">vs</span>`;
   }
 
+  const stadium = venueIndex ? venueIndex[match.venue] : null;
+
   let statusHTML = '';
-  if (isFinished) statusHTML = '<span class="match-card__status match-card__status--finished">Encerrado</span>';
-  else if (isLive) statusHTML = '<span class="match-card__status match-card__status--live">Em andamento</span>';
-  else {
-    const label = match.time || (match.date ? formatDate(match.date) : 'A definir');
-    statusHTML = `<span class="match-card__status">${label}</span>`;
+  let timesHTML = '';
+  if (isFinished) {
+    statusHTML = '<span class="match-card__status match-card__status--finished">Encerrado</span>';
+  } else if (isLive) {
+    statusHTML = '<span class="match-card__status match-card__status--live">Em andamento</span>';
+  } else {
+    const times = formatMatchTimes(match, stadium);
+    if (times) {
+      timesHTML = `
+        <div class="match-card__times">
+          <span class="match-card__time">${times.local}<small>seu horário</small></span>
+          ${times.venue && times.venue !== times.local ? `<span class="match-card__time">${times.venue}<small>no local do jogo</small></span>` : ''}
+        </div>
+      `;
+    } else {
+      const label = (match.time && match.time !== '—') ? match.time : (match.date ? formatDate(match.date) : 'A definir');
+      statusHTML = `<span class="match-card__status">${label}</span>`;
+    }
   }
+
+  const venueHTML = match.venue
+    ? (stadium
+        ? `<button type="button" class="match-card__venue" data-stadium="${stadium.id}">${match.venue}</button>`
+        : `<span class="match-card__venue match-card__venue--plain">${match.venue}</span>`)
+    : '';
 
   const home = resolveTeamDisplay(match, 'home', groups, knockoutFlat);
   const away = resolveTeamDisplay(match, 'away', groups, knockoutFlat);
@@ -302,13 +412,15 @@ function matchCardHTML(match, groups, knockoutFlat) {
       ${scoreHTML}
       <div class="match-card__team match-card__team--away ${away.tbd ? 'bracket-match__team--tbd' : ''}">${away.html}</div>
       <div class="match-card__info">
-        ${statusHTML}<br>${match.venue || ''}
+        ${statusHTML}
+        ${timesHTML}
+        ${venueHTML}
       </div>
     </div>
   `;
 }
 
-function renderMatches(matches, groups) {
+function renderMatches(matches, groups, stadiums) {
   const tabsWrap = document.getElementById('matchTabs');
   const listWrap = document.getElementById('matchesList');
 
@@ -320,6 +432,7 @@ function renderMatches(matches, groups) {
   const groupStage = matches.groupStage || [];
   const knockout = matches.knockout || {};
   const knockoutFlat = flattenKnockout(knockout);
+  const venueIndex = buildVenueIndex(stadiums);
 
   // Build group filter tabs
   const groupLetters = [...new Set(groupStage.map(m => m.group))].sort();
@@ -355,7 +468,7 @@ function renderMatches(matches, groups) {
 
     Object.keys(byDate).sort().forEach(date => {
       html += `<div class="match-day">${formatDayLabel(date)}</div>`;
-      byDate[date].forEach(m => { html += matchCardHTML(m, groups, knockoutFlat); });
+      byDate[date].forEach(m => { html += matchCardHTML(m, groups, knockoutFlat, venueIndex); });
     });
 
     // Knockout
@@ -365,7 +478,7 @@ function renderMatches(matches, groups) {
 
     koKeysToShow.forEach(k => {
       html += `<div class="match-day">${KNOCKOUT_LABELS[k]}</div>`;
-      (knockout[k] || []).forEach(m => { html += matchCardHTML({ ...m, stage: KNOCKOUT_LABELS[k] }, groups, knockoutFlat); });
+      (knockout[k] || []).forEach(m => { html += matchCardHTML({ ...m, stage: KNOCKOUT_LABELS[k] }, groups, knockoutFlat, venueIndex); });
     });
 
     listWrap.innerHTML = html || '<div class="empty-state">Nenhum jogo para este filtro.</div>';
@@ -379,6 +492,14 @@ function renderMatches(matches, groups) {
       btn.classList.add('active');
       renderList(btn.dataset.tab);
     });
+  });
+
+  // Abre o modal da sede ao clicar no nome do estádio
+  listWrap.addEventListener('click', (e) => {
+    const btn = e.target.closest('.match-card__venue');
+    if (!btn) return;
+    const stadium = (stadiums || []).find(s => s.id === btn.dataset.stadium);
+    if (stadium) openStadiumModal(stadium);
   });
 }
 
@@ -613,17 +734,10 @@ const STADIUM_ICON = `
   </svg>
 `;
 
-function renderStadiums(stadiums) {
-  const grid = document.getElementById('stadiumGrid');
-  const markers = document.getElementById('stadiumMarkers');
-
-  if (!stadiums || stadiums.length === 0) {
-    grid.innerHTML = '<div class="empty-state">Lista de estádios ainda não disponível.</div>';
-    return;
-  }
-
-  grid.innerHTML = stadiums.map(s => `
-    <div class="stadium-card" id="stadium-${s.id}" data-stadium="${s.id}">
+// Card de uma sede, reaproveitado na grade de estádios, no popup do mapa e no modal de jogos
+function stadiumCardHTML(s, { withId = true } = {}) {
+  return `
+    <div class="stadium-card" ${withId ? `id="stadium-${s.id}"` : ''} data-stadium="${s.id}">
       <div class="stadium-card__media">
         ${STADIUM_ICON}
         ${s.image ? `<img src="${s.image}" alt="${s.name}" loading="lazy" onerror="this.remove()" />` : ''}
@@ -635,33 +749,203 @@ function renderStadiums(stadiums) {
         ${s.credit ? `<a class="stadium-card__credit" href="${s.credit}" target="_blank" rel="noopener noreferrer">Foto: Wikimedia Commons</a>` : ''}
       </div>
     </div>
-  `).join('');
+  `;
+}
 
-  markers.innerHTML = stadiums.map(s => `
-    <g class="map-marker" data-stadium="${s.id}" transform="translate(${(s.x * 10).toFixed(1)} ${(s.y * 7).toFixed(1)})">
-      <title>${s.name} — ${s.city}</title>
-      <circle r="9" class="map-marker__halo" />
-      <circle r="4" class="map-marker__dot" />
-    </g>
-  `).join('');
+let stadiumMap = null;
+const stadiumMapMarkers = {};
+
+function renderStadiums(stadiums) {
+  const grid = document.getElementById('stadiumGrid');
+  const mapEl = document.getElementById('stadiumMap');
+
+  if (!stadiums || stadiums.length === 0) {
+    grid.innerHTML = '<div class="empty-state">Lista de estádios ainda não disponível.</div>';
+    return;
+  }
+
+  grid.innerHTML = stadiums.map(s => stadiumCardHTML(s)).join('');
+
+  const rootStyle = getComputedStyle(document.documentElement);
+  const dotColor = rootStyle.getPropertyValue('--gold-500').trim() || '#d4af00';
+  const activeDotColor = rootStyle.getPropertyValue('--gold-400').trim() || '#ffdf00';
+  const strokeColor = rootStyle.getPropertyValue('--navy-900').trim() || '#04210f';
 
   function highlightStadium(id) {
     document.querySelectorAll('.stadium-card').forEach(c => c.classList.toggle('stadium-card--highlight', c.dataset.stadium === id));
-    document.querySelectorAll('.map-marker').forEach(m => m.classList.toggle('map-marker--active', m.dataset.stadium === id));
+    Object.keys(stadiumMapMarkers).forEach(key => {
+      stadiumMapMarkers[key].setStyle({ fillColor: key === id ? activeDotColor : dotColor });
+    });
+    const marker = stadiumMapMarkers[id];
+    if (marker) marker.openPopup();
   }
 
   grid.querySelectorAll('.stadium-card').forEach(card => {
     card.addEventListener('click', () => highlightStadium(card.dataset.stadium));
   });
 
-  markers.querySelectorAll('.map-marker').forEach(marker => {
-    marker.addEventListener('click', () => {
-      const id = marker.dataset.stadium;
-      highlightStadium(id);
-      const card = document.getElementById(`stadium-${id}`);
-      if (card) card.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    });
+  if (typeof L === 'undefined' || !mapEl) return;
+
+  if (!stadiumMap) {
+    stadiumMap = L.map(mapEl, { scrollWheelZoom: false });
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a> contributors',
+      maxZoom: 18
+    }).addTo(stadiumMap);
+  } else {
+    Object.values(stadiumMapMarkers).forEach(m => stadiumMap.removeLayer(m));
+  }
+  Object.keys(stadiumMapMarkers).forEach(k => delete stadiumMapMarkers[k]);
+
+  stadiums.forEach(s => {
+    if (s.lat == null || s.lon == null) return;
+    const marker = L.circleMarker([s.lat, s.lon], {
+      radius: 8,
+      color: strokeColor,
+      weight: 1.5,
+      fillColor: dotColor,
+      fillOpacity: 1
+    }).addTo(stadiumMap);
+
+    marker.bindTooltip(s.city, { permanent: true, direction: 'top', offset: [0, -6], className: 'stadium-tooltip' });
+    marker.bindPopup(stadiumCardHTML(s, { withId: false }), { maxWidth: 240, className: 'stadium-popup' });
+    marker.on('click', () => highlightStadium(s.id));
+
+    stadiumMapMarkers[s.id] = marker;
   });
+
+  const bounds = L.latLngBounds(stadiums.filter(s => s.lat != null).map(s => [s.lat, s.lon]));
+  stadiumMap.invalidateSize();
+  if (bounds.isValid()) stadiumMap.fitBounds(bounds, { padding: [24, 24] });
+}
+
+/* ============================================================
+   MODAL DE SEDES (aberto ao clicar no nome de uma sede na lista de jogos)
+   ============================================================ */
+function openStadiumModal(stadium) {
+  const modal = document.getElementById('stadiumModal');
+  const body = document.getElementById('modalStadiumBody');
+  if (!modal || !body) return;
+  body.innerHTML = stadiumCardHTML(stadium, { withId: false });
+  modal.hidden = false;
+  document.body.classList.add('modal-open');
+}
+
+function closeStadiumModal() {
+  const modal = document.getElementById('stadiumModal');
+  if (modal) modal.hidden = true;
+  document.body.classList.remove('modal-open');
+}
+
+function setupStadiumModal() {
+  document.querySelectorAll('[data-modal-close]').forEach(el => {
+    el.addEventListener('click', closeStadiumModal);
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeStadiumModal();
+  });
+}
+
+/* ============================================================
+   ÚLTIMOS / PRÓXIMOS JOGOS (cards ao lado de "Datas-chave")
+   ============================================================ */
+const RECENT_ICON = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><path d='M3 12a9 9 0 1 0 2.6-6.4L3 8'/><path d='M3 3v5h5'/><path d='M12 7v5l3 3'/></svg>`;
+const UPCOMING_ICON = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><rect x='3' y='4' width='18' height='18' rx='2'/><path d='M16 2v4'/><path d='M8 2v4'/><path d='M3 10h18'/><path d='M9 16l3-3 3 3'/><path d='M12 13v6'/></svg>`;
+
+function getAllMatches(matches) {
+  const all = [...(matches.groupStage || [])];
+  Object.values(matches.knockout || {}).forEach(list => all.push(...(list || [])));
+  return all;
+}
+
+function miniMatchHTML(m, groups, knockoutFlat) {
+  const home = resolveTeamDisplay(m, 'home', groups, knockoutFlat);
+  const away = resolveTeamDisplay(m, 'away', groups, knockoutFlat);
+  const isFinished = m.status === 'finished';
+  const isLive = m.status === 'live';
+  const score = (isFinished || isLive) ? `${m.homeScore} - ${m.awayScore}` : 'vs';
+  return `
+    <div class="mini-match">
+      <div class="mini-match__teams">
+        <span class="mini-match__team">${home.html}</span>
+        <span class="mini-match__score">${score}</span>
+        <span class="mini-match__team">${away.html}</span>
+      </div>
+      <div class="mini-match__meta">${formatDate(m.date)}${m.venue ? ' · ' + m.venue : ''}</div>
+    </div>
+  `;
+}
+
+function renderRecentUpcoming(matches, groups) {
+  const grid = document.getElementById('formatGrid');
+  if (!grid || !matches) return;
+
+  const all = getAllMatches(matches);
+  const knockoutFlat = flattenKnockout(matches.knockout);
+
+  const recent = all
+    .filter(m => m.status === 'finished')
+    .sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : b.id - a.id))
+    .slice(0, 3);
+
+  const upcoming = all
+    .filter(m => m.status !== 'finished')
+    .sort((a, b) => (a.date > b.date ? 1 : a.date < b.date ? -1 : a.id - b.id))
+    .slice(0, 3);
+
+  const cardHTML = (title, icon, list) => `
+    <div class="format-card format-card--dynamic">
+      <div class="format-card__icon">${icon}</div>
+      <h3 class="format-card__title">${title}</h3>
+      <div class="mini-matches">
+        ${list.length ? list.map(m => miniMatchHTML(m, groups, knockoutFlat)).join('') : '<p class="format-card__desc">Nenhum jogo encontrado.</p>'}
+      </div>
+    </div>
+  `;
+
+  grid.querySelectorAll('.format-card--dynamic').forEach(el => el.remove());
+  grid.insertAdjacentHTML('beforeend', cardHTML('Últimos resultados', RECENT_ICON, recent) + cardHTML('Próximos jogos', UPCOMING_ICON, upcoming));
+}
+
+/* ============================================================
+   ATUALIZAÇÃO DOS DADOS
+   ============================================================ */
+let currentGroups = null;
+let currentMatches = null;
+let currentStadiums = null;
+
+async function refreshData() {
+  const btn = document.getElementById('refreshNow');
+  if (btn) {
+    btn.disabled = true;
+    btn.textContent = 'Atualizando...';
+  }
+
+  const ts = Date.now();
+  const [groups, matches, scorers, stadiums] = await Promise.all([
+    loadJSON(`data/groups.json?t=${ts}`),
+    loadJSON(`data/matches.json?t=${ts}`),
+    loadJSON(`data/scorers.json?t=${ts}`),
+    loadJSON(`data/stadiums.json?t=${ts}`)
+  ]);
+
+  if (groups) currentGroups = groups;
+  if (matches) currentMatches = matches;
+  if (stadiums) currentStadiums = stadiums;
+
+  renderGroups(currentGroups);
+  renderThirdPlaced(currentGroups);
+  renderMatches(currentMatches, currentGroups, currentStadiums);
+  renderBracket(currentMatches, currentGroups);
+  renderRecentUpcoming(currentMatches, currentGroups);
+  renderScorers(scorers);
+  renderStadiums(currentStadiums);
+  renderLastUpdated();
+
+  if (btn) {
+    btn.disabled = false;
+    btn.textContent = 'Atualizar agora';
+  }
 }
 
 /* ============================================================
@@ -677,12 +961,21 @@ function renderStadiums(stadiums) {
     loadJSON('data/stadiums.json')
   ]);
 
+  currentGroups = groups;
+  currentMatches = matches;
+  currentStadiums = stadiums;
+
   renderInfo(info);
   renderGroups(groups);
   renderThirdPlaced(groups);
-  renderMatches(matches, groups);
+  renderMatches(matches, groups, stadiums);
   renderBracket(matches, groups);
+  renderRecentUpcoming(matches, groups);
   renderScorers(scorers);
   renderFlagBar(teams);
   renderStadiums(stadiums);
+  setupStadiumModal();
+
+  const refreshBtn = document.getElementById('refreshNow');
+  if (refreshBtn) refreshBtn.addEventListener('click', refreshData);
 })();

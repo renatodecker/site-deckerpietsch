@@ -3,6 +3,7 @@
     "name": "México",
     "flag": "🇲🇽",
     "group": "A",
+    "fifaRanking": 15,
     "navy": "#0B5C36",
     "gold": "#C8102E"
   },
@@ -10,6 +11,7 @@
     "name": "Coreia do Sul",
     "flag": "🇰🇷",
     "group": "A",
+    "fifaRanking": 25,
     "navy": "#001F4D",
     "gold": "#CE1126"
   },
@@ -17,6 +19,7 @@
     "name": "Tchéquia",
     "flag": "🇨🇿",
     "group": "A",
+    "fifaRanking": 40,
     "navy": "#11457E",
     "gold": "#D7141A"
   },
@@ -24,6 +27,7 @@
     "name": "África do Sul",
     "flag": "🇿🇦",
     "group": "A",
+    "fifaRanking": 60,
     "navy": "#007A4D",
     "gold": "#FFB612"
   },
@@ -31,6 +35,7 @@
     "name": "Canadá",
     "flag": "🇨🇦",
     "group": "B",
+    "fifaRanking": 30,
     "navy": "#1A1A1A",
     "gold": "#D52B1E"
   },
@@ -38,6 +43,7 @@
     "name": "Bósnia e Herzegovina",
     "flag": "🇧🇦",
     "group": "B",
+    "fifaRanking": 64,
     "navy": "#002B7F",
     "gold": "#FECB00"
   },
@@ -45,6 +51,7 @@
     "name": "Catar",
     "flag": "🇶🇦",
     "group": "B",
+    "fifaRanking": 56,
     "navy": "#8A1538",
     "gold": "#C9A227"
   },
@@ -52,6 +59,7 @@
     "name": "Suíça",
     "flag": "🇨🇭",
     "group": "B",
+    "fifaRanking": 19,
     "navy": "#B22222",
     "gold": "#D4AF37"
   },
@@ -59,6 +67,7 @@
     "name": "Brasil",
     "flag": "🇧🇷",
     "group": "C",
+    "fifaRanking": 6,
     "navy": "#0B4A2C",
     "gold": "#FFDF00"
   },
@@ -66,6 +75,7 @@
     "name": "Marrocos",
     "flag": "🇲🇦",
     "group": "C",
+    "fifaRanking": 8,
     "navy": "#C1272D",
     "gold": "#006233"
   },
@@ -73,6 +83,7 @@
     "name": "Haiti",
     "flag": "🇭🇹",
     "group": "C",
+    "fifaRanking": 83,
     "navy": "#00209F",
     "gold": "#D21034"
   },
@@ -80,6 +91,7 @@
     "name": "Escócia",
     "flag": "🏴󠁧󠁢󠁳󠁣󠁴󠁿",
     "group": "C",
+    "fifaRanking": 42,
     "navy": "#0065BF",
     "gold": "#FDB927"
   },
@@ -87,6 +99,7 @@
     "name": "Estados Unidos",
     "flag": "🇺🇸",
     "group": "D",
+    "fifaRanking": 16,
     "navy": "#0A3161",
     "gold": "#B31942"
   },
@@ -94,6 +107,7 @@
     "name": "Paraguai",
     "flag": "🇵🇾",
     "group": "D",
+    "fifaRanking": 41,
     "navy": "#0038A8",
     "gold": "#D52B1E"
   },
@@ -101,6 +115,7 @@
     "name": "Austrália",
     "flag": "🇦🇺",
     "group": "D",
+    "fifaRanking": 27,
     "navy": "#00843D",
     "gold": "#FFCD00"
   },
@@ -108,6 +123,7 @@
     "name": "Turquia",
     "flag": "🇹🇷",
     "group": "D",
+    "fifaRanking": 22,
     "navy": "#C8102E",
     "gold": "#FFD200"
   },
@@ -115,6 +131,7 @@
     "name": "Alemanha",
     "flag": "🇩🇪",
     "group": "E",
+    "fifaRanking": 10,
     "navy": "#1A1A1A",
     "gold": "#FFCC00"
   },
@@ -122,6 +139,7 @@
     "name": "Curaçao",
     "flag": "🇨🇼",
     "group": "E",
+    "fifaRanking": 82,
     "navy": "#002B7F",
     "gold": "#FFD100"
   },
@@ -129,6 +147,7 @@
     "name": "Costa do Marfim",
     "flag": "🇨🇮",
     "group": "E",
+    "fifaRanking": 33,
     "navy": "#E25303",
     "gold": "#009E60"
   },
@@ -136,6 +155,7 @@
     "name": "Equador",
     "flag": "🇪🇨",
     "group": "E",
+    "fifaRanking": 23,
     "navy": "#034EA2",
     "gold": "#FFD100"
   },
@@ -143,6 +163,7 @@
     "name": "Países Baixos",
     "flag": "🇳🇱",
     "group": "F",
+    "fifaRanking": 7,
     "navy": "#1E2A78",
     "gold": "#FF6600"
   },
@@ -150,6 +171,7 @@
     "name": "Japão",
     "flag": "🇯🇵",
     "group": "F",
+    "fifaRanking": 18,
     "navy": "#0033A0",
     "gold": "#BC002D"
   },
@@ -157,6 +179,7 @@
     "name": "Suécia",
     "flag": "🇸🇪",
     "group": "F",
+    "fifaRanking": 38,
     "navy": "#006AA7",
     "gold": "#FECC02"
   },
@@ -164,6 +187,7 @@
     "name": "Tunísia",
     "flag": "🇹🇳",
     "group": "F",
+    "fifaRanking": 45,
     "navy": "#CE1126",
     "gold": "#FFD700"
   },
@@ -171,6 +195,7 @@
     "name": "Bélgica",
     "flag": "🇧🇪",
     "group": "G",
+    "fifaRanking": 9,
     "navy": "#000000",
     "gold": "#FDDA24"
   },
@@ -178,6 +203,7 @@
     "name": "Egito",
     "flag": "🇪🇬",
     "group": "G",
+    "fifaRanking": 29,
     "navy": "#000000",
     "gold": "#CE1126"
   },
@@ -185,6 +211,7 @@
     "name": "Irã",
     "flag": "🇮🇷",
     "group": "G",
+    "fifaRanking": 20,
     "navy": "#CC1B1B",
     "gold": "#239F40"
   },
@@ -192,6 +219,7 @@
     "name": "Nova Zelândia",
     "flag": "🇳🇿",
     "group": "G",
+    "fifaRanking": 85,
     "navy": "#000000",
     "gold": "#C8102E"
   },
@@ -199,6 +227,7 @@
     "name": "Espanha",
     "flag": "🇪🇸",
     "group": "H",
+    "fifaRanking": 2,
     "navy": "#AA151B",
     "gold": "#F1BF00"
   },
@@ -206,6 +235,7 @@
     "name": "Cabo Verde",
     "flag": "🇨🇻",
     "group": "H",
+    "fifaRanking": 67,
     "navy": "#003893",
     "gold": "#CF2027"
   },
@@ -213,6 +243,7 @@
     "name": "Arábia Saudita",
     "flag": "🇸🇦",
     "group": "H",
+    "fifaRanking": 61,
     "navy": "#006C35",
     "gold": "#FFD700"
   },
@@ -220,6 +251,7 @@
     "name": "Uruguai",
     "flag": "🇺🇾",
     "group": "H",
+    "fifaRanking": 17,
     "navy": "#0038A8",
     "gold": "#FCD116"
   },
@@ -227,6 +259,7 @@
     "name": "França",
     "flag": "🇫🇷",
     "group": "I",
+    "fifaRanking": 1,
     "navy": "#0055A4",
     "gold": "#EF4135"
   },
@@ -234,6 +267,7 @@
     "name": "Senegal",
     "flag": "🇸🇳",
     "group": "I",
+    "fifaRanking": 14,
     "navy": "#00853F",
     "gold": "#FDEF42"
   },
@@ -241,6 +275,7 @@
     "name": "Iraque",
     "flag": "🇮🇶",
     "group": "I",
+    "fifaRanking": 57,
     "navy": "#CE1126",
     "gold": "#FFD700"
   },
@@ -248,6 +283,7 @@
     "name": "Noruega",
     "flag": "🇳🇴",
     "group": "I",
+    "fifaRanking": 31,
     "navy": "#00205B",
     "gold": "#BA0C2F"
   },
@@ -255,6 +291,7 @@
     "name": "Argentina",
     "flag": "🇦🇷",
     "group": "J",
+    "fifaRanking": 3,
     "navy": "#6CACE4",
     "gold": "#FFD700"
   },
@@ -262,6 +299,7 @@
     "name": "Argélia",
     "flag": "🇩🇿",
     "group": "J",
+    "fifaRanking": 28,
     "navy": "#006233",
     "gold": "#D21034"
   },
@@ -269,6 +307,7 @@
     "name": "Áustria",
     "flag": "🇦🇹",
     "group": "J",
+    "fifaRanking": 24,
     "navy": "#ED2939",
     "gold": "#FFD700"
   },
@@ -276,6 +315,7 @@
     "name": "Jordânia",
     "flag": "🇯🇴",
     "group": "J",
+    "fifaRanking": 63,
     "navy": "#CE1126",
     "gold": "#007A3D"
   },
@@ -283,6 +323,7 @@
     "name": "Portugal",
     "flag": "🇵🇹",
     "group": "K",
+    "fifaRanking": 5,
     "navy": "#006600",
     "gold": "#FF0000"
   },
@@ -290,6 +331,7 @@
     "name": "RD Congo",
     "flag": "🇨🇩",
     "group": "K",
+    "fifaRanking": 46,
     "navy": "#0033A0",
     "gold": "#F7D618"
   },
@@ -297,6 +339,7 @@
     "name": "Uzbequistão",
     "flag": "🇺🇿",
     "group": "K",
+    "fifaRanking": 50,
     "navy": "#0099B5",
     "gold": "#1EB53A"
   },
@@ -304,6 +347,7 @@
     "name": "Colômbia",
     "flag": "🇨🇴",
     "group": "K",
+    "fifaRanking": 13,
     "navy": "#003893",
     "gold": "#FCD116"
   },
@@ -311,6 +355,7 @@
     "name": "Inglaterra",
     "flag": "🏴󠁧󠁢󠁥󠁮󠁧󠁿",
     "group": "L",
+    "fifaRanking": 4,
     "navy": "#1A1A1A",
     "gold": "#CE1124"
   },
@@ -318,6 +363,7 @@
     "name": "Croácia",
     "flag": "🇭🇷",
     "group": "L",
+    "fifaRanking": 11,
     "navy": "#C8102E",
     "gold": "#1E50A2"
   },
@@ -325,6 +371,7 @@
     "name": "Gana",
     "flag": "🇬🇭",
     "group": "L",
+    "fifaRanking": 73,
     "navy": "#006B3F",
     "gold": "#FCD116"
   },
@@ -332,6 +379,7 @@
     "name": "Panamá",
     "flag": "🇵🇦",
     "group": "L",
+    "fifaRanking": 34,
     "navy": "#072357",
     "gold": "#DA121A"
   }

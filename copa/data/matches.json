@@ -1,4 +1,5 @@
 {
+  "_comment": "Campo opcional 'cards' em cada jogo: { home: N, away: N }, representando o saldo de pontos de fair play (cartões) de cada time nesse jogo (valores negativos = penalidades por cartão). Usado no critério de desempate 'fairPlay'. Ausente ou omitido = 0 para ambos os times. Não é preenchido automaticamente pelo script de atualização (scripts/update-copa-data.mjs) — atualização manual quando necessário.",
   "groupStage": [
     {
       "id": 1,

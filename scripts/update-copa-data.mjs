@@ -21,6 +21,7 @@
 import { readFileSync, writeFileSync, existsSync } from 'fs';
 import { resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
+import { sortGroupStandings } from '../copa/js/standings.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const DATA_DIR = resolve(__dirname, '../copa/data');
@@ -66,12 +67,6 @@ function tournamentWindow(matches) {
   Object.values(matches.knockout || {}).forEach(arr => arr.forEach(m => { if (m.date) dates.push(m.date); }));
   dates.sort();
   return { start: dates[0], end: dates[dates.length - 1] };
-}
-
-function compareStandings(a, b) {
-  if (b.pts !== a.pts) return b.pts - a.pts;
-  if (b.sg !== a.sg) return b.sg - a.sg;
-  return b.gp - a.gp;
 }
 
 /* ============================================================
@@ -156,30 +151,40 @@ function computeGroupsFromMatches(matches, teams) {
 
   teams.forEach(t => {
     if (!groups[t.group]) groups[t.group] = [];
-    groups[t.group].push({ team: t.name, flag: t.flag, pj: 0, v: 0, e: 0, d: 0, gp: 0, gc: 0, sg: 0, pts: 0 });
+    groups[t.group].push({ team: t.name, flag: t.flag, pj: 0, v: 0, e: 0, d: 0, gp: 0, gc: 0, sg: 0, pts: 0, fairPlay: 0 });
   });
 
-  (matches.groupStage || [])
-    .filter(m => m.status === 'finished' && m.homeScore != null && m.awayScore != null)
-    .forEach(m => {
-      const groupArr = groups[m.group];
-      if (!groupArr) return;
-      const home = groupArr.find(t => t.team === m.home);
-      const away = groupArr.find(t => t.team === m.away);
-      if (!home || !away) return;
+  const finishedMatches = (matches.groupStage || [])
+    .filter(m => m.status === 'finished' && m.homeScore != null && m.awayScore != null);
 
-      [[home, m.homeScore, m.awayScore], [away, m.awayScore, m.homeScore]].forEach(([team, gf, ga]) => {
-        team.pj += 1;
-        team.gp += gf;
-        team.gc += ga;
-        team.sg = team.gp - team.gc;
-        if (gf > ga) { team.v += 1; team.pts += 3; }
-        else if (gf === ga) { team.e += 1; team.pts += 1; }
-        else { team.d += 1; }
-      });
+  finishedMatches.forEach(m => {
+    const groupArr = groups[m.group];
+    if (!groupArr) return;
+    const home = groupArr.find(t => t.team === m.home);
+    const away = groupArr.find(t => t.team === m.away);
+    if (!home || !away) return;
+
+    const cards = m.cards || {};
+    [[home, m.homeScore, m.awayScore, cards.home], [away, m.awayScore, m.homeScore, cards.away]].forEach(([team, gf, ga, fairPlayDelta]) => {
+      team.pj += 1;
+      team.gp += gf;
+      team.gc += ga;
+      team.sg = team.gp - team.gc;
+      if (gf > ga) { team.v += 1; team.pts += 3; }
+      else if (gf === ga) { team.e += 1; team.pts += 1; }
+      else { team.d += 1; }
+      team.fairPlay += (fairPlayDelta || 0);
     });
+  });
 
-  Object.keys(groups).forEach(letter => groups[letter].sort(compareStandings));
+  const fifaRankingByTeam = {};
+  teams.forEach(t => { fifaRankingByTeam[t.name] = t.fifaRanking; });
+
+  Object.keys(groups).forEach(letter => {
+    const groupMatches = finishedMatches.filter(m => m.group === letter);
+    const withRanking = groups[letter].map(t => ({ ...t, fifaRanking: fifaRankingByTeam[t.team] }));
+    groups[letter] = sortGroupStandings(withRanking, groupMatches).map(({ fifaRanking, ...rest }) => rest);
+  });
 
   return groups;
 }

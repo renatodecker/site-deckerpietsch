@@ -1,3 +1,5 @@
+import { sortGroupStandings, sortThirdPlaced } from './standings.js';
+
 /* ============================================================
    HEADER / NAV (igual ao site principal)
    ============================================================ */
@@ -146,12 +148,6 @@ function renderLastUpdated() {
 /* ============================================================
    GRUPOS / CLASSIFICAÇÃO
    ============================================================ */
-function compareStandings(a, b) {
-  if (b.pts !== a.pts) return b.pts - a.pts;
-  if (b.sg !== a.sg) return b.sg - a.sg;
-  return b.gp - a.gp;
-}
-
 // Jogos da fase de grupos que estão em andamento agora
 function getLiveGroupMatches(matches) {
   if (!matches || !matches.groupStage) return [];
@@ -171,7 +167,8 @@ function applyLiveProvisional(teams, liveMatches) {
     const away = map[m.away];
     if (!home || !away || m.homeScore == null || m.awayScore == null) return;
 
-    [[home, m.homeScore, m.awayScore], [away, m.awayScore, m.homeScore]].forEach(([team, gf, ga]) => {
+    const cards = m.cards || {};
+    [[home, m.homeScore, m.awayScore, cards.home], [away, m.awayScore, m.homeScore, cards.away]].forEach(([team, gf, ga, fairPlayDelta]) => {
       team.pj += 1;
       team.gp += gf;
       team.gc += ga;
@@ -179,11 +176,33 @@ function applyLiveProvisional(teams, liveMatches) {
       if (gf > ga) { team.v += 1; team.pts += 3; }
       else if (gf === ga) { team.e += 1; team.pts += 1; }
       else { team.d += 1; }
+      team.fairPlay = (team.fairPlay || 0) + (fairPlayDelta || 0);
       team.live = true;
     });
   });
 
   return Object.values(map);
+}
+
+// Aplica o placar provisório de jogos em andamento e ordena cada grupo
+// segundo os critérios oficiais de desempate (ver copa/js/standings.js).
+// Resultado: { [letra]: [times ordenados] }, usado por toda a página
+// (classificação, melhores terceiros e definição de vagas do mata-mata).
+function buildSortedGroups(groups, matches) {
+  if (!groups) return {};
+
+  const liveMatches = getLiveGroupMatches(matches);
+  const sorted = {};
+
+  Object.keys(groups).forEach(letter => {
+    const groupMatches = (matches && matches.groupStage || []).filter(m => m.group === letter);
+    const groupLive = liveMatches.filter(m => m.group === letter);
+    const withLive = applyLiveProvisional(groups[letter], groupLive)
+      .map(t => ({ ...t, fifaRanking: fifaRankingIndex[t.team] }));
+    sorted[letter] = sortGroupStandings(withLive, groupMatches);
+  });
+
+  return sorted;
 }
 
 /* ============================================================
@@ -214,18 +233,18 @@ function renderLiveBanner(matches) {
   `).join('');
 }
 
-function renderGroups(groups, matches) {
+function renderGroups(sortedGroups, matches) {
   const wrap = document.getElementById('groupsGrid');
-  if (!groups || Object.keys(groups).length === 0) {
+  if (!sortedGroups || Object.keys(sortedGroups).length === 0) {
     wrap.innerHTML = '<div class="empty-state">Classificação ainda não disponível.</div>';
     return;
   }
 
   const liveMatches = getLiveGroupMatches(matches);
 
-  wrap.innerHTML = Object.keys(groups).sort().map(letter => {
+  wrap.innerHTML = Object.keys(sortedGroups).sort().map(letter => {
     const groupLive = liveMatches.filter(m => m.group === letter);
-    const teams = [...applyLiveProvisional(groups[letter], groupLive)].sort(compareStandings);
+    const teams = sortedGroups[letter];
 
     const rows = teams.map((t, i) => {
       const cls = i < 2 ? 'qualified' : (i === 2 ? 'qualified-3rd' : '');
@@ -271,24 +290,20 @@ function renderGroups(groups, matches) {
 /* ============================================================
    MELHORES TERCEIROS
    ============================================================ */
-function getThirdPlacedTeams(groups, matches) {
-  if (!groups) return [];
-  const liveMatches = getLiveGroupMatches(matches);
-  return Object.keys(groups).sort().map(letter => {
-    const groupLive = liveMatches.filter(m => m.group === letter);
-    const teams = [...applyLiveProvisional(groups[letter], groupLive)].sort(compareStandings);
-    return { ...teams[2], group: letter };
-  }).sort(compareStandings);
+function getThirdPlacedTeams(sortedGroups) {
+  if (!sortedGroups) return [];
+  const thirds = Object.keys(sortedGroups).sort().map(letter => ({ ...sortedGroups[letter][2], group: letter }));
+  return sortThirdPlaced(thirds);
 }
 
-function renderThirdPlaced(groups, matches) {
+function renderThirdPlaced(sortedGroups) {
   const wrap = document.getElementById('thirdPlacedWrap');
-  if (!groups || Object.keys(groups).length === 0) {
+  if (!sortedGroups || Object.keys(sortedGroups).length === 0) {
     wrap.innerHTML = '<div class="empty-state">Classificação ainda não disponível.</div>';
     return;
   }
 
-  const ranked = getThirdPlacedTeams(groups, matches);
+  const ranked = getThirdPlacedTeams(sortedGroups);
 
   const rows = ranked.map((t, i) => {
     const cls = i < 8 ? 'qualified' : 'not-qualified';
@@ -336,12 +351,11 @@ function flattenKnockout(knockout) {
   return flat;
 }
 
-function getGroupSlot(groups, letter, pos) {
-  const teams = groups && groups[letter];
+function getGroupSlot(sortedGroups, letter, pos) {
+  const teams = sortedGroups && sortedGroups[letter];
   if (!teams || teams.length === 0) return null;
   if (!teams.some(t => t.pj > 0)) return null;
-  const sorted = [...teams].sort(compareStandings);
-  return sorted[pos - 1] || null;
+  return teams[pos - 1] || null;
 }
 
 function getMatchOutcome(match, wantLoser) {
@@ -389,6 +403,15 @@ let teamFlagIndex = {};
 function buildTeamFlagIndex(teams) {
   const index = {};
   (teams || []).forEach(t => { index[t.name] = t.flag; });
+  return index;
+}
+
+// Posição no ranking FIFA de cada seleção, indexada pelo nome (data/teams.json)
+let fifaRankingIndex = {};
+
+function buildFifaRankingIndex(teams) {
+  const index = {};
+  (teams || []).forEach(t => { index[t.name] = t.fifaRanking; });
   return index;
 }
 
@@ -1033,11 +1056,13 @@ async function refreshData() {
   if (matches) currentMatches = matches;
   if (stadiums) currentStadiums = stadiums;
 
-  renderGroups(currentGroups, currentMatches);
-  renderThirdPlaced(currentGroups, currentMatches);
-  renderMatches(currentMatches, currentGroups, currentStadiums);
-  renderBracket(currentMatches, currentGroups, currentStadiums);
-  renderRecentUpcoming(currentMatches, currentGroups);
+  const sortedGroups = buildSortedGroups(currentGroups, currentMatches);
+
+  renderGroups(sortedGroups, currentMatches);
+  renderThirdPlaced(sortedGroups);
+  renderMatches(currentMatches, sortedGroups, currentStadiums);
+  renderBracket(currentMatches, sortedGroups, currentStadiums);
+  renderRecentUpcoming(currentMatches, sortedGroups);
   renderLiveBanner(currentMatches);
   renderScorers(scorers);
   renderStadiums(currentStadiums);
@@ -1066,14 +1091,17 @@ async function refreshData() {
   currentMatches = matches;
   currentStadiums = stadiums;
   teamFlagIndex = buildTeamFlagIndex(teams);
+  fifaRankingIndex = buildFifaRankingIndex(teams);
+
+  const sortedGroups = buildSortedGroups(groups, matches);
 
   renderInfo(info);
-  renderGroups(groups, matches);
-  renderThirdPlaced(groups, matches);
+  renderGroups(sortedGroups, matches);
+  renderThirdPlaced(sortedGroups);
   renderLiveBanner(matches);
-  renderMatches(matches, groups, stadiums);
-  renderBracket(matches, groups, stadiums);
-  renderRecentUpcoming(matches, groups);
+  renderMatches(matches, sortedGroups, stadiums);
+  renderBracket(matches, sortedGroups, stadiums);
+  renderRecentUpcoming(matches, sortedGroups);
   renderScorers(scorers);
   renderFlagBar(teams);
   renderStadiums(stadiums);

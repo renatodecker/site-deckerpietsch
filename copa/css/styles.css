@@ -1093,6 +1093,21 @@ img { display: block; max-width: 100%; }
   color: var(--gray-500);
 }
 
+.sim-card__cta {
+  display: inline-block;
+  margin-top: 18px;
+  font-size: .85rem;
+  font-weight: 700;
+  color: var(--navy-900);
+  background: var(--gold-400);
+  border-radius: 999px;
+  padding: 10px 24px;
+  text-decoration: none;
+  transition: filter .15s ease;
+}
+
+.sim-card__cta:hover { filter: brightness(1.08); }
+
 /* ============================================================
    FOOTER
    ============================================================ */

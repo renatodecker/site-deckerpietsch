@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Simulador da Copa do Mundo FIFA 2026: digite os placares dos jogos da fase de grupos e do mata-mata e veja a classificação e o chaveamento se atualizarem na hora." />
+  <meta name="robots" content="index, follow" />
+  <title>Simulador | Copa do Mundo FIFA 2026</title>
+  <link rel="canonical" href="https://deckerpietsch.com.br/copa-simulador" />
+  <link rel="icon" href="../assets/logo.png" type="image/png" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://deckerpietsch.com.br/copa-simulador" />
+  <meta property="og:title" content="Simulador | Copa do Mundo FIFA 2026" />
+  <meta property="og:description" content="Digite os placares dos jogos da Copa do Mundo FIFA 2026 e veja a classificação dos grupos e o chaveamento do mata-mata se atualizarem na hora." />
+  <meta property="og:locale" content="pt_BR" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../copa/css/styles.css" />
+  <link rel="stylesheet" href="css/styles.css" />
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-SKL0JMRVYW"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-SKL0JMRVYW');
+  </script>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="header" id="header">
+    <div class="container header__inner">
+      <a href="#topo" class="logo">
+        <img src="../assets/logo.png" alt="Decker Pietsch" class="logo__img" />
+        <span class="logo__title">Simulador<small>Copa do Mundo FIFA 2026</small></span>
+      </a>
+      <nav class="nav" id="nav">
+        <a href="#grupos" class="nav__link">Grupos</a>
+        <a href="#jogos" class="nav__link">Jogos</a>
+        <a href="#mata-mata" class="nav__link">Mata-mata</a>
+        <a href="../copa/index.html" class="nav__link">Dados reais</a>
+      </nav>
+      <button class="nav-toggle" id="navToggle" aria-label="Abrir menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero" id="topo">
+    <div class="container hero__inner">
+      <p class="hero__eyebrow">Estados Unidos · México · Canadá</p>
+      <h1 class="hero__title">Simulador da Copa <span>FIFA 2026</span></h1>
+      <p class="hero__subtitle">
+        Digite o placar de qualquer jogo da fase de grupos ou do mata-mata e veja a classificação
+        e o chaveamento se recalcularem na hora. Suas simulações ficam salvas neste navegador.
+      </p>
+      <div class="sim-toolbar">
+        <span class="sim-toolbar__label" id="simStatus">Mostrando os resultados reais até agora.</span>
+        <button type="button" class="sim-toolbar__reset" id="resetSim">Zerar simulação</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- GRUPOS / CLASSIFICAÇÃO -->
+  <section class="section" id="grupos">
+    <div class="container">
+      <div class="section__header">
+        <span class="section__tag">Classificação</span>
+        <h2 class="section__title">Grupos</h2>
+        <p class="section__desc">
+          Classificação dos 12 grupos considerando os resultados reais e os placares que você digitar.
+        </p>
+      </div>
+      <div class="groups__grid" id="groupsGrid">
+        <!-- preenchido via JS -->
+      </div>
+      <div class="standings-legend">
+        <span class="standings-legend__item">
+          <span class="standings-legend__swatch standings-legend__swatch--qualified"></span>
+          Classificado direto (1º e 2º do grupo)
+        </span>
+        <span class="standings-legend__item">
+          <span class="standings-legend__swatch standings-legend__swatch--qualified-3rd"></span>
+          Pode classificar como um dos 8 melhores 3ºs colocados
+        </span>
+      </div>
+    </div>
+  </section>
+
+  <!-- MELHORES TERCEIROS -->
+  <section class="section section--alt" id="terceiros">
+    <div class="container">
+      <div class="section__header">
+        <span class="section__tag">Classificação</span>
+        <h2 class="section__title">Melhores Terceiros</h2>
+        <p class="section__desc">
+          Os 8 melhores terceiros colocados avançam para a fase de 32.
+        </p>
+      </div>
+      <div class="third-placed" id="thirdPlacedWrap">
+        <!-- preenchido via JS -->
+      </div>
+      <div class="standings-legend">
+        <span class="standings-legend__item">
+          <span class="standings-legend__swatch standings-legend__swatch--qualified"></span>
+          Classificado para a fase de 32 (8 melhores)
+        </span>
+      </div>
+    </div>
+  </section>
+
+  <!-- JOGOS -->
+  <section class="section" id="jogos">
+    <div class="container">
+      <div class="section__header">
+        <span class="section__tag">Calendário</span>
+        <h2 class="section__title">Jogos</h2>
+        <p class="section__desc">
+          Fase de grupos: edite os placares para simular o restante do torneio.
+        </p>
+      </div>
+      <div class="tabs" id="matchTabs">
+        <!-- preenchido via JS -->
+      </div>
+      <div class="matches__list" id="matchesList">
+        <!-- preenchido via JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- MATA-MATA -->
+  <section class="section section--alt" id="mata-mata">
+    <div class="container">
+      <div class="section__header">
+        <span class="section__tag">Fase final</span>
+        <h2 class="section__title">Chaveamento</h2>
+        <p class="section__desc">
+          Conforme os grupos se definem (reais ou simulados), as vagas da fase de 32 são preenchidas.
+          Edite o placar de cada confronto para simular as fases seguintes até a final.
+        </p>
+      </div>
+      <div class="champion-banner" id="championBanner" hidden>
+        <!-- preenchido via JS quando a final tiver um resultado -->
+      </div>
+      <div class="bracket" id="bracket">
+        <!-- preenchido via JS -->
+      </div>
+      <div class="bracket-note">
+        <p>
+          <strong>Vagas em formato "1A", "2B" etc.</strong> indicam 1º ou 2º colocado do grupo correspondente.
+          <strong>"Melhor 3º"</strong> mostra o grupo do 3º colocado classificado para aquela vaga, segundo a
+          simulação atual.
+        </p>
+        <p>
+          A distribuição dos melhores terceiros colocados entre as vagas da fase de 32 é uma aproximação do
+          critério oficial da FIFA (Anexo C), que respeita as mesmas restrições de grupo da tabela oficial.
+        </p>
+        <p>
+          Em caso de empate no mata-mata, escolha quem avança nos pênaltis clicando no nome do time.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container footer__inner">
+      <p class="footer__copy">Simulação não-oficial, apenas para entretenimento · Os placares ficam salvos só neste navegador.</p>
+      <a href="../copa/index.html" class="footer__back">&larr; Voltar para a Copa do Mundo FIFA 2026</a>
+    </div>
+  </footer>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>

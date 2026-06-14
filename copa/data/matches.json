@@ -135,7 +135,10 @@
       "status": "finished",
       "homeScore": 1,
       "awayScore": 1,
-      "cards": { "home": -2, "away": 0 }
+      "cards": {
+        "home": -2,
+        "away": 0
+      }
     },
     {
       "id": 14,
@@ -257,8 +260,8 @@
       "home": "Alemanha",
       "away": "Curaçao",
       "venue": "Houston",
-      "status": "live",
-      "homeScore": 3,
+      "status": "finished",
+      "homeScore": 7,
       "awayScore": 1
     },
     {

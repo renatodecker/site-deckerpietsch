@@ -1,14 +1,17 @@
 /* ============================================================
-   CRITÉRIOS OFICIAIS DE DESEMPATE (fase de grupos da Copa do Mundo)
+   CRITÉRIOS OFICIAIS DE DESEMPATE (fase de grupos da Copa do Mundo 2026)
 
    1. Pontos
-   2. Saldo de gols
-   3. Gols marcados
-   4. Confronto direto entre os times empatados (pontos, saldo e gols
-      marcados somente nos jogos entre eles)
+   2. Confronto direto entre os times empatados: pontos, saldo de gols e
+      gols marcados somente nos jogos entre eles
+   3. Saldo de gols geral (todos os jogos do grupo)
+   4. Gols marcados geral (todos os jogos do grupo)
    5. Pontos de fair play (cartões) em todos os jogos do grupo
    6. Posição no ranking FIFA (menor número = melhor)
    7. Ordem alfabética (último recurso, no lugar de sorteio)
+
+   A partir de 2026 a FIFA passou a aplicar o confronto direto antes do
+   saldo/gols geral (nas edições anteriores era o contrário).
 
    Para a comparação entre 3os colocados de grupos diferentes, o confronto
    direto não se aplica (times de grupos diferentes não jogam entre si).
@@ -48,12 +51,14 @@ function sortCluster(cluster, criteria, level, groupMatches) {
   const criterion = criteria[level];
   let keyFn;
 
-  if (criterion === 'primary') {
-    keyFn = t => [t.pts, t.sg, t.gp];
+  if (criterion === 'points') {
+    keyFn = t => [t.pts];
   } else if (criterion === 'h2h') {
     if (!groupMatches) return sortCluster(cluster, criteria, level + 1, groupMatches);
     const h2h = computeHeadToHead(cluster, groupMatches);
     keyFn = t => [h2h[t.team].pts, h2h[t.team].sg, h2h[t.team].gp];
+  } else if (criterion === 'overall') {
+    keyFn = t => [t.sg, t.gp];
   } else if (criterion === 'fairplay') {
     keyFn = t => [t.fairPlay || 0];
   } else if (criterion === 'ranking') {
@@ -77,8 +82,8 @@ function sortCluster(cluster, criteria, level, groupMatches) {
   return result;
 }
 
-const GROUP_CRITERIA = ['primary', 'h2h', 'fairplay', 'ranking', 'alphabetical'];
-const CROSS_GROUP_CRITERIA = ['primary', 'fairplay', 'ranking', 'alphabetical'];
+const GROUP_CRITERIA = ['points', 'h2h', 'overall', 'fairplay', 'ranking', 'alphabetical'];
+const CROSS_GROUP_CRITERIA = ['points', 'overall', 'fairplay', 'ranking', 'alphabetical'];
 
 // Ordena a classificação de um grupo (4 times), aplicando os critérios
 // oficiais de desempate em sequência. `groupMatches` são os jogos da fase de

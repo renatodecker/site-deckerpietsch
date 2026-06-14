@@ -332,7 +332,7 @@ function renderChampion(champion) {
 
   wrap.hidden = false;
   wrap.innerHTML = `
-    <div class="champion-banner__trophy">🏆</div>
+    <img class="champion-banner__trophy" src="assets/trophy.svg" alt="Taça da Copa do Mundo" />
     <div class="champion-banner__label">Campeão da Copa do Mundo FIFA 2026 (simulação)</div>
     <div class="champion-banner__team"><span class="champion-banner__flag">${teamFlagIndex[champion] || ''}</span>${champion}</div>
   `;

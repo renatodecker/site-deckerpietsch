@@ -158,9 +158,10 @@
 }
 
 .champion-banner__trophy {
-  font-size: 4rem;
-  line-height: 1;
-  margin-bottom: 12px;
+  width: 88px;
+  height: auto;
+  margin: 0 auto 12px;
+  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, .35));
 }
 
 .champion-banner__label {

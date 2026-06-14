@@ -9,14 +9,19 @@
 //      jogo retornado com um jogo da fase de grupos pelo par de times (usando
 //      copa/data/team-name-aliases.json para lidar com nomes em inglês/PT-BR).
 //   3. Atualiza status (scheduled/live/finished) e placar de matches.json.
-//   4. Recalcula copa/data/groups.json a partir dos jogos com status "finished",
-//      aplicando os critérios oficiais de desempate (copa/js/standings.js).
+//   4. Para jogos em andamento ou recém-finalizados, busca o resumo
+//      ("summary") da ESPN para preencher cartões (campo "cards", usado no
+//      critério de desempate "fair play") e artilheiros (campo "scorers").
+//   5. Recalcula copa/data/groups.json a partir dos jogos com status "finished",
+//      aplicando os critérios oficiais de desempate (copa/js/standings.js), e
+//      copa/data/scorers.json a partir dos gols registrados em cada jogo.
 //
 // Se a ESPN não responder (endpoint não-oficial, pode mudar sem aviso), o
-// script não grava nada e os dados atuais permanecem (fallback seguro).
-//
-// scorers.json (artilharia) e o campo "cards" de matches.json (cartões/fair
-// play) não são atualizados automaticamente — seguem manuais.
+// script não grava nada e os dados atuais permanecem (fallback seguro). O
+// mesmo vale para scorers.json: só é sobrescrito depois que pelo menos um
+// jogo tiver cartões/artilheiros lidos com sucesso da ESPN (campo
+// "scorers" presente em matches.json), para não substituir uma lista
+// preenchida manualmente por uma lista vazia.
 
 import { readFileSync, writeFileSync, existsSync } from 'fs';
 import { resolve, dirname } from 'path';
@@ -70,13 +75,18 @@ async function update() {
     return;
   }
 
-  const { matches: updatedMatches, groups: computedGroups, changed: matchesChanged } = result;
+  const { matches: updatedMatches, groups: computedGroups, scorers: computedScorers, changed: matchesChanged } = result;
   const groupsChanged = JSON.stringify(computedGroups) !== JSON.stringify(groups);
+
+  const hasScorersData = (updatedMatches.groupStage || []).some(m => Array.isArray(m.scorers));
+  const scorers = readJSON('scorers.json');
+  const scorersChanged = hasScorersData && JSON.stringify(computedScorers.scorers) !== JSON.stringify(scorers.scorers);
 
   if (matchesChanged) writeJSON('matches.json', updatedMatches);
   if (groupsChanged) writeJSON('groups.json', computedGroups);
+  if (scorersChanged) writeJSON('scorers.json', computedScorers);
 
-  console.log(`Atualizado. matches=${matchesChanged} groups=${groupsChanged}`);
+  console.log(`Atualizado. matches=${matchesChanged} groups=${groupsChanged} scorers=${scorersChanged}`);
 }
 
 update().catch(err => {

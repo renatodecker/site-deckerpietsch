@@ -1047,18 +1047,20 @@ let currentAliases = null;
 async function fetchUpdatedData(ts) {
   if (currentMatches && currentTeams && currentAliases) {
     try {
-      const { matches, groups } = await fetchLiveUpdate(currentMatches, currentTeams, currentAliases);
-      return { matches, groups };
+      const { matches, groups, scorers } = await fetchLiveUpdate(currentMatches, currentTeams, currentAliases);
+      const hasScorersData = (matches.groupStage || []).some(m => Array.isArray(m.scorers));
+      return { matches, groups, scorers: hasScorersData ? scorers : await loadJSON(`data/scorers.json?t=${ts}`) };
     } catch (err) {
       console.warn('Falha ao buscar dados da ESPN, usando arquivos estáticos:', err.message);
     }
   }
 
-  const [groups, matches] = await Promise.all([
+  const [groups, matches, scorers] = await Promise.all([
     loadJSON(`data/groups.json?t=${ts}`),
-    loadJSON(`data/matches.json?t=${ts}`)
+    loadJSON(`data/matches.json?t=${ts}`),
+    loadJSON(`data/scorers.json?t=${ts}`)
   ]);
-  return { matches, groups };
+  return { matches, groups, scorers };
 }
 
 async function refreshData() {
@@ -1069,9 +1071,8 @@ async function refreshData() {
   }
 
   const ts = Date.now();
-  const [{ groups, matches }, scorers, stadiums] = await Promise.all([
+  const [{ groups, matches, scorers }, stadiums] = await Promise.all([
     fetchUpdatedData(ts),
-    loadJSON(`data/scorers.json?t=${ts}`),
     loadJSON(`data/stadiums.json?t=${ts}`)
   ]);
 

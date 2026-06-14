@@ -83,6 +83,10 @@ export function applyScoreboard(matches, events, aliasIndex) {
       (m.home === homeName && m.away === awayName) || (m.home === awayName && m.away === homeName));
     if (!target) return;
 
+    // Guarda o id do evento na ESPN para podermos buscar cartões/artilheiros
+    // depois via fetchMatchSummary (endpoint "summary").
+    if (!target.espnId && event.id) { target.espnId = event.id; changed = true; }
+
     if (target.status !== mapped) { target.status = mapped; changed = true; }
 
     if (mapped !== 'scheduled') {
@@ -151,9 +155,85 @@ export function computeGroupsFromMatches(matches, teams) {
   return groups;
 }
 
+/* ============================================================
+   DETALHES DA PARTIDA (cartões e gols) — endpoint "summary" da ESPN
+   ============================================================ */
+export async function fetchMatchSummary(espnId) {
+  const url = `https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/summary?event=${espnId}`;
+  const res = await fetch(url);
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  return res.json();
+}
+
+// Lê os eventos de um summary da ESPN (gols e cartões) e os traduz para os
+// nomes de time usados neste site (via aliasIndex).
+//
+// Retorna `null` se `header.competitions[0].details` não existir nesse
+// summary (endpoint não-oficial, pode mudar de formato) — assim quem chama
+// sabe que não deve sobrescrever `cards`/`scorers` já existentes com zeros.
+//
+// Pontos de fair play por cartão (regra oficial da FIFA): 1o amarelo = -1,
+// 2o amarelo (expulsão) = -2 adicionais (total -3), vermelho direto = -4.
+export function extractMatchDetails(summary, aliasIndex) {
+  const competition = summary && summary.header && summary.header.competitions && summary.header.competitions[0];
+  const details = competition && competition.details;
+  if (!Array.isArray(details)) return null;
+
+  const teamNameById = {};
+  (competition.competitors || []).forEach(c => {
+    const name = c.team && aliasIndex[normalize(c.team.displayName || '')];
+    if (name) teamNameById[c.team.id] = name;
+  });
+
+  const cards = {};
+  const goals = [];
+  const yellowCount = {};
+
+  details.forEach(d => {
+    const teamName = d.team && teamNameById[d.team.id];
+    if (!teamName) return;
+
+    const type = ((d.type && d.type.text) || '').toLowerCase();
+    const athlete = d.athletesInvolved && d.athletesInvolved[0] && d.athletesInvolved[0].displayName;
+
+    if (type.includes('yellow card')) {
+      const key = `${d.team.id}:${athlete}`;
+      yellowCount[key] = (yellowCount[key] || 0) + 1;
+      cards[teamName] = (cards[teamName] || 0) + (yellowCount[key] >= 2 ? -2 : -1);
+    } else if (type.includes('red card')) {
+      cards[teamName] = (cards[teamName] || 0) - 4;
+    } else if (athlete && ((type.includes('goal') && !type.includes('own goal')) || (type.includes('penalty') && type.includes('scor')))) {
+      goals.push({ player: athlete, team: teamName });
+    }
+  });
+
+  return { cards, goals };
+}
+
+/* ============================================================
+   ARTILHARIA — agregada a partir dos gols registrados em cada jogo
+   ============================================================ */
+export function computeScorersFromMatches(matches, teams) {
+  const flagByTeam = {};
+  teams.forEach(t => { flagByTeam[t.name] = t.flag; });
+
+  const totals = {};
+  (matches.groupStage || []).forEach(m => {
+    (m.scorers || []).forEach(({ player, team }) => {
+      const key = `${player}|${team}`;
+      if (!totals[key]) totals[key] = { name: player, country: `${flagByTeam[team] || ''} ${team}`.trim(), goals: 0 };
+      totals[key].goals += 1;
+    });
+  });
+
+  return { scorers: Object.values(totals).sort((a, b) => b.goals - a.goals).slice(0, 10) };
+}
+
 // Busca o placar da ESPN para ontem/hoje/amanhã (UTC) e aplica em uma cópia
-// de `matches`. Retorna { matches, groups, changed } ou lança erro se todas
-// as chamadas à ESPN falharem (rede, CORS, endpoint fora do ar, etc.).
+// de `matches`, incluindo cartões e artilheiros dos jogos em andamento ou
+// recém-finalizados (via fetchMatchSummary). Retorna
+// { matches, groups, scorers, changed } ou lança erro se todas as chamadas
+// ao placar da ESPN falharem (rede, CORS, endpoint fora do ar, etc.).
 export async function fetchLiveUpdate(matches, teams, aliases) {
   const aliasIndex = buildAliasIndex(teams, aliases);
   const todayUtc = new Date().toISOString().slice(0, 10);
@@ -176,8 +256,40 @@ export async function fetchLiveUpdate(matches, teams, aliases) {
   }
 
   const updatedMatches = JSON.parse(JSON.stringify(matches));
-  const changed = applyScoreboard(updatedMatches, events, aliasIndex);
-  const groups = computeGroupsFromMatches(updatedMatches, teams);
+  let changed = applyScoreboard(updatedMatches, events, aliasIndex);
 
-  return { matches: updatedMatches, groups, changed };
+  for (const m of (updatedMatches.groupStage || [])) {
+    if (!m.espnId) continue;
+    if (m.status !== 'live' && m.status !== 'finished') continue;
+    if (m.detailsFetched) continue;
+
+    try {
+      const summary = await fetchMatchSummary(m.espnId);
+      const extracted = extractMatchDetails(summary, aliasIndex);
+      if (!extracted) continue;
+
+      const newCards = { home: extracted.cards[m.home] || 0, away: extracted.cards[m.away] || 0 };
+      if (!m.cards || m.cards.home !== newCards.home || m.cards.away !== newCards.away) {
+        m.cards = newCards;
+        changed = true;
+      }
+
+      if (JSON.stringify(m.scorers || []) !== JSON.stringify(extracted.goals)) {
+        m.scorers = extracted.goals;
+        changed = true;
+      }
+
+      if (m.status === 'finished') {
+        m.detailsFetched = true;
+        changed = true;
+      }
+    } catch {
+      // Sem detalhes desta vez; tenta novamente na próxima atualização.
+    }
+  }
+
+  const groups = computeGroupsFromMatches(updatedMatches, teams);
+  const scorers = computeScorersFromMatches(updatedMatches, teams);
+
+  return { matches: updatedMatches, groups, scorers, changed };
 }

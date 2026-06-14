@@ -1,5 +1,5 @@
 {
-  "_comment": "Campo opcional 'cards' em cada jogo: { home: N, away: N }, representando o saldo de pontos de fair play (cartões) de cada time nesse jogo (valores negativos = penalidades por cartão). Usado no critério de desempate 'fairPlay'. Ausente ou omitido = 0 para ambos os times. Não é preenchido automaticamente pelo script de atualização (scripts/update-copa-data.mjs) — atualização manual quando necessário.",
+  "_comment": "Campos preenchidos automaticamente pelo script de atualização (scripts/update-copa-data.mjs) a partir da ESPN, não editar manualmente quando presentes: 'espnId' (id do evento na ESPN, usado para buscar cartões/artilheiros), 'cards' ({ home: N, away: N }, saldo de pontos de fair play de cada time nesse jogo, usado no critério de desempate 'fairPlay'; negativo = penalidades por cartão; ausente/omitido = 0), 'scorers' (lista de gols do jogo: [{ player, team }]), 'detailsFetched' (true quando cartões/artilheiros já foram obtidos para um jogo finalizado, evita buscas repetidas).",
   "groupStage": [
     {
       "id": 1,

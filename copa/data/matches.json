@@ -332,10 +332,11 @@
       "home": "Países Baixos",
       "away": "Japão",
       "venue": "Arlington",
-      "status": "live",
+      "status": "finished",
       "espnId": "760425",
-      "homeScore": 1,
-      "awayScore": 0
+      "homeScore": 2,
+      "awayScore": 2,
+      "detailsFetched": true
     },
     {
       "id": 32,

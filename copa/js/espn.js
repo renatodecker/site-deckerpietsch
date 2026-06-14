@@ -268,10 +268,18 @@ export async function fetchLiveUpdate(matches, teams, aliases) {
       const extracted = extractMatchDetails(summary, aliasIndex);
       if (!extracted) continue;
 
-      const newCards = { home: extracted.cards[m.home] || 0, away: extracted.cards[m.away] || 0 };
-      if (!m.cards || m.cards.home !== newCards.home || m.cards.away !== newCards.away) {
-        m.cards = newCards;
-        changed = true;
+      // Só atualiza `cards` se a ESPN retornou algum cartão para um dos dois
+      // times: se `extracted.cards` vier vazio (ex: formato do summary não
+      // bateu com o esperado, ou nomes de time não casaram), preserva
+      // `m.cards` já existente em vez de zerar pontos de fair play
+      // registrados manualmente.
+      const hasCardData = m.home in extracted.cards || m.away in extracted.cards;
+      if (hasCardData) {
+        const newCards = { home: extracted.cards[m.home] || 0, away: extracted.cards[m.away] || 0 };
+        if (!m.cards || m.cards.home !== newCards.home || m.cards.away !== newCards.away) {
+          m.cards = newCards;
+          changed = true;
+        }
       }
 
       if (JSON.stringify(m.scorers || []) !== JSON.stringify(extracted.goals)) {

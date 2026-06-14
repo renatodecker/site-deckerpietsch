@@ -83,7 +83,9 @@
       "venue": "Santa Clara",
       "status": "finished",
       "homeScore": 1,
-      "awayScore": 1
+      "awayScore": 1,
+      "espnId": "760420",
+      "detailsFetched": true
     },
     {
       "id": 9,
@@ -138,7 +140,9 @@
       "cards": {
         "home": -2,
         "away": 0
-      }
+      },
+      "espnId": "760419",
+      "detailsFetched": true
     },
     {
       "id": 14,
@@ -149,7 +153,9 @@
       "venue": "Foxborough",
       "status": "finished",
       "homeScore": 0,
-      "awayScore": 1
+      "awayScore": 1,
+      "espnId": "760418",
+      "detailsFetched": true
     },
     {
       "id": 15,
@@ -211,7 +217,9 @@
       "venue": "Vancouver",
       "status": "finished",
       "homeScore": 2,
-      "awayScore": 0
+      "awayScore": 0,
+      "espnId": "760421",
+      "detailsFetched": true
     },
     {
       "id": 21,
@@ -262,7 +270,9 @@
       "venue": "Houston",
       "status": "finished",
       "homeScore": 7,
-      "awayScore": 1
+      "awayScore": 1,
+      "espnId": "760422",
+      "detailsFetched": true
     },
     {
       "id": 26,
@@ -272,7 +282,8 @@
       "away": "Equador",
       "venue": "Filadélfia",
       "status": "scheduled",
-      "time": "19h ET"
+      "time": "19h ET",
+      "espnId": "760423"
     },
     {
       "id": 27,
@@ -321,8 +332,10 @@
       "home": "Países Baixos",
       "away": "Japão",
       "venue": "Arlington",
-      "status": "scheduled",
-      "time": "16h"
+      "status": "live",
+      "espnId": "760425",
+      "homeScore": 1,
+      "awayScore": 0
     },
     {
       "id": 32,
@@ -332,7 +345,8 @@
       "away": "Tunísia",
       "venue": "Monterrey",
       "status": "scheduled",
-      "time": "22h"
+      "time": "22h",
+      "espnId": "760424"
     },
     {
       "id": 33,
@@ -382,7 +396,8 @@
       "away": "Egito",
       "venue": "Seattle",
       "status": "scheduled",
-      "time": "15h ET"
+      "time": "15h ET",
+      "espnId": "760426"
     },
     {
       "id": 38,
@@ -392,7 +407,8 @@
       "away": "Nova Zelândia",
       "venue": "Inglewood",
       "status": "scheduled",
-      "time": "21h ET"
+      "time": "21h ET",
+      "espnId": "760427"
     },
     {
       "id": 39,
@@ -442,7 +458,8 @@
       "away": "Cabo Verde",
       "venue": "Atlanta",
       "status": "scheduled",
-      "time": "12h"
+      "time": "12h",
+      "espnId": "760428"
     },
     {
       "id": 44,
@@ -452,7 +469,8 @@
       "away": "Uruguai",
       "venue": "Miami",
       "status": "scheduled",
-      "time": "18h"
+      "time": "18h",
+      "espnId": "760429"
     },
     {
       "id": 45,

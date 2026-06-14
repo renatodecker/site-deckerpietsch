@@ -9,27 +9,22 @@
 //      jogo retornado com um jogo da fase de grupos pelo par de times (usando
 //      copa/data/team-name-aliases.json para lidar com nomes em inglês/PT-BR).
 //   3. Atualiza status (scheduled/live/finished) e placar de matches.json.
-//   4. Recalcula copa/data/groups.json a partir dos jogos com status "finished"
-//      (mesma lógica de pontuação usada no front-end para o placar provisório
-//      de jogos em andamento).
+//   4. Recalcula copa/data/groups.json a partir dos jogos com status "finished",
+//      aplicando os critérios oficiais de desempate (copa/js/standings.js).
 //
 // Se a ESPN não responder (endpoint não-oficial, pode mudar sem aviso), o
 // script não grava nada e os dados atuais permanecem (fallback seguro).
 //
-// scorers.json (artilharia) não é atualizado automaticamente — segue manual.
+// scorers.json (artilharia) e o campo "cards" de matches.json (cartões/fair
+// play) não são atualizados automaticamente — seguem manuais.
 
 import { readFileSync, writeFileSync, existsSync } from 'fs';
 import { resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { sortGroupStandings } from '../copa/js/standings.js';
+import { addDaysUtc, tournamentWindow, fetchLiveUpdate } from '../copa/js/espn.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const DATA_DIR = resolve(__dirname, '../copa/data');
-
-const ESPN_SCOREBOARD_URL = 'https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/scoreboard';
-
-// Mapeia o estado de status da ESPN (status.type.state) para o status usado neste site.
-const STATUS_MAP = { pre: 'scheduled', in: 'live', post: 'finished' };
 
 /* ============================================================
    HELPERS DE ARQUIVO
@@ -46,147 +41,6 @@ function readJSONOrDefault(name, fallback) {
 
 function writeJSON(name, data) {
   writeFileSync(resolve(DATA_DIR, name), JSON.stringify(data, null, 2) + '\n');
-}
-
-/* ============================================================
-   HELPERS GERAIS
-   ============================================================ */
-function normalize(str) {
-  return String(str).normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().trim();
-}
-
-function addDaysUtc(dateStr, days) {
-  const d = new Date(`${dateStr}T00:00:00Z`);
-  d.setUTCDate(d.getUTCDate() + days);
-  return d.toISOString().slice(0, 10);
-}
-
-function tournamentWindow(matches) {
-  const dates = [];
-  (matches.groupStage || []).forEach(m => dates.push(m.date));
-  Object.values(matches.knockout || {}).forEach(arr => arr.forEach(m => { if (m.date) dates.push(m.date); }));
-  dates.sort();
-  return { start: dates[0], end: dates[dates.length - 1] };
-}
-
-/* ============================================================
-   CLIENTE ESPN
-   ============================================================ */
-async function fetchScoreboard(dateStr) {
-  const url = `${ESPN_SCOREBOARD_URL}?dates=${dateStr.replace(/-/g, '')}`;
-  const res = await fetch(url);
-  if (!res.ok) throw new Error(`HTTP ${res.status}`);
-  return res.json();
-}
-
-/* ============================================================
-   CASAMENTO DE TIMES (nomes do site <-> nomes da ESPN)
-   ============================================================ */
-function buildAliasIndex(teams, aliases) {
-  const index = {};
-  teams.forEach(t => {
-    index[normalize(t.name)] = t.name;
-    (aliases[t.name] || []).forEach(alias => {
-      index[normalize(alias)] = t.name;
-    });
-  });
-  return index;
-}
-
-/* ============================================================
-   APLICA PLACAR/STATUS DA ESPN EM matches.json
-   ============================================================ */
-function applyScoreboard(matches, events, aliasIndex) {
-  let changed = false;
-
-  events.forEach(event => {
-    const competition = event.competitions && event.competitions[0];
-    if (!competition) return;
-
-    const competitors = competition.competitors || [];
-    const home = competitors.find(c => c.homeAway === 'home');
-    const away = competitors.find(c => c.homeAway === 'away');
-    if (!home || !away || !home.team || !away.team) return;
-
-    const homeName = aliasIndex[normalize(home.team.displayName)];
-    const awayName = aliasIndex[normalize(away.team.displayName)];
-    if (!homeName || !awayName) return;
-
-    const state = (competition.status && competition.status.type && competition.status.type.state)
-      || (event.status && event.status.type && event.status.type.state);
-    const mapped = STATUS_MAP[state];
-    if (!mapped) return;
-
-    const target = (matches.groupStage || []).find(m =>
-      (m.home === homeName && m.away === awayName) || (m.home === awayName && m.away === homeName));
-    if (!target) return;
-
-    if (target.status !== mapped) { target.status = mapped; changed = true; }
-
-    if (mapped !== 'scheduled') {
-      const sameOrientation = target.home === homeName;
-      const homeScore = Number(home.score);
-      const awayScore = Number(away.score);
-      if (Number.isFinite(homeScore) && Number.isFinite(awayScore)) {
-        const newHomeScore = sameOrientation ? homeScore : awayScore;
-        const newAwayScore = sameOrientation ? awayScore : homeScore;
-        if (target.homeScore !== newHomeScore || target.awayScore !== newAwayScore) {
-          target.homeScore = newHomeScore;
-          target.awayScore = newAwayScore;
-          changed = true;
-        }
-      }
-      if ('time' in target) { delete target.time; changed = true; }
-    }
-  });
-
-  return changed;
-}
-
-/* ============================================================
-   RECALCULA groups.json A PARTIR DOS JOGOS FINALIZADOS
-   ============================================================ */
-function computeGroupsFromMatches(matches, teams) {
-  const groups = {};
-
-  teams.forEach(t => {
-    if (!groups[t.group]) groups[t.group] = [];
-    groups[t.group].push({ team: t.name, flag: t.flag, pj: 0, v: 0, e: 0, d: 0, gp: 0, gc: 0, sg: 0, pts: 0, fairPlay: 0 });
-  });
-
-  const finishedMatches = (matches.groupStage || [])
-    .filter(m => m.status === 'finished' && m.homeScore != null && m.awayScore != null);
-
-  finishedMatches.forEach(m => {
-    const groupArr = groups[m.group];
-    if (!groupArr) return;
-    const home = groupArr.find(t => t.team === m.home);
-    const away = groupArr.find(t => t.team === m.away);
-    if (!home || !away) return;
-
-    const cards = m.cards || {};
-    [[home, m.homeScore, m.awayScore, cards.home], [away, m.awayScore, m.homeScore, cards.away]].forEach(([team, gf, ga, fairPlayDelta]) => {
-      team.pj += 1;
-      team.gp += gf;
-      team.gc += ga;
-      team.sg = team.gp - team.gc;
-      if (gf > ga) { team.v += 1; team.pts += 3; }
-      else if (gf === ga) { team.e += 1; team.pts += 1; }
-      else { team.d += 1; }
-      team.fairPlay += (fairPlayDelta || 0);
-    });
-  });
-
-  const fifaRankingByTeam = {};
-  teams.forEach(t => { fifaRankingByTeam[t.name] = t.fifaRanking; });
-
-  Object.keys(groups).forEach(letter => {
-    const groupMatches = finishedMatches.filter(m => m.group === letter);
-    const withRanking = groups[letter].map(t => ({ ...t, fifaRanking: fifaRankingByTeam[t.team] }));
-    groups[letter] = sortGroupStandings(withRanking, groupMatches).map(({ fifaRanking, ...rest }) => rest);
-  });
-
-  return groups;
 }
 
 /* ============================================================
@@ -208,40 +62,21 @@ async function update() {
     return;
   }
 
-  const dates = [-1, 0, 1].map(offset => addDaysUtc(todayUtc, offset));
-  const events = [];
-  let failures = 0;
-
-  for (const date of dates) {
-    try {
-      const data = await fetchScoreboard(date);
-      events.push(...(data.events || []));
-    } catch (err) {
-      failures += 1;
-      console.warn(`Falha ao buscar ESPN para ${date}: ${err.message}`);
-    }
-  }
-
-  if (failures === dates.length) {
-    console.error('Todas as chamadas à ESPN falharam. Mantendo dados atuais.');
+  let result;
+  try {
+    result = await fetchLiveUpdate(matches, teams, aliases);
+  } catch (err) {
+    console.error(`${err.message} Mantendo dados atuais.`);
     return;
   }
 
-  if (events.length === 0) {
-    console.log('ESPN não retornou jogos para o período. Nada a fazer.');
-    return;
-  }
-
-  const aliasIndex = buildAliasIndex(teams, aliases);
-  const matchesChanged = applyScoreboard(matches, events, aliasIndex);
-
-  const computedGroups = computeGroupsFromMatches(matches, teams);
+  const { matches: updatedMatches, groups: computedGroups, changed: matchesChanged } = result;
   const groupsChanged = JSON.stringify(computedGroups) !== JSON.stringify(groups);
 
-  if (matchesChanged) writeJSON('matches.json', matches);
+  if (matchesChanged) writeJSON('matches.json', updatedMatches);
   if (groupsChanged) writeJSON('groups.json', computedGroups);
 
-  console.log(`Atualizado. matches=${matchesChanged} groups=${groupsChanged} (${events.length} evento(s) recebido(s))`);
+  console.log(`Atualizado. matches=${matchesChanged} groups=${groupsChanged}`);
 }
 
 update().catch(err => {

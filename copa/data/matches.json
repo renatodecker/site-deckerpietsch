@@ -134,7 +134,8 @@
       "venue": "East Rutherford",
       "status": "finished",
       "homeScore": 1,
-      "awayScore": 1
+      "awayScore": 1,
+      "cards": { "home": -2, "away": 0 }
     },
     {
       "id": 14,

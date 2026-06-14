@@ -1,4 +1,5 @@
 import { sortGroupStandings, sortThirdPlaced } from './standings.js';
+import { fetchLiveUpdate } from './espn.js';
 
 /* ============================================================
    HEADER / NAV (igual ao site principal)
@@ -1036,6 +1037,29 @@ function renderRecentUpcoming(matches, groups) {
 let currentGroups = null;
 let currentMatches = null;
 let currentStadiums = null;
+let currentTeams = null;
+let currentAliases = null;
+
+// Tenta buscar o placar ao vivo direto da ESPN (mesma lógica do script de
+// atualização automática, ver copa/js/espn.js). Se a chamada falhar (CORS,
+// endpoint fora do ar, etc.), recarrega os arquivos estáticos data/*.json
+// (atualizados pelo workflow agendado a cada 30 min) como alternativa.
+async function fetchUpdatedData(ts) {
+  if (currentMatches && currentTeams && currentAliases) {
+    try {
+      const { matches, groups } = await fetchLiveUpdate(currentMatches, currentTeams, currentAliases);
+      return { matches, groups };
+    } catch (err) {
+      console.warn('Falha ao buscar dados da ESPN, usando arquivos estáticos:', err.message);
+    }
+  }
+
+  const [groups, matches] = await Promise.all([
+    loadJSON(`data/groups.json?t=${ts}`),
+    loadJSON(`data/matches.json?t=${ts}`)
+  ]);
+  return { matches, groups };
+}
 
 async function refreshData() {
   const btn = document.getElementById('refreshNow');
@@ -1045,9 +1069,8 @@ async function refreshData() {
   }
 
   const ts = Date.now();
-  const [groups, matches, scorers, stadiums] = await Promise.all([
-    loadJSON(`data/groups.json?t=${ts}`),
-    loadJSON(`data/matches.json?t=${ts}`),
+  const [{ groups, matches }, scorers, stadiums] = await Promise.all([
+    fetchUpdatedData(ts),
     loadJSON(`data/scorers.json?t=${ts}`),
     loadJSON(`data/stadiums.json?t=${ts}`)
   ]);
@@ -1078,18 +1101,21 @@ async function refreshData() {
    INIT
    ============================================================ */
 (async function init() {
-  const [info, groups, matches, scorers, teams, stadiums] = await Promise.all([
+  const [info, groups, matches, scorers, teams, stadiums, aliases] = await Promise.all([
     loadJSON('data/info.json'),
     loadJSON('data/groups.json'),
     loadJSON('data/matches.json'),
     loadJSON('data/scorers.json'),
     loadJSON('data/teams.json'),
-    loadJSON('data/stadiums.json')
+    loadJSON('data/stadiums.json'),
+    loadJSON('data/team-name-aliases.json')
   ]);
 
   currentGroups = groups;
   currentMatches = matches;
   currentStadiums = stadiums;
+  currentTeams = teams;
+  currentAliases = aliases || {};
   teamFlagIndex = buildTeamFlagIndex(teams);
   fifaRankingIndex = buildFifaRankingIndex(teams);
 

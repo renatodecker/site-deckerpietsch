@@ -158,10 +158,15 @@
 }
 
 .champion-banner__trophy {
-  width: 88px;
+  display: block;
+  width: 140px;
+  max-width: 60%;
   height: auto;
-  margin: 0 auto 12px;
-  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, .35));
+  margin: 0 auto 16px;
+  background: var(--white);
+  border-radius: var(--radius-md);
+  padding: 10px;
+  box-shadow: var(--shadow-lg);
 }
 
 .champion-banner__label {

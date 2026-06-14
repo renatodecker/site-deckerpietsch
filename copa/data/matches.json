@@ -131,7 +131,7 @@
       "home": "Brasil",
       "away": "Marrocos",
       "venue": "East Rutherford",
-      "status": "live",
+      "status": "finished",
       "homeScore": 1,
       "awayScore": 1
     },
@@ -142,8 +142,9 @@
       "home": "Haiti",
       "away": "Escócia",
       "venue": "Foxborough",
-      "status": "scheduled",
-      "time": "21h ET"
+      "status": "finished",
+      "homeScore": 0,
+      "awayScore": 1
     },
     {
       "id": 15,
@@ -203,8 +204,9 @@
       "home": "Austrália",
       "away": "Turquia",
       "venue": "Vancouver",
-      "status": "scheduled",
-      "time": "00h ET (13/06)"
+      "status": "live",
+      "homeScore": 0,
+      "awayScore": 0
     },
     {
       "id": 21,

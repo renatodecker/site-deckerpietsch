@@ -87,6 +87,28 @@ async function update() {
   if (scorersChanged) writeJSON('scorers.json', computedScorers);
 
   console.log(`Atualizado. matches=${matchesChanged} groups=${groupsChanged} scorers=${scorersChanged}`);
+
+  // DIAGNÓSTICO TEMPORÁRIO: inspeciona o summary da ESPN de um jogo já
+  // finalizado para descobrir por que cartões/artilheiros não estão sendo
+  // extraídos (extractMatchDetails). Remover depois.
+  try {
+    const res = await fetch('https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/summary?event=760425');
+    const data = await res.json();
+    console.log('DEBUG summary status:', res.status);
+    console.log('DEBUG top-level keys:', Object.keys(data));
+    const header = data.header;
+    console.log('DEBUG header keys:', header ? Object.keys(header) : null);
+    const competition = header && header.competitions && header.competitions[0];
+    console.log('DEBUG competition keys:', competition ? Object.keys(competition) : null);
+    if (competition) {
+      console.log('DEBUG details isArray:', Array.isArray(competition.details), 'len:', (competition.details || []).length);
+      console.log('DEBUG details sample:', JSON.stringify((competition.details || []).slice(0, 5)));
+      console.log('DEBUG competitors:', JSON.stringify((competition.competitors || []).map(c => ({ homeAway: c.homeAway, teamId: c.team && c.team.id, teamDisplayName: c.team && c.team.displayName }))));
+    }
+    console.log('DEBUG array keys at top level:', Object.keys(data).filter(k => Array.isArray(data[k])).map(k => `${k}(${data[k].length})`));
+  } catch (err) {
+    console.log('DEBUG erro:', err.message);
+  }
 }
 
 update().catch(err => {

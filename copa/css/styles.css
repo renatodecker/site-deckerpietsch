@@ -602,6 +602,12 @@ img { display: block; max-width: 100%; }
   white-space: nowrap;
 }
 
+.standings-table-wrap {
+  overflow-x: auto;
+}
+
+.team-name__short { display: none; }
+
 .standings-table tbody tr:last-child td { border-bottom: none; }
 
 .standings-table tbody tr.qualified .team-cell {
@@ -1293,4 +1299,13 @@ body.modal-open { overflow: hidden; }
   .third-placed .standings-table {
     min-width: 560px;
   }
+}
+
+@media (max-width: 480px) {
+  .standings-table th,
+  .standings-table td {
+    padding: 8px 3px;
+  }
+  .team-name__full { display: none; }
+  .team-name__short { display: inline; }
 }

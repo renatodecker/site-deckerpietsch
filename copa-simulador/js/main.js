@@ -95,6 +95,12 @@ function slotTagHTML(source, teamName, sim) {
   return '';
 }
 
+// Nome do time nas tabelas de classificação: em telas estreitas, a versão
+// abreviada (t.short) substitui o nome completo para a tabela não estourar.
+function teamNameHTML(t) {
+  return `<span class="team-name__full">${t.team}</span><span class="team-name__short">${t.short || t.team}</span>`;
+}
+
 /* ============================================================
    GRUPOS / CLASSIFICAÇÃO
    ============================================================ */
@@ -109,7 +115,7 @@ function renderGroups(groups) {
       return `
         <tr class="${cls}">
           <td>${i + 1}</td>
-          <td class="team-cell"><span class="team-flag">${t.flag || ''}</span>${t.team}</td>
+          <td class="team-cell"><span class="team-flag">${t.flag || ''}</span>${teamNameHTML(t)}</td>
           <td>${t.pj}</td>
           <td>${t.v}</td>
           <td>${t.e}</td>
@@ -125,17 +131,19 @@ function renderGroups(groups) {
     return `
       <div class="group-card">
         <div class="group-card__header">Grupo ${letter}<span>Classificação</span></div>
-        <table class="standings-table">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th class="team-cell">Time</th>
-              <th>J</th><th>V</th><th>E</th><th>D</th>
-              <th>GP</th><th>GC</th><th>SG</th><th>Pts</th>
-            </tr>
-          </thead>
-          <tbody>${rows}</tbody>
-        </table>
+        <div class="standings-table-wrap">
+          <table class="standings-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th class="team-cell">Time</th>
+                <th>J</th><th>V</th><th>E</th><th>D</th>
+                <th>GP</th><th>GC</th><th>SG</th><th>Pts</th>
+              </tr>
+            </thead>
+            <tbody>${rows}</tbody>
+          </table>
+        </div>
       </div>
     `;
   }).join('');
@@ -150,7 +158,7 @@ function renderThirdPlaced(rankedThirds) {
       <tr class="${cls}">
         <td>${i + 1}</td>
         <td class="group-cell">${t.group}</td>
-        <td class="team-cell"><span class="team-flag">${t.flag || ''}</span>${t.team}</td>
+        <td class="team-cell"><span class="team-flag">${t.flag || ''}</span>${teamNameHTML(t)}</td>
         <td>${t.pj}</td>
         <td>${t.v}</td>
         <td>${t.e}</td>

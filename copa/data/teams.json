@@ -9,6 +9,7 @@
   },
   {
     "name": "Coreia do Sul",
+    "short": "Coreia Sul",
     "flag": "🇰🇷",
     "group": "A",
     "fifaRanking": 25,
@@ -25,6 +26,7 @@
   },
   {
     "name": "África do Sul",
+    "short": "África Sul",
     "flag": "🇿🇦",
     "group": "A",
     "fifaRanking": 60,
@@ -41,6 +43,7 @@
   },
   {
     "name": "Bósnia e Herzegovina",
+    "short": "Bósnia-Herz.",
     "flag": "🇧🇦",
     "group": "B",
     "fifaRanking": 64,
@@ -97,6 +100,7 @@
   },
   {
     "name": "Estados Unidos",
+    "short": "EUA",
     "flag": "🇺🇸",
     "group": "D",
     "fifaRanking": 16,
@@ -145,6 +149,7 @@
   },
   {
     "name": "Costa do Marfim",
+    "short": "Costa Marfim",
     "flag": "🇨🇮",
     "group": "E",
     "fifaRanking": 33,
@@ -161,6 +166,7 @@
   },
   {
     "name": "Países Baixos",
+    "short": "P. Baixos",
     "flag": "🇳🇱",
     "group": "F",
     "fifaRanking": 7,
@@ -217,6 +223,7 @@
   },
   {
     "name": "Nova Zelândia",
+    "short": "N. Zelândia",
     "flag": "🇳🇿",
     "group": "G",
     "fifaRanking": 85,
@@ -241,6 +248,7 @@
   },
   {
     "name": "Arábia Saudita",
+    "short": "Ar. Saudita",
     "flag": "🇸🇦",
     "group": "H",
     "fifaRanking": 61,

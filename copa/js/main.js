@@ -146,6 +146,12 @@ function renderLastUpdated() {
   if (lastUpdated) lastUpdated.textContent = `Última atualização: ${formatLocalDateTime(new Date())}`;
 }
 
+// Nome do time nas tabelas de classificação: em telas estreitas, a versão
+// abreviada (t.short) substitui o nome completo para a tabela não estourar.
+function teamNameHTML(t) {
+  return `<span class="team-name__full">${t.team}</span><span class="team-name__short">${t.short || t.team}</span>`;
+}
+
 /* ============================================================
    GRUPOS / CLASSIFICAÇÃO
    ============================================================ */
@@ -252,7 +258,7 @@ function renderGroups(sortedGroups, matches) {
       return `
         <tr class="${cls}">
           <td>${i + 1}</td>
-          <td class="team-cell"><span class="team-flag">${t.flag || ''}</span>${t.team}${t.live ? '<span class="live-dot" title="Jogo em andamento"></span>' : ''}</td>
+          <td class="team-cell"><span class="team-flag">${t.flag || ''}</span>${teamNameHTML(t)}${t.live ? '<span class="live-dot" title="Jogo em andamento"></span>' : ''}</td>
           <td>${t.pj}</td>
           <td>${t.v}</td>
           <td>${t.e}</td>
@@ -271,17 +277,19 @@ function renderGroups(sortedGroups, matches) {
           Grupo ${letter}
           <span>${groupLive.length ? 'Em andamento' : 'Classificação'}</span>
         </div>
-        <table class="standings-table">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th class="team-cell">Time</th>
-              <th>J</th><th>V</th><th>E</th><th>D</th>
-              <th>GP</th><th>GC</th><th>SG</th><th>Pts</th>
-            </tr>
-          </thead>
-          <tbody>${rows}</tbody>
-        </table>
+        <div class="standings-table-wrap">
+          <table class="standings-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th class="team-cell">Time</th>
+                <th>J</th><th>V</th><th>E</th><th>D</th>
+                <th>GP</th><th>GC</th><th>SG</th><th>Pts</th>
+              </tr>
+            </thead>
+            <tbody>${rows}</tbody>
+          </table>
+        </div>
         ${groupLive.length ? '<div class="group-card__note">Classificação provisória: considera o placar parcial do jogo em andamento.</div>' : ''}
       </div>
     `;
@@ -312,7 +320,7 @@ function renderThirdPlaced(sortedGroups) {
       <tr class="${cls}">
         <td>${i + 1}</td>
         <td class="group-cell">${t.group}</td>
-        <td class="team-cell"><span class="team-flag">${t.flag || ''}</span>${t.team}${t.live ? '<span class="live-dot" title="Jogo em andamento"></span>' : ''}</td>
+        <td class="team-cell"><span class="team-flag">${t.flag || ''}</span>${teamNameHTML(t)}${t.live ? '<span class="live-dot" title="Jogo em andamento"></span>' : ''}</td>
         <td>${t.pj}</td>
         <td>${t.v}</td>
         <td>${t.e}</td>

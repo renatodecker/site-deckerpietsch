@@ -15,6 +15,7 @@
     },
     {
       "team": "Coreia do Sul",
+      "short": "Coreia Sul",
       "flag": "🇰🇷",
       "pj": 1,
       "v": 1,
@@ -41,6 +42,7 @@
     },
     {
       "team": "África do Sul",
+      "short": "África Sul",
       "flag": "🇿🇦",
       "pj": 1,
       "v": 0,
@@ -95,6 +97,7 @@
     },
     {
       "team": "Bósnia e Herzegovina",
+      "short": "Bósnia-Herz.",
       "flag": "🇧🇦",
       "pj": 1,
       "v": 0,
@@ -164,6 +167,7 @@
   "D": [
     {
       "team": "Estados Unidos",
+      "short": "EUA",
       "flag": "🇺🇸",
       "pj": 1,
       "v": 1,
@@ -244,6 +248,7 @@
     },
     {
       "team": "Costa do Marfim",
+      "short": "Costa Marfim",
       "flag": "🇨🇮",
       "pj": 0,
       "v": 0,
@@ -272,6 +277,7 @@
   "F": [
     {
       "team": "Países Baixos",
+      "short": "P. Baixos",
       "flag": "🇳🇱",
       "pj": 1,
       "v": 0,
@@ -365,6 +371,7 @@
     },
     {
       "team": "Nova Zelândia",
+      "short": "N. Zelândia",
       "flag": "🇳🇿",
       "pj": 0,
       "v": 0,
@@ -406,6 +413,7 @@
     },
     {
       "team": "Arábia Saudita",
+      "short": "Ar. Saudita",
       "flag": "🇸🇦",
       "pj": 0,
       "v": 0,

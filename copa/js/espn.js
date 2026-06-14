@@ -240,7 +240,7 @@ export function computeGroupsFromMatches(matches, teams) {
 
   teams.forEach(t => {
     if (!groups[t.group]) groups[t.group] = [];
-    groups[t.group].push({ team: t.name, flag: t.flag, pj: 0, v: 0, e: 0, d: 0, gp: 0, gc: 0, sg: 0, pts: 0, fairPlay: 0 });
+    groups[t.group].push({ team: t.name, short: t.short, flag: t.flag, pj: 0, v: 0, e: 0, d: 0, gp: 0, gc: 0, sg: 0, pts: 0, fairPlay: 0 });
   });
 
   const finishedMatches = (matches.groupStage || [])

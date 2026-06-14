@@ -11,33 +11,28 @@
     </linearGradient>
   </defs>
 
-  <!-- base -->
-  <rect x="55" y="216" width="90" height="14" rx="3" fill="url(#goldBase)" />
-  <rect x="68" y="200" width="64" height="18" rx="3" fill="url(#goldBase)" />
+  <!-- handles -->
+  <path d="M62 52 C 26 52 24 92 58 100" fill="none" stroke="url(#goldBody)" stroke-width="11" stroke-linecap="round" />
+  <path d="M138 52 C 174 52 176 92 142 100" fill="none" stroke="url(#goldBody)" stroke-width="11" stroke-linecap="round" />
+
+  <!-- cup bowl -->
+  <path d="M58 30
+           A 42 10 0 0 1 142 30
+           C 142 78 124 116 100 148
+           C 76 116 58 78 58 30 Z"
+        fill="url(#goldBody)" />
+
+  <!-- rim highlight -->
+  <ellipse cx="100" cy="29" rx="40" ry="8" fill="#fff8d9" opacity="0.6" />
+
+  <!-- star -->
+  <path d="M100 54 L106 68 L121 69 L109 79 L113 94 L100 85 L87 94 L91 79 L79 69 L94 68 Z"
+        fill="#8a6d00" opacity="0.65" />
 
   <!-- stem -->
-  <path d="M92 200 L92 168 L108 168 L108 200 Z" fill="url(#goldBody)" />
+  <path d="M90 148 L110 148 L106 184 L94 184 Z" fill="url(#goldBody)" />
 
-  <!-- cup bands spiralling up to the globe -->
-  <path d="M100 168
-           C58 168 40 140 46 110
-           C50 90 64 78 78 70
-           C66 64 60 50 66 36
-           C72 22 88 14 100 14
-           C112 14 128 22 134 36
-           C140 50 134 64 122 70
-           C136 78 150 90 154 110
-           C160 140 142 168 100 168 Z"
-        fill="none" stroke="url(#goldBody)" stroke-width="14" stroke-linecap="round" />
-
-  <!-- globe on top -->
-  <circle cx="100" cy="40" r="26" fill="url(#goldBody)" />
-  <g stroke="#8a6d00" stroke-width="2" fill="none" opacity="0.55">
-    <ellipse cx="100" cy="40" rx="26" ry="11" />
-    <ellipse cx="100" cy="40" rx="11" ry="26" />
-    <line x1="74" y1="40" x2="126" y2="40" />
-  </g>
-
-  <!-- shine -->
-  <path d="M84 28 C90 22 98 20 106 22" stroke="#fff8d9" stroke-width="4" fill="none" stroke-linecap="round" opacity="0.85" />
+  <!-- base -->
+  <rect x="74" y="184" width="52" height="14" rx="3" fill="url(#goldBase)" />
+  <rect x="60" y="200" width="80" height="16" rx="3" fill="url(#goldBase)" />
 </svg>

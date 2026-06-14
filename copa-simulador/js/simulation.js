@@ -8,6 +8,7 @@
 
 import { sortThirdPlaced } from '../../copa/js/standings.js';
 import { computeGroupsFromMatches } from '../../copa/js/espn.js';
+import { getThirdSlots, assignThirdSlots, resolveR32, resolveRound } from '../../copa/js/bracket.js';
 
 // Aplica os placares simulados (simState[id] = { h, a, p? }) sobre os jogos
 // da fase de grupos. Jogos sem placar simulado mantêm o resultado real (se
@@ -22,103 +23,6 @@ export function applyGroupOverrides(groupStage, simState) {
   });
 }
 
-// Slots da fase de 32 que recebem um "melhor 3º colocado" (ex: id 74,
-// awaySource "3:A,B,C,D,F"), na ordem em que aparecem em matches.json.
-export function getThirdSlots(r32) {
-  return r32
-    .map(m => {
-      const source = ['home', 'away'].map(side => m[`${side}Source`]).find(s => (s || '').startsWith('3:'));
-      if (!source) return null;
-      return { id: m.id, groups: source.slice(2).split(',') };
-    })
-    .filter(Boolean)
-    .sort((a, b) => a.id - b.id);
-}
-
-// Distribui os melhores terceiros colocados qualificados (8 de 12) pelos
-// slots "3:..." da fase de 32. Para cada slot, tenta na ordem o time
-// qualificado mais bem ranqueado cujo grupo esteja na lista de grupos
-// elegíveis do slot, com backtracking caso essa escolha torne algum slot
-// seguinte impossível de preencher. É uma aproximação do critério oficial da
-// FIFA (Anexo C, com 495 combinações possíveis): os grupos elegíveis de cada
-// slot já vêm de matches.json e garantem que existe pelo menos uma
-// distribuição válida (sem repetir grupo) para qualquer combinação de
-// terceiros qualificados.
-export function assignThirdSlots(qualifiedThirds, thirdSlots) {
-  const groupOrder = qualifiedThirds.map(t => t.group);
-  const used = new Set();
-  const assignment = {};
-
-  function backtrack(slotIndex) {
-    if (slotIndex === thirdSlots.length) return true;
-    const slot = thirdSlots[slotIndex];
-    for (const group of groupOrder) {
-      if (used.has(group) || !slot.groups.includes(group)) continue;
-      used.add(group);
-      assignment[slot.id] = group;
-      if (backtrack(slotIndex + 1)) return true;
-      used.delete(group);
-      delete assignment[slot.id];
-    }
-    return false;
-  }
-
-  backtrack(0);
-
-  const teamByGroup = {};
-  qualifiedThirds.forEach(t => { teamByGroup[t.group] = t.team; });
-
-  const result = {};
-  Object.keys(assignment).forEach(slotId => { result[slotId] = teamByGroup[assignment[slotId]]; });
-  return result;
-}
-
-// Resolve homeSource/awaySource da fase de 32 ("1A", "2B", "3:A,B,C,D,F") em
-// nomes de seleção, usando a classificação simulada dos grupos e a
-// distribuição dos melhores terceiros.
-function resolveGroupSource(source, groups, thirdAssignment, matchId) {
-  if (!source) return null;
-
-  const direct = source.match(/^([12])([A-L])$/);
-  if (direct) {
-    const arr = groups[direct[2]];
-    const team = arr && arr[Number(direct[1]) - 1];
-    return team ? team.team : null;
-  }
-
-  if (source.startsWith('3:')) {
-    return thirdAssignment[matchId] || null;
-  }
-
-  return null;
-}
-
-function resolveR32(r32, groups, thirdAssignment) {
-  return r32.map(m => ({
-    ...m,
-    home: resolveGroupSource(m.homeSource, groups, thirdAssignment, m.id),
-    away: resolveGroupSource(m.awaySource, groups, thirdAssignment, m.id)
-  }));
-}
-
-// Resolve homeSource/awaySource das rodadas seguintes ("W101", "L102") usando
-// os resultados (vencedor/perdedor) das partidas já resolvidas anteriormente.
-function resolveWLSource(source, resultsMap) {
-  if (!source) return null;
-  const m = source.match(/^([WL])(\d+)$/);
-  if (!m) return null;
-  const result = resultsMap[Number(m[2])];
-  if (!result) return null;
-  return m[1] === 'W' ? result.winner : result.loser;
-}
-
-function resolveRound(matchList, resultsMap) {
-  return matchList.map(m => ({
-    ...m,
-    home: resolveWLSource(m.homeSource, resultsMap),
-    away: resolveWLSource(m.awaySource, resultsMap)
-  }));
-}
 
 // Aplica os placares simulados a uma rodada do mata-mata já com home/away
 // resolvidos, e registra o resultado (vencedor/perdedor) em `resultsMap` para

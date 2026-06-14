@@ -6,7 +6,8 @@
 // agora" no front-end (copa/js/main.js, no navegador) — por isso este
 // módulo não usa nenhuma API exclusiva do Node (fs, path, etc.).
 
-import { sortGroupStandings } from './standings.js';
+import { sortGroupStandings, sortThirdPlaced } from './standings.js';
+import { resolveKnockoutFixtures } from './bracket.js';
 
 export const ESPN_SCOREBOARD_URL = 'https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/scoreboard';
 
@@ -79,8 +80,12 @@ export function applyScoreboard(matches, events, aliasIndex) {
     const mapped = STATUS_MAP[state];
     if (!mapped) return;
 
+    // `m.status !== 'finished'` evita que um evento do mata-mata entre dois
+    // times que também se enfrentaram na fase de grupos sobrescreva o
+    // resultado (já correto) daquele jogo da fase de grupos.
     const target = (matches.groupStage || []).find(m =>
-      (m.home === homeName && m.away === awayName) || (m.home === awayName && m.away === homeName));
+      m.status !== 'finished'
+      && ((m.home === homeName && m.away === awayName) || (m.home === awayName && m.away === homeName)));
     if (!target) return;
 
     // Guarda o id do evento na ESPN para podermos buscar cartões/artilheiros
@@ -107,6 +112,124 @@ export function applyScoreboard(matches, events, aliasIndex) {
   });
 
   return changed;
+}
+
+/* ============================================================
+   APLICA PLACAR/STATUS DA ESPN AOS JOGOS DO MATA-MATA (matches.knockout)
+   ============================================================ */
+// Só atua depois que a fase de grupos estiver totalmente concluída (os
+// confrontos do mata-mata só ficam definidos nesse momento). Resolve
+// home/away de cada partida (ver copa/js/bracket.js) e, para as que já têm
+// os dois lados definidos e ainda não estão "finished", procura um evento
+// correspondente nos placares da ESPN.
+//
+// Rodadas a partir das quartas de final dependem do resultado de partidas
+// anteriores do mata-mata já gravadas em matches.json — por isso a
+// atualização avança uma rodada por execução, naturalmente, a cada chamada
+// periódica deste script.
+//
+// Para os slots "3:..." da fase de 32 (melhor 3º colocado), a resolução é
+// uma aproximação do Anexo C da FIFA (ver copa/js/bracket.js): se a
+// aproximação não bater com o confronto real definido pela FIFA, esse jogo
+// específico não será encontrado na ESPN e ficará pendente até ser corrigido
+// manualmente.
+export function applyKnockoutScoreboard(matches, events, aliasIndex, teams) {
+  const groupStage = matches.groupStage || [];
+  const knockout = matches.knockout;
+  if (groupStage.length === 0 || !knockout) return false;
+  if (!groupStage.every(m => m.status === 'finished')) return false;
+
+  const groups = computeGroupsFromMatches(matches, teams);
+
+  const fifaRankingByTeam = {};
+  teams.forEach(t => { fifaRankingByTeam[t.name] = t.fifaRanking; });
+
+  const thirds = Object.keys(groups).sort().map(letter => {
+    const team = groups[letter][2];
+    return { ...team, group: letter, fifaRanking: fifaRankingByTeam[team.team] };
+  });
+  const qualifiedThirds = sortThirdPlaced(thirds).slice(0, 8);
+
+  const fixtures = resolveKnockoutFixtures(knockout, groups, qualifiedThirds);
+  let changed = false;
+
+  Object.keys(fixtures).forEach(round => {
+    fixtures[round].forEach((fixture, i) => {
+      const target = knockout[round][i];
+      if (target.status === 'finished' || !fixture.home || !fixture.away) return;
+
+      const result = matchKnockoutEvent(fixture, events, aliasIndex);
+      if (!result) return;
+
+      if (target.home !== fixture.home) { target.home = fixture.home; changed = true; }
+      if (target.away !== fixture.away) { target.away = fixture.away; changed = true; }
+      if (target.status !== result.status) { target.status = result.status; changed = true; }
+      if (target.homeScore !== result.homeScore || target.awayScore !== result.awayScore) {
+        target.homeScore = result.homeScore;
+        target.awayScore = result.awayScore;
+        changed = true;
+      }
+      if (result.winner && target.winner !== result.winner) {
+        target.winner = result.winner;
+        changed = true;
+      }
+      if (result.penalties && !target.penalties) { target.penalties = true; changed = true; }
+    });
+  });
+
+  return changed;
+}
+
+// Procura, nos eventos da ESPN, uma partida entre `fixture.home` e
+// `fixture.away` (em qualquer ordem) e retorna { status, homeScore,
+// awayScore, winnerSide, penalties }, ou `null` se nenhum evento
+// correspondente ainda finalizado/em andamento for encontrado.
+function matchKnockoutEvent(fixture, events, aliasIndex) {
+  for (const event of events) {
+    const competition = event.competitions && event.competitions[0];
+    if (!competition) continue;
+
+    const competitors = competition.competitors || [];
+    const home = competitors.find(c => c.homeAway === 'home');
+    const away = competitors.find(c => c.homeAway === 'away');
+    if (!home || !away || !home.team || !away.team) continue;
+
+    const homeName = aliasIndex[normalize(home.team.displayName)];
+    const awayName = aliasIndex[normalize(away.team.displayName)];
+    if (!homeName || !awayName) continue;
+
+    const sameOrientation = fixture.home === homeName && fixture.away === awayName;
+    const reverseOrientation = fixture.home === awayName && fixture.away === homeName;
+    if (!sameOrientation && !reverseOrientation) continue;
+
+    const state = (competition.status && competition.status.type && competition.status.type.state)
+      || (event.status && event.status.type && event.status.type.state);
+    const status = STATUS_MAP[state];
+    if (!status || status === 'scheduled') return null;
+
+    const homeScoreEspn = Number(home.score);
+    const awayScoreEspn = Number(away.score);
+    if (!Number.isFinite(homeScoreEspn) || !Number.isFinite(awayScoreEspn)) return null;
+
+    const homeScore = sameOrientation ? homeScoreEspn : awayScoreEspn;
+    const awayScore = sameOrientation ? awayScoreEspn : homeScoreEspn;
+
+    let winner = null;
+    let penalties = false;
+    if (status === 'finished' && homeScore === awayScore) {
+      // Empate no placar normal: o mata-mata vai para os pênaltis. A ESPN
+      // costuma indicar o vencedor final em `competitor.winner`, mesmo com o
+      // placar (após prorrogação) empatado.
+      const homeIsWinner = sameOrientation ? home.winner : away.winner;
+      const awayIsWinner = sameOrientation ? away.winner : home.winner;
+      if (homeIsWinner === true) { winner = 'home'; penalties = true; }
+      else if (awayIsWinner === true) { winner = 'away'; penalties = true; }
+    }
+
+    return { status, homeScore, awayScore, winner, penalties };
+  }
+
+  return null;
 }
 
 /* ============================================================
@@ -295,6 +418,8 @@ export async function fetchLiveUpdate(matches, teams, aliases) {
       // Sem detalhes desta vez; tenta novamente na próxima atualização.
     }
   }
+
+  if (applyKnockoutScoreboard(updatedMatches, events, aliasIndex, teams)) changed = true;
 
   const groups = computeGroupsFromMatches(updatedMatches, teams);
   const scorers = computeScorersFromMatches(updatedMatches, teams);

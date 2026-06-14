@@ -256,8 +256,9 @@
       "home": "Alemanha",
       "away": "Curaçao",
       "venue": "Houston",
-      "status": "scheduled",
-      "time": "13h ET"
+      "status": "live",
+      "homeScore": 3,
+      "awayScore": 1
     },
     {
       "id": 26,

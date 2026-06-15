@@ -259,7 +259,7 @@ function renderGroups(sortedGroups, matches) {
       return `
         <tr class="${cls}">
           <td>${i + 1}</td>
-          <td class="team-cell"><span class="team-flag">${t.flag || ''}</span>${teamNameHTML(t)}${t.live ? '<span class="live-dot" title="Jogo em andamento"></span>' : ''}</td>
+          <td class="team-cell"><span class="team-flag">${flagHTML(t.flag)}</span>${teamNameHTML(t)}${t.live ? '<span class="live-dot" title="Jogo em andamento"></span>' : ''}</td>
           <td>${t.pj}</td>
           <td>${t.v}</td>
           <td>${t.e}</td>
@@ -321,7 +321,7 @@ function renderThirdPlaced(sortedGroups) {
       <tr class="${cls}">
         <td>${i + 1}</td>
         <td class="group-cell">${t.group}</td>
-        <td class="team-cell"><span class="team-flag">${t.flag || ''}</span>${teamNameHTML(t)}${t.live ? '<span class="live-dot" title="Jogo em andamento"></span>' : ''}</td>
+        <td class="team-cell"><span class="team-flag">${flagHTML(t.flag)}</span>${teamNameHTML(t)}${t.live ? '<span class="live-dot" title="Jogo em andamento"></span>' : ''}</td>
         <td>${t.pj}</td>
         <td>${t.v}</td>
         <td>${t.e}</td>
@@ -425,9 +425,52 @@ function buildFifaRankingIndex(teams) {
   return index;
 }
 
+// Converte um emoji de bandeira (regional indicators ou tag sequence) para a
+// classe CSS correspondente da biblioteca flag-icons, que renderiza a
+// bandeira como imagem (necessário pois o Windows/Chrome não exibe os emojis
+// de bandeira corretamente).
+function flagEmojiToClass(emoji) {
+  if (!emoji) return '';
+  const codePoints = [...emoji].map(c => c.codePointAt(0));
+
+  // Bandeiras de subdivisão (Inglaterra, Escócia, País de Gales, etc.) usam
+  // o emoji "bandeira preta" seguido de uma tag sequence, ex.: 🏴 + gbeng + (cancel tag)
+  if (codePoints[0] === 0x1F3F4) {
+    const letters = codePoints.slice(1, -1)
+      .map(cp => String.fromCharCode(cp - 0xE0000))
+      .join('');
+    if (letters.length === 5) {
+      return `fi-${letters.slice(0, 2)}-${letters.slice(2)}`.toLowerCase();
+    }
+    return '';
+  }
+
+  // Bandeiras de país: dois "regional indicator symbols" (🇦-🇿)
+  if (codePoints.length === 2) {
+    const letters = codePoints.map(cp => String.fromCharCode(cp - 0x1F1E6 + 65)).join('');
+    return `fi-${letters}`.toLowerCase();
+  }
+
+  return '';
+}
+
+function flagHTML(emoji) {
+  const cls = flagEmojiToClass(emoji);
+  return cls ? `<span class="fi ${cls}"></span>` : '';
+}
+
+// Converte strings no formato "🇲🇽 México" (usadas em data/scorers.json) para
+// HTML com a bandeira renderizada via flag-icons.
+function countryHTML(country) {
+  if (!country) return '';
+  const spaceIdx = country.indexOf(' ');
+  if (spaceIdx === -1) return country;
+  return `${flagHTML(country.slice(0, spaceIdx))} ${country.slice(spaceIdx + 1)}`;
+}
+
 function teamFlagHTML(name) {
   const flag = teamFlagIndex[name];
-  return flag ? `<span class="team-flag">${flag}</span>` : '';
+  return flag ? `<span class="team-flag">${flagHTML(flag)}</span>` : '';
 }
 
 // Returns { html, tbd } for a match's home/away side, resolving
@@ -709,7 +752,7 @@ function renderScorers(data) {
       <tr>
         <td class="num">${i + 1}</td>
         <td>${s.name}</td>
-        <td>${s.country}</td>
+        <td>${countryHTML(s.country)}</td>
         <td class="num">${s.goals}</td>
       </tr>
     `).join('');
@@ -849,7 +892,7 @@ function renderFlagBar(teams) {
 
   wrap.innerHTML = sorted.map(t => `
     <button type="button" class="flag-bar__flag" data-team="${t.name}" title="${t.name}" aria-label="${t.name}">
-      ${t.flag}
+      ${flagHTML(t.flag)}
     </button>
   `).join('');
 
@@ -892,7 +935,7 @@ function stadiumCardHTML(s, { withId = true } = {}) {
       </div>
       <div class="stadium-card__body">
         <p class="stadium-card__name">${s.name}</p>
-        <p class="stadium-card__city">${s.flag} ${s.city}, ${s.country}</p>
+        <p class="stadium-card__city">${flagHTML(s.flag)} ${s.city}, ${s.country}</p>
         <p class="stadium-card__capacity">Capacidade: ${s.capacity}</p>
         ${s.credit ? `<a class="stadium-card__credit" href="${s.credit}" target="_blank" rel="noopener noreferrer">Foto: Wikimedia Commons</a>` : ''}
       </div>

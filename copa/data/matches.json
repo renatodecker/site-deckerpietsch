@@ -10,7 +10,23 @@
       "venue": "Cidade do México",
       "status": "finished",
       "homeScore": 2,
-      "awayScore": 0
+      "awayScore": 0,
+      "espnId": "760415",
+      "cards": {
+        "home": -4,
+        "away": -8
+      },
+      "scorers": [
+        {
+          "player": "Julián Quiñones",
+          "team": "México"
+        },
+        {
+          "player": "Raúl Jiménez",
+          "team": "México"
+        }
+      ],
+      "detailsFetched": true
     },
     {
       "id": 2,
@@ -21,7 +37,23 @@
       "venue": "Guadalajara",
       "status": "finished",
       "homeScore": 2,
-      "awayScore": 1
+      "awayScore": 1,
+      "espnId": "760414",
+      "scorers": [
+        {
+          "player": "Ladislav Krejcí",
+          "team": "Tchéquia"
+        },
+        {
+          "player": "Hwang In-Beom",
+          "team": "Coreia do Sul"
+        },
+        {
+          "player": "Oh Hyeon-Gyu",
+          "team": "Coreia do Sul"
+        }
+      ],
+      "detailsFetched": true
     },
     {
       "id": 3,
@@ -72,7 +104,19 @@
       "venue": "Toronto",
       "status": "finished",
       "homeScore": 1,
-      "awayScore": 1
+      "awayScore": 1,
+      "espnId": "760416",
+      "scorers": [
+        {
+          "player": "Jovo Lukic",
+          "team": "Bósnia e Herzegovina"
+        },
+        {
+          "player": "Cyle Larin",
+          "team": "Canadá"
+        }
+      ],
+      "detailsFetched": true
     },
     {
       "id": 8,
@@ -84,7 +128,14 @@
       "status": "finished",
       "homeScore": 1,
       "awayScore": 1,
-      "espnId": "760420"
+      "espnId": "760420",
+      "scorers": [
+        {
+          "player": "Breel Embolo",
+          "team": "Suíça"
+        }
+      ],
+      "detailsFetched": true
     },
     {
       "id": 9,
@@ -140,7 +191,18 @@
         "home": -2,
         "away": 0
       },
-      "espnId": "760419"
+      "espnId": "760419",
+      "scorers": [
+        {
+          "player": "Ismael Saibari",
+          "team": "Marrocos"
+        },
+        {
+          "player": "Vinícius Júnior",
+          "team": "Brasil"
+        }
+      ],
+      "detailsFetched": true
     },
     {
       "id": 14,
@@ -152,7 +214,14 @@
       "status": "finished",
       "homeScore": 0,
       "awayScore": 1,
-      "espnId": "760418"
+      "espnId": "760418",
+      "scorers": [
+        {
+          "player": "John McGinn",
+          "team": "Escócia"
+        }
+      ],
+      "detailsFetched": true
     },
     {
       "id": 15,
@@ -203,7 +272,27 @@
       "venue": "Inglewood",
       "status": "finished",
       "homeScore": 4,
-      "awayScore": 1
+      "awayScore": 1,
+      "espnId": "760417",
+      "scorers": [
+        {
+          "player": "Folarin Balogun",
+          "team": "Estados Unidos"
+        },
+        {
+          "player": "Folarin Balogun",
+          "team": "Estados Unidos"
+        },
+        {
+          "player": "Maurício",
+          "team": "Paraguai"
+        },
+        {
+          "player": "Giovanni Reyna",
+          "team": "Estados Unidos"
+        }
+      ],
+      "detailsFetched": true
     },
     {
       "id": 20,
@@ -215,7 +304,18 @@
       "status": "finished",
       "homeScore": 2,
       "awayScore": 0,
-      "espnId": "760421"
+      "espnId": "760421",
+      "scorers": [
+        {
+          "player": "Nestory Irankunda",
+          "team": "Austrália"
+        },
+        {
+          "player": "Connor Metcalfe",
+          "team": "Austrália"
+        }
+      ],
+      "detailsFetched": true
     },
     {
       "id": 21,
@@ -267,7 +367,42 @@
       "status": "finished",
       "homeScore": 7,
       "awayScore": 1,
-      "espnId": "760422"
+      "espnId": "760422",
+      "scorers": [
+        {
+          "player": "Felix Nmecha",
+          "team": "Alemanha"
+        },
+        {
+          "player": "Livano Comenencia",
+          "team": "Curaçao"
+        },
+        {
+          "player": "Nico Schlotterbeck",
+          "team": "Alemanha"
+        },
+        {
+          "player": "Kai Havertz",
+          "team": "Alemanha"
+        },
+        {
+          "player": "Jamal Musiala",
+          "team": "Alemanha"
+        },
+        {
+          "player": "Nathaniel Brown",
+          "team": "Alemanha"
+        },
+        {
+          "player": "Deniz Undav",
+          "team": "Alemanha"
+        },
+        {
+          "player": "Kai Havertz",
+          "team": "Alemanha"
+        }
+      ],
+      "detailsFetched": true
     },
     {
       "id": 26,
@@ -276,10 +411,17 @@
       "home": "Costa do Marfim",
       "away": "Equador",
       "venue": "Filadélfia",
-      "status": "live",
+      "status": "finished",
       "espnId": "760423",
-      "homeScore": 0,
-      "awayScore": 0
+      "homeScore": 1,
+      "awayScore": 0,
+      "scorers": [
+        {
+          "player": "Amad Diallo",
+          "team": "Costa do Marfim"
+        }
+      ],
+      "detailsFetched": true
     },
     {
       "id": 27,
@@ -331,7 +473,26 @@
       "status": "finished",
       "espnId": "760425",
       "homeScore": 2,
-      "awayScore": 2
+      "awayScore": 2,
+      "scorers": [
+        {
+          "player": "Virgil van Dijk",
+          "team": "Países Baixos"
+        },
+        {
+          "player": "Keito Nakamura",
+          "team": "Japão"
+        },
+        {
+          "player": "Crysencio Summerville",
+          "team": "Países Baixos"
+        },
+        {
+          "player": "Daichi Kamada",
+          "team": "Japão"
+        }
+      ],
+      "detailsFetched": true
     },
     {
       "id": 32,
@@ -340,9 +501,37 @@
       "home": "Suécia",
       "away": "Tunísia",
       "venue": "Monterrey",
-      "status": "scheduled",
-      "time": "22h",
-      "espnId": "760424"
+      "status": "finished",
+      "espnId": "760424",
+      "homeScore": 5,
+      "awayScore": 1,
+      "scorers": [
+        {
+          "player": "Yasin Ayari",
+          "team": "Suécia"
+        },
+        {
+          "player": "Alexander Isak",
+          "team": "Suécia"
+        },
+        {
+          "player": "Omar Rekik",
+          "team": "Tunísia"
+        },
+        {
+          "player": "Viktor Gyökeres",
+          "team": "Suécia"
+        },
+        {
+          "player": "Mattias Svanberg",
+          "team": "Suécia"
+        },
+        {
+          "player": "Yasin Ayari",
+          "team": "Suécia"
+        }
+      ],
+      "detailsFetched": true
     },
     {
       "id": 33,

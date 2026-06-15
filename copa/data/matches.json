@@ -580,7 +580,7 @@
       "home": "Bélgica",
       "away": "Egito",
       "venue": "Seattle",
-      "status": "live",
+      "status": "finished",
       "espnId": "760426",
       "homeScore": 1,
       "awayScore": 1,
@@ -589,7 +589,8 @@
           "player": "Emam Ashour",
           "team": "Egito"
         }
-      ]
+      ],
+      "detailsFetched": true
     },
     {
       "id": 38,
@@ -663,9 +664,16 @@
       "home": "Arábia Saudita",
       "away": "Uruguai",
       "venue": "Miami",
-      "status": "scheduled",
-      "time": "18h",
-      "espnId": "760429"
+      "status": "live",
+      "espnId": "760429",
+      "homeScore": 1,
+      "awayScore": 0,
+      "scorers": [
+        {
+          "player": "Abdulelah Al-Amri",
+          "team": "Arábia Saudita"
+        }
+      ]
     },
     {
       "id": 45,

@@ -642,9 +642,11 @@
       "home": "Espanha",
       "away": "Cabo Verde",
       "venue": "Atlanta",
-      "status": "scheduled",
-      "time": "12h",
-      "espnId": "760428"
+      "status": "live",
+      "espnId": "760428",
+      "homeScore": 0,
+      "awayScore": 0,
+      "scorers": []
     },
     {
       "id": 44,

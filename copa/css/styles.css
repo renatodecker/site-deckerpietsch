@@ -223,6 +223,14 @@ img { display: block; max-width: 100%; }
 
 .hero__meta-item strong { color: var(--gold-400); }
 
+.hero__meta-item .fi,
+.format-card__desc .fi {
+  width: 16px;
+  height: 12px;
+  vertical-align: middle;
+  border-radius: 1px;
+}
+
 .live-banner {
   display: flex;
   flex-direction: column;

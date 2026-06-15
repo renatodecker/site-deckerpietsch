@@ -123,7 +123,7 @@ function renderInfo(info) {
 
   const heroMeta = document.getElementById('heroMeta');
   heroMeta.innerHTML = (info.meta || []).map(item => `
-    <span class="hero__meta-item"><strong>${item.label}:</strong> ${item.value}</span>
+    <span class="hero__meta-item"><strong>${item.label}:</strong> ${replaceFlagEmojis(item.value)}</span>
   `).join('');
 
   const formatGrid = document.getElementById('formatGrid');
@@ -133,7 +133,7 @@ function renderInfo(info) {
       <h3 class="format-card__title">${card.title}</h3>
       <div class="format-card__desc">
         ${card.desc ? `<p>${card.desc}</p>` : ''}
-        ${card.list ? `<ul>${card.list.map(li => `<li>${li}</li>`).join('')}</ul>` : ''}
+        ${card.list ? `<ul>${card.list.map(li => `<li>${replaceFlagEmojis(li)}</li>`).join('')}</ul>` : ''}
       </div>
     </div>
   `).join('');
@@ -466,6 +466,15 @@ function countryHTML(country) {
   const spaceIdx = country.indexOf(' ');
   if (spaceIdx === -1) return country;
   return `${flagHTML(country.slice(0, spaceIdx))} ${country.slice(spaceIdx + 1)}`;
+}
+
+// Substitui todos os emojis de bandeira presentes em um texto livre (ex.:
+// "🇺🇸 EUA · 🇲🇽 México · 🇨🇦 Canadá") pelas imagens da flag-icons.
+const FLAG_EMOJI_RE = /(?:🏴(?:\uDB40[\uDC00-\uDFFF])+)|(?:\uD83C[\uDDE6-\uDDFF]\uD83C[\uDDE6-\uDDFF])/g;
+
+function replaceFlagEmojis(text) {
+  if (!text) return text;
+  return text.replace(FLAG_EMOJI_RE, m => flagHTML(m));
 }
 
 function teamFlagHTML(name) {

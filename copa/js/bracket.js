@@ -133,6 +133,56 @@ export function getMatchResult(match) {
   };
 }
 
+// Ids das partidas de cada metade do chaveamento, da rodada mais externa
+// (fase de 32) à mais interna (semifinal), na ordem em que devem aparecer
+// (agrupadas para que cada par de jogos fique ao lado do jogo da rodada
+// seguinte que eles alimentam). Usado para desenhar o chaveamento como uma
+// árvore: uma metade da esquerda para a direita, a outra da direita para a
+// esquerda, convergindo para a final no centro.
+export const BRACKET_HALVES = {
+  left: {
+    r32: [74, 77, 73, 75, 83, 84, 81, 82],
+    r16: [89, 90, 93, 94],
+    qf: [97, 98],
+    sf: [101],
+  },
+  right: {
+    r32: [76, 78, 79, 80, 86, 88, 85, 87],
+    r16: [91, 92, 95, 96],
+    qf: [99, 100],
+    sf: [102],
+  },
+};
+
+// Monta as colunas do chaveamento como uma árvore completa: fase de
+// 32/oitavas/quartas/semifinal de um lado (esquerda → direita), final (+
+// disputa de 3º) no centro, e o outro lado em ordem espelhada (semifinal →
+// fase de 32, direita → esquerda), convergindo para o centro. Cada coluna é
+// { round, side, matches }, com `matches` na ordem em que devem ser
+// desenhados de cima para baixo.
+export function getBracketColumns(knockout) {
+  const byId = {};
+  Object.values(knockout || {}).forEach(list => (list || []).forEach(m => { byId[m.id] = m; }));
+
+  const pick = ids => ids.map(id => byId[id]).filter(Boolean);
+
+  const columns = [];
+  ['r32', 'r16', 'qf', 'sf'].forEach(round => {
+    const matches = pick(BRACKET_HALVES.left[round]);
+    if (matches.length) columns.push({ round, side: 'left', matches });
+  });
+
+  const centerMatches = [...(knockout.final || []), ...(knockout.third || [])];
+  if (centerMatches.length) columns.push({ round: 'final', side: 'center', matches: centerMatches });
+
+  ['sf', 'qf', 'r16', 'r32'].forEach(round => {
+    const matches = pick(BRACKET_HALVES.right[round]);
+    if (matches.length) columns.push({ round, side: 'right', matches });
+  });
+
+  return columns;
+}
+
 // Resolve home/away de todas as rodadas do mata-mata (knockout.r32/r16/qf/sf/
 // third/final) a partir da classificação real dos grupos e dos melhores
 // terceiros, usando os resultados já conhecidos (status "finished") das

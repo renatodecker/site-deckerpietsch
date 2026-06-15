@@ -1,4 +1,5 @@
 import { buildSimulation } from './simulation.js';
+import { getBracketColumns } from '../../copa/js/bracket.js';
 
 /* ============================================================
    COOKIE (placares simulados ficam salvos só neste navegador)
@@ -317,14 +318,29 @@ function bracketMatchHTML(match, sim) {
 
 function renderBracket(knockout, sim) {
   const wrap = document.getElementById('bracket');
-  const order = ['r32', 'r16', 'qf', 'sf', 'final', 'third'];
+  const columns = getBracketColumns(knockout);
 
-  wrap.innerHTML = order.filter(k => (knockout[k] || []).length > 0).map(k => `
-    <div class="bracket__round">
-      <div class="bracket__round-title">${KNOCKOUT_LABELS[k]}</div>
-      ${(knockout[k] || []).map(m => bracketMatchHTML(m, sim)).join('')}
-    </div>
-  `).join('');
+  wrap.innerHTML = columns.map(col => {
+    if (col.side === 'center') {
+      const [final, third] = col.matches;
+      return `
+        <div class="bracket__round bracket__round--center">
+          <div class="bracket__round-title">${KNOCKOUT_LABELS.final}</div>
+          ${bracketMatchHTML(final, sim)}
+          ${third ? `
+            <div class="bracket__round-title bracket__round-title--third">${KNOCKOUT_LABELS.third}</div>
+            ${bracketMatchHTML(third, sim)}
+          ` : ''}
+        </div>
+      `;
+    }
+    return `
+      <div class="bracket__round bracket__round--${col.side}">
+        <div class="bracket__round-title">${KNOCKOUT_LABELS[col.round]}</div>
+        ${col.matches.map(m => bracketMatchHTML(m, sim)).join('')}
+      </div>
+    `;
+  }).join('');
 }
 
 /* ============================================================

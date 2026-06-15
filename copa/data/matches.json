@@ -580,9 +580,16 @@
       "home": "Bélgica",
       "away": "Egito",
       "venue": "Seattle",
-      "status": "scheduled",
-      "time": "15h ET",
-      "espnId": "760426"
+      "status": "live",
+      "espnId": "760426",
+      "homeScore": 1,
+      "awayScore": 1,
+      "scorers": [
+        {
+          "player": "Emam Ashour",
+          "team": "Egito"
+        }
+      ]
     },
     {
       "id": 38,
@@ -642,11 +649,12 @@
       "home": "Espanha",
       "away": "Cabo Verde",
       "venue": "Atlanta",
-      "status": "live",
+      "status": "finished",
       "espnId": "760428",
       "homeScore": 0,
       "awayScore": 0,
-      "scorers": []
+      "scorers": [],
+      "detailsFetched": true
     },
     {
       "id": 44,

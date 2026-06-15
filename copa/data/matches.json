@@ -281,9 +281,10 @@
       "home": "Costa do Marfim",
       "away": "Equador",
       "venue": "Filadélfia",
-      "status": "scheduled",
-      "time": "19h ET",
-      "espnId": "760423"
+      "status": "live",
+      "espnId": "760423",
+      "homeScore": 0,
+      "awayScore": 0
     },
     {
       "id": 27,
@@ -521,7 +522,8 @@
       "away": "Senegal",
       "venue": "East Rutherford",
       "status": "scheduled",
-      "time": "15h"
+      "time": "15h",
+      "espnId": "760432"
     },
     {
       "id": 50,
@@ -531,7 +533,8 @@
       "away": "Noruega",
       "venue": "Foxborough",
       "status": "scheduled",
-      "time": "18h"
+      "time": "18h",
+      "espnId": "760430"
     },
     {
       "id": 51,
@@ -581,7 +584,8 @@
       "away": "Argélia",
       "venue": "Kansas City",
       "status": "scheduled",
-      "time": "21h ET"
+      "time": "21h ET",
+      "espnId": "760433"
     },
     {
       "id": 56,

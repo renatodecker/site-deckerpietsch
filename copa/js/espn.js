@@ -80,11 +80,14 @@ export function applyScoreboard(matches, events, aliasIndex) {
     const mapped = STATUS_MAP[state];
     if (!mapped) return;
 
-    // `m.status !== 'finished'` evita que um evento do mata-mata entre dois
-    // times que também se enfrentaram na fase de grupos sobrescreva o
-    // resultado (já correto) daquele jogo da fase de grupos.
+    // `m.status !== 'finished' || !m.espnId` evita que um evento do
+    // mata-mata entre dois times que também se enfrentaram na fase de grupos
+    // sobrescreva o resultado (já correto) daquele jogo da fase de grupos,
+    // mas ainda permite casar um jogo da fase de grupos já finalizado que
+    // ficou sem `espnId` (ex: cadastrado manualmente antes da integração com
+    // a ESPN) para preencher esse campo.
     const target = (matches.groupStage || []).find(m =>
-      m.status !== 'finished'
+      (m.status !== 'finished' || !m.espnId)
       && ((m.home === homeName && m.away === awayName) || (m.home === awayName && m.away === homeName)));
     if (!target) return;
 
@@ -297,6 +300,12 @@ export async function fetchMatchSummary(espnId) {
 //
 // Pontos de fair play por cartão (regra oficial da FIFA): 1o amarelo = -1,
 // 2o amarelo (expulsão) = -2 adicionais (total -3), vermelho direto = -4.
+//
+// O formato atual do summary não traz `type.text` nem `athletesInvolved` nos
+// itens de `details` — em vez disso usa os campos booleanos `scoringPlay`,
+// `ownGoal`, `redCard`, `penaltyKick` e a lista `participants` (o primeiro
+// participante é quem fez o gol/recebeu o cartão). Mantemos o casamento por
+// `type.text` como fallback, caso a ESPN volte a incluí-lo.
 export function extractMatchDetails(summary, aliasIndex) {
   const competition = summary && summary.header && summary.header.competitions && summary.header.competitions[0];
   const details = competition && competition.details;
@@ -317,15 +326,21 @@ export function extractMatchDetails(summary, aliasIndex) {
     if (!teamName) return;
 
     const type = ((d.type && d.type.text) || '').toLowerCase();
-    const athlete = d.athletesInvolved && d.athletesInvolved[0] && d.athletesInvolved[0].displayName;
+    const athlete = d.participants && d.participants[0] && d.participants[0].athlete && d.participants[0].athlete.displayName;
 
-    if (type.includes('yellow card')) {
+    const isYellowCard = type.includes('yellow card') || d.yellowCard === true;
+    const isRedCard = type.includes('red card') || d.redCard === true;
+    const isGoal = !d.ownGoal && (d.scoringPlay === true
+      || (type.includes('goal') && !type.includes('own goal'))
+      || (type.includes('penalty') && type.includes('scor')));
+
+    if (isYellowCard) {
       const key = `${d.team.id}:${athlete}`;
       yellowCount[key] = (yellowCount[key] || 0) + 1;
       cards[teamName] = (cards[teamName] || 0) + (yellowCount[key] >= 2 ? -2 : -1);
-    } else if (type.includes('red card')) {
+    } else if (isRedCard) {
       cards[teamName] = (cards[teamName] || 0) - 4;
-    } else if (athlete && ((type.includes('goal') && !type.includes('own goal')) || (type.includes('penalty') && type.includes('scor')))) {
+    } else if (isGoal && athlete) {
       goals.push({ player: athlete, team: teamName });
     }
   });
@@ -361,6 +376,16 @@ export async function fetchLiveUpdate(matches, teams, aliases) {
   const aliasIndex = buildAliasIndex(teams, aliases);
   const todayUtc = new Date().toISOString().slice(0, 10);
   const dates = [-1, 0, 1].map(offset => addDaysUtc(todayUtc, offset));
+
+  // Jogos já finalizados sem `espnId` (ex: cadastrados manualmente antes da
+  // integração com a ESPN) ficam fora da janela de ontem/hoje/amanhã — busca
+  // também o placar da data desses jogos, para casar o evento pelos times e
+  // preencher o `espnId` (necessário para buscar cartões/artilheiros).
+  (matches.groupStage || []).forEach(m => {
+    if (m.status === 'finished' && !m.espnId && m.date && !dates.includes(m.date)) {
+      dates.push(m.date);
+    }
+  });
 
   const events = [];
   let failures = 0;
@@ -405,7 +430,7 @@ export async function fetchLiveUpdate(matches, teams, aliases) {
         }
       }
 
-      if (JSON.stringify(m.scorers || []) !== JSON.stringify(extracted.goals)) {
+      if (JSON.stringify(m.scorers) !== JSON.stringify(extracted.goals)) {
         m.scorers = extracted.goals;
         changed = true;
       }

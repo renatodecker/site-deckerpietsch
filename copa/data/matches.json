@@ -84,8 +84,7 @@
       "status": "finished",
       "homeScore": 1,
       "awayScore": 1,
-      "espnId": "760420",
-      "detailsFetched": true
+      "espnId": "760420"
     },
     {
       "id": 9,
@@ -141,8 +140,7 @@
         "home": -2,
         "away": 0
       },
-      "espnId": "760419",
-      "detailsFetched": true
+      "espnId": "760419"
     },
     {
       "id": 14,
@@ -154,8 +152,7 @@
       "status": "finished",
       "homeScore": 0,
       "awayScore": 1,
-      "espnId": "760418",
-      "detailsFetched": true
+      "espnId": "760418"
     },
     {
       "id": 15,
@@ -218,8 +215,7 @@
       "status": "finished",
       "homeScore": 2,
       "awayScore": 0,
-      "espnId": "760421",
-      "detailsFetched": true
+      "espnId": "760421"
     },
     {
       "id": 21,
@@ -271,8 +267,7 @@
       "status": "finished",
       "homeScore": 7,
       "awayScore": 1,
-      "espnId": "760422",
-      "detailsFetched": true
+      "espnId": "760422"
     },
     {
       "id": 26,
@@ -336,8 +331,7 @@
       "status": "finished",
       "espnId": "760425",
       "homeScore": 2,
-      "awayScore": 2,
-      "detailsFetched": true
+      "awayScore": 2
     },
     {
       "id": 32,

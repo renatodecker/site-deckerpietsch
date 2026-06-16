@@ -747,9 +747,29 @@
       "home": "França",
       "away": "Senegal",
       "venue": "East Rutherford",
-      "status": "scheduled",
-      "time": "15h",
-      "espnId": "760432"
+      "status": "finished",
+      "espnId": "760432",
+      "homeScore": 3,
+      "awayScore": 1,
+      "scorers": [
+        {
+          "player": "Kylian Mbappé",
+          "team": "França"
+        },
+        {
+          "player": "Bradley Barcola",
+          "team": "França"
+        },
+        {
+          "player": "Ibrahim Mbaye",
+          "team": "Senegal"
+        },
+        {
+          "player": "Kylian Mbappé",
+          "team": "França"
+        }
+      ],
+      "detailsFetched": true
     },
     {
       "id": 50,

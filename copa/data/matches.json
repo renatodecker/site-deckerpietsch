@@ -778,9 +778,24 @@
       "home": "Iraque",
       "away": "Noruega",
       "venue": "Foxborough",
-      "status": "scheduled",
-      "time": "18h",
-      "espnId": "760430"
+      "status": "live",
+      "espnId": "760430",
+      "homeScore": 1,
+      "awayScore": 2,
+      "scorers": [
+        {
+          "player": "Erling Haaland",
+          "team": "Noruega"
+        },
+        {
+          "player": "Aymen Hussein",
+          "team": "Iraque"
+        },
+        {
+          "player": "Erling Haaland",
+          "team": "Noruega"
+        }
+      ]
     },
     {
       "id": 51,

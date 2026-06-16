@@ -26,6 +26,11 @@
       "goals": 2
     },
     {
+      "name": "Erling Haaland",
+      "country": "🇳🇴 Noruega",
+      "goals": 2
+    },
+    {
       "name": "Julián Quiñones",
       "country": "🇲🇽 México",
       "goals": 1
@@ -42,11 +47,6 @@
     },
     {
       "name": "Hwang In-Beom",
-      "country": "🇰🇷 Coreia do Sul",
-      "goals": 1
-    },
-    {
-      "name": "Oh Hyeon-Gyu",
       "country": "🇰🇷 Coreia do Sul",
       "goals": 1
     }

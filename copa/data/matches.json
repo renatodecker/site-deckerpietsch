@@ -599,10 +599,10 @@
       "home": "Irã",
       "away": "Nova Zelândia",
       "venue": "Inglewood",
-      "status": "live",
+      "status": "finished",
       "espnId": "760427",
-      "homeScore": 1,
-      "awayScore": 1,
+      "homeScore": 2,
+      "awayScore": 2,
       "scorers": [
         {
           "player": "Elijah Just",
@@ -611,8 +611,17 @@
         {
           "player": "Ramin Rezaeian",
           "team": "Irã"
+        },
+        {
+          "player": "Elijah Just",
+          "team": "Nova Zelândia"
+        },
+        {
+          "player": "Mohammad Mohebbi",
+          "team": "Irã"
         }
-      ]
+      ],
+      "detailsFetched": true
     },
     {
       "id": 39,

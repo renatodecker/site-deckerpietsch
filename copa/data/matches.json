@@ -599,9 +599,20 @@
       "home": "Irã",
       "away": "Nova Zelândia",
       "venue": "Inglewood",
-      "status": "scheduled",
-      "time": "21h ET",
-      "espnId": "760427"
+      "status": "live",
+      "espnId": "760427",
+      "homeScore": 1,
+      "awayScore": 1,
+      "scorers": [
+        {
+          "player": "Elijah Just",
+          "team": "Nova Zelândia"
+        },
+        {
+          "player": "Ramin Rezaeian",
+          "team": "Irã"
+        }
+      ]
     },
     {
       "id": 39,
@@ -664,16 +675,21 @@
       "home": "Arábia Saudita",
       "away": "Uruguai",
       "venue": "Miami",
-      "status": "live",
+      "status": "finished",
       "espnId": "760429",
       "homeScore": 1,
-      "awayScore": 0,
+      "awayScore": 1,
       "scorers": [
         {
           "player": "Abdulelah Al-Amri",
           "team": "Arábia Saudita"
+        },
+        {
+          "player": "Maxi Araújo",
+          "team": "Uruguai"
         }
-      ]
+      ],
+      "detailsFetched": true
     },
     {
       "id": 45,
@@ -796,7 +812,8 @@
       "away": "Jordânia",
       "venue": "Santa Clara",
       "status": "scheduled",
-      "time": "00h ET (17/06)"
+      "time": "00h ET (17/06)",
+      "espnId": "760431"
     },
     {
       "id": 57,
@@ -846,7 +863,8 @@
       "away": "RD Congo",
       "venue": "Houston",
       "status": "scheduled",
-      "time": "13h ET"
+      "time": "13h ET",
+      "espnId": "760435"
     },
     {
       "id": 62,
@@ -856,7 +874,8 @@
       "away": "Colômbia",
       "venue": "Cidade do México",
       "status": "scheduled",
-      "time": "22h ET"
+      "time": "22h ET",
+      "espnId": "760436"
     },
     {
       "id": 63,
@@ -906,7 +925,8 @@
       "away": "Croácia",
       "venue": "Arlington",
       "status": "scheduled",
-      "time": "16h"
+      "time": "16h",
+      "espnId": "760437"
     },
     {
       "id": 68,
@@ -916,7 +936,8 @@
       "away": "Panamá",
       "venue": "Toronto",
       "status": "scheduled",
-      "time": "19h"
+      "time": "19h",
+      "espnId": "760434"
     },
     {
       "id": 69,

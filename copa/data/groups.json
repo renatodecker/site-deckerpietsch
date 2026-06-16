@@ -386,6 +386,33 @@
   ],
   "H": [
     {
+      "team": "Uruguai",
+      "flag": "🇺🇾",
+      "pj": 1,
+      "v": 0,
+      "e": 1,
+      "d": 0,
+      "gp": 1,
+      "gc": 1,
+      "sg": 0,
+      "pts": 1,
+      "fairPlay": 0
+    },
+    {
+      "team": "Arábia Saudita",
+      "short": "Ar. Saudita",
+      "flag": "🇸🇦",
+      "pj": 1,
+      "v": 0,
+      "e": 1,
+      "d": 0,
+      "gp": 1,
+      "gc": 1,
+      "sg": 0,
+      "pts": 1,
+      "fairPlay": 0
+    },
+    {
       "team": "Espanha",
       "flag": "🇪🇸",
       "pj": 1,
@@ -409,33 +436,6 @@
       "gc": 0,
       "sg": 0,
       "pts": 1,
-      "fairPlay": 0
-    },
-    {
-      "team": "Uruguai",
-      "flag": "🇺🇾",
-      "pj": 0,
-      "v": 0,
-      "e": 0,
-      "d": 0,
-      "gp": 0,
-      "gc": 0,
-      "sg": 0,
-      "pts": 0,
-      "fairPlay": 0
-    },
-    {
-      "team": "Arábia Saudita",
-      "short": "Ar. Saudita",
-      "flag": "🇸🇦",
-      "pj": 0,
-      "v": 0,
-      "e": 0,
-      "d": 0,
-      "gp": 0,
-      "gc": 0,
-      "sg": 0,
-      "pts": 0,
       "fairPlay": 0
     }
   ],

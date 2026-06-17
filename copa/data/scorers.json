@@ -36,6 +36,11 @@
       "goals": 2
     },
     {
+      "name": "Harry Kane",
+      "country": "🏴󠁧󠁢󠁥󠁮󠁧󠁿 Inglaterra",
+      "goals": 2
+    },
+    {
       "name": "Julián Quiñones",
       "country": "🇲🇽 México",
       "goals": 1
@@ -43,11 +48,6 @@
     {
       "name": "Raúl Jiménez",
       "country": "🇲🇽 México",
-      "goals": 1
-    },
-    {
-      "name": "Ladislav Krejcí",
-      "country": "🇨🇿 Tchéquia",
       "goals": 1
     }
   ]

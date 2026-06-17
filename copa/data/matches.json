@@ -947,7 +947,7 @@
       "home": "Portugal",
       "away": "RD Congo",
       "venue": "Houston",
-      "status": "live",
+      "status": "finished",
       "espnId": "760435",
       "homeScore": 1,
       "awayScore": 1,
@@ -960,7 +960,8 @@
           "player": "Yoane Wissa",
           "team": "RD Congo"
         }
-      ]
+      ],
+      "detailsFetched": true
     },
     {
       "id": 62,
@@ -1020,9 +1021,28 @@
       "home": "Inglaterra",
       "away": "Croácia",
       "venue": "Arlington",
-      "status": "scheduled",
-      "time": "16h",
-      "espnId": "760437"
+      "status": "live",
+      "espnId": "760437",
+      "homeScore": 2,
+      "awayScore": 2,
+      "scorers": [
+        {
+          "player": "Harry Kane",
+          "team": "Inglaterra"
+        },
+        {
+          "player": "Martin Baturina",
+          "team": "Croácia"
+        },
+        {
+          "player": "Harry Kane",
+          "team": "Inglaterra"
+        },
+        {
+          "player": "Petar Musa",
+          "team": "Croácia"
+        }
+      ]
     },
     {
       "id": 68,

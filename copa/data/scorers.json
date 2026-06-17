@@ -1,6 +1,11 @@
 {
   "scorers": [
     {
+      "name": "Lionel Messi",
+      "country": "🇦🇷 Argentina",
+      "goals": 3
+    },
+    {
       "name": "Folarin Balogun",
       "country": "🇺🇸 Estados Unidos",
       "goals": 2
@@ -43,11 +48,6 @@
     {
       "name": "Ladislav Krejcí",
       "country": "🇨🇿 Tchéquia",
-      "goals": 1
-    },
-    {
-      "name": "Hwang In-Beom",
-      "country": "🇰🇷 Coreia do Sul",
       "goals": 1
     }
   ]

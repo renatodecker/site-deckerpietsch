@@ -853,16 +853,25 @@
       "home": "Argentina",
       "away": "Argélia",
       "venue": "Kansas City",
-      "status": "live",
+      "status": "finished",
       "espnId": "760433",
-      "homeScore": 1,
+      "homeScore": 3,
       "awayScore": 0,
       "scorers": [
         {
           "player": "Lionel Messi",
           "team": "Argentina"
+        },
+        {
+          "player": "Lionel Messi",
+          "team": "Argentina"
+        },
+        {
+          "player": "Lionel Messi",
+          "team": "Argentina"
         }
-      ]
+      ],
+      "detailsFetched": true
     },
     {
       "id": 56,
@@ -871,9 +880,25 @@
       "home": "Áustria",
       "away": "Jordânia",
       "venue": "Santa Clara",
-      "status": "scheduled",
-      "time": "00h ET (17/06)",
-      "espnId": "760431"
+      "status": "finished",
+      "espnId": "760431",
+      "homeScore": 3,
+      "awayScore": 1,
+      "scorers": [
+        {
+          "player": "Romano Schmid",
+          "team": "Áustria"
+        },
+        {
+          "player": "Ali Olwan",
+          "team": "Jordânia"
+        },
+        {
+          "player": "Marko Arnautovic",
+          "team": "Áustria"
+        }
+      ],
+      "detailsFetched": true
     },
     {
       "id": 57,

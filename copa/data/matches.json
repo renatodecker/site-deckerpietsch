@@ -1021,9 +1021,9 @@
       "home": "Inglaterra",
       "away": "Croácia",
       "venue": "Arlington",
-      "status": "live",
+      "status": "finished",
       "espnId": "760437",
-      "homeScore": 2,
+      "homeScore": 4,
       "awayScore": 2,
       "scorers": [
         {
@@ -1041,8 +1041,17 @@
         {
           "player": "Petar Musa",
           "team": "Croácia"
+        },
+        {
+          "player": "Jude Bellingham",
+          "team": "Inglaterra"
+        },
+        {
+          "player": "Marcus Rashford",
+          "team": "Inglaterra"
         }
-      ]
+      ],
+      "detailsFetched": true
     },
     {
       "id": 68,

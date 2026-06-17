@@ -63,7 +63,8 @@
       "away": "África do Sul",
       "venue": "Atlanta",
       "status": "scheduled",
-      "time": "12h ET"
+      "time": "12h ET",
+      "espnId": "760438"
     },
     {
       "id": 4,
@@ -73,7 +74,8 @@
       "away": "Coreia do Sul",
       "venue": "Guadalajara",
       "status": "scheduled",
-      "time": "21h"
+      "time": "21h",
+      "espnId": "760441"
     },
     {
       "id": 5,
@@ -145,7 +147,8 @@
       "away": "Bósnia e Herzegovina",
       "venue": "Inglewood",
       "status": "scheduled",
-      "time": "15h ET"
+      "time": "15h ET",
+      "espnId": "760439"
     },
     {
       "id": 10,
@@ -155,7 +158,8 @@
       "away": "Catar",
       "venue": "Vancouver",
       "status": "scheduled",
-      "time": "18h ET"
+      "time": "18h ET",
+      "espnId": "760440"
     },
     {
       "id": 11,
@@ -778,10 +782,10 @@
       "home": "Iraque",
       "away": "Noruega",
       "venue": "Foxborough",
-      "status": "live",
+      "status": "finished",
       "espnId": "760430",
       "homeScore": 1,
-      "awayScore": 2,
+      "awayScore": 4,
       "scorers": [
         {
           "player": "Erling Haaland",
@@ -794,8 +798,13 @@
         {
           "player": "Erling Haaland",
           "team": "Noruega"
+        },
+        {
+          "player": "Leo Østigard",
+          "team": "Noruega"
         }
-      ]
+      ],
+      "detailsFetched": true
     },
     {
       "id": 51,
@@ -844,9 +853,16 @@
       "home": "Argentina",
       "away": "Argélia",
       "venue": "Kansas City",
-      "status": "scheduled",
-      "time": "21h ET",
-      "espnId": "760433"
+      "status": "live",
+      "espnId": "760433",
+      "homeScore": 1,
+      "awayScore": 0,
+      "scorers": [
+        {
+          "player": "Lionel Messi",
+          "team": "Argentina"
+        }
+      ]
     },
     {
       "id": 56,

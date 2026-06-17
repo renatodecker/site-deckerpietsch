@@ -947,9 +947,20 @@
       "home": "Portugal",
       "away": "RD Congo",
       "venue": "Houston",
-      "status": "scheduled",
-      "time": "13h ET",
-      "espnId": "760435"
+      "status": "live",
+      "espnId": "760435",
+      "homeScore": 1,
+      "awayScore": 1,
+      "scorers": [
+        {
+          "player": "João Neves",
+          "team": "Portugal"
+        },
+        {
+          "player": "Yoane Wissa",
+          "team": "RD Congo"
+        }
+      ]
     },
     {
       "id": 62,

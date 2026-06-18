@@ -62,16 +62,21 @@
       "home": "Tchéquia",
       "away": "África do Sul",
       "venue": "Atlanta",
-      "status": "live",
+      "status": "finished",
       "espnId": "760438",
       "homeScore": 1,
-      "awayScore": 0,
+      "awayScore": 1,
       "scorers": [
         {
           "player": "Michal Sadílek",
           "team": "Tchéquia"
+        },
+        {
+          "player": "Teboho Mokoena",
+          "team": "África do Sul"
         }
-      ]
+      ],
+      "detailsFetched": true
     },
     {
       "id": 4,
@@ -153,9 +158,11 @@
       "home": "Suíça",
       "away": "Bósnia e Herzegovina",
       "venue": "Inglewood",
-      "status": "scheduled",
-      "time": "15h ET",
-      "espnId": "760439"
+      "status": "live",
+      "espnId": "760439",
+      "homeScore": 0,
+      "awayScore": 0,
+      "scorers": []
     },
     {
       "id": 10,

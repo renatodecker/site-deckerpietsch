@@ -62,9 +62,16 @@
       "home": "Tchéquia",
       "away": "África do Sul",
       "venue": "Atlanta",
-      "status": "scheduled",
-      "time": "12h ET",
-      "espnId": "760438"
+      "status": "live",
+      "espnId": "760438",
+      "homeScore": 1,
+      "awayScore": 0,
+      "scorers": [
+        {
+          "player": "Michal Sadílek",
+          "team": "Tchéquia"
+        }
+      ]
     },
     {
       "id": 4,

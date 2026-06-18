@@ -974,9 +974,29 @@
       "home": "Uzbequistão",
       "away": "Colômbia",
       "venue": "Cidade do México",
-      "status": "scheduled",
-      "time": "22h ET",
-      "espnId": "760436"
+      "status": "finished",
+      "espnId": "760436",
+      "homeScore": 1,
+      "awayScore": 3,
+      "scorers": [
+        {
+          "player": "Daniel Muñoz",
+          "team": "Colômbia"
+        },
+        {
+          "player": "Abbosbek Fayzullaev",
+          "team": "Uzbequistão"
+        },
+        {
+          "player": "Luis Díaz",
+          "team": "Colômbia"
+        },
+        {
+          "player": "Jáminton Campaz",
+          "team": "Colômbia"
+        }
+      ],
+      "detailsFetched": true
     },
     {
       "id": 63,
@@ -1064,11 +1084,17 @@
       "home": "Gana",
       "away": "Panamá",
       "venue": "Toronto",
-      "status": "live",
+      "status": "finished",
       "espnId": "760434",
-      "homeScore": 0,
+      "homeScore": 1,
       "awayScore": 0,
-      "scorers": []
+      "scorers": [
+        {
+          "player": "Caleb Yirenkyi",
+          "team": "Gana"
+        }
+      ],
+      "detailsFetched": true
     },
     {
       "id": 69,

@@ -235,7 +235,8 @@
       "away": "Marrocos",
       "venue": "Foxborough",
       "status": "scheduled",
-      "time": "18h"
+      "time": "18h",
+      "espnId": "760445"
     },
     {
       "id": 16,
@@ -245,7 +246,8 @@
       "away": "Haiti",
       "venue": "Filadélfia",
       "status": "scheduled",
-      "time": "20h30"
+      "time": "20h30",
+      "espnId": "760444"
     },
     {
       "id": 17,
@@ -329,7 +331,8 @@
       "away": "Austrália",
       "venue": "Seattle",
       "status": "scheduled",
-      "time": "15h ET"
+      "time": "15h ET",
+      "espnId": "760442"
     },
     {
       "id": 22,
@@ -339,7 +342,8 @@
       "away": "Paraguai",
       "venue": "Santa Clara",
       "status": "scheduled",
-      "time": "23h ET"
+      "time": "23h ET",
+      "espnId": "760443"
     },
     {
       "id": 23,
@@ -1060,9 +1064,11 @@
       "home": "Gana",
       "away": "Panamá",
       "venue": "Toronto",
-      "status": "scheduled",
-      "time": "19h",
-      "espnId": "760434"
+      "status": "live",
+      "espnId": "760434",
+      "homeScore": 0,
+      "awayScore": 0,
+      "scorers": []
     },
     {
       "id": 69,

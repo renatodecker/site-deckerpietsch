@@ -158,11 +158,37 @@
       "home": "Suíça",
       "away": "Bósnia e Herzegovina",
       "venue": "Inglewood",
-      "status": "live",
+      "status": "finished",
       "espnId": "760439",
-      "homeScore": 0,
-      "awayScore": 0,
-      "scorers": []
+      "homeScore": 4,
+      "awayScore": 1,
+      "scorers": [
+        {
+          "player": "Johan Manzambi",
+          "team": "Suíça"
+        },
+        {
+          "player": "Rubén Vargas",
+          "team": "Suíça"
+        },
+        {
+          "player": "Johan Manzambi",
+          "team": "Suíça"
+        },
+        {
+          "player": "Ermin Mahmic",
+          "team": "Bósnia e Herzegovina"
+        },
+        {
+          "player": "Granit Xhaka",
+          "team": "Suíça"
+        }
+      ],
+      "cards": {
+        "home": 0,
+        "away": -4
+      },
+      "detailsFetched": true
     },
     {
       "id": 10,
@@ -171,9 +197,11 @@
       "home": "Canadá",
       "away": "Catar",
       "venue": "Vancouver",
-      "status": "scheduled",
-      "time": "18h ET",
-      "espnId": "760440"
+      "status": "live",
+      "espnId": "760440",
+      "homeScore": 0,
+      "awayScore": 0,
+      "scorers": []
     },
     {
       "id": 11,

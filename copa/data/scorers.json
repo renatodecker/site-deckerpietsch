@@ -6,6 +6,11 @@
       "goals": 3
     },
     {
+      "name": "Johan Manzambi",
+      "country": "🇨🇭 Suíça",
+      "goals": 2
+    },
+    {
       "name": "Folarin Balogun",
       "country": "🇺🇸 Estados Unidos",
       "goals": 2
@@ -42,11 +47,6 @@
     },
     {
       "name": "Julián Quiñones",
-      "country": "🇲🇽 México",
-      "goals": 1
-    },
-    {
-      "name": "Raúl Jiménez",
       "country": "🇲🇽 México",
       "goals": 1
     }

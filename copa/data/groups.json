@@ -59,14 +59,14 @@
     {
       "team": "Suíça",
       "flag": "🇨🇭",
-      "pj": 1,
-      "v": 0,
+      "pj": 2,
+      "v": 1,
       "e": 1,
       "d": 0,
-      "gp": 1,
-      "gc": 1,
-      "sg": 0,
-      "pts": 1,
+      "gp": 5,
+      "gc": 2,
+      "sg": 3,
+      "pts": 4,
       "fairPlay": 0
     },
     {
@@ -83,22 +83,22 @@
       "fairPlay": 0
     },
     {
-      "team": "Catar",
-      "flag": "🇶🇦",
-      "pj": 1,
-      "v": 0,
-      "e": 1,
-      "d": 0,
-      "gp": 1,
-      "gc": 1,
-      "sg": 0,
-      "pts": 1,
-      "fairPlay": 0
-    },
-    {
       "team": "Bósnia e Herzegovina",
       "short": "Bósnia-Herz.",
       "flag": "🇧🇦",
+      "pj": 2,
+      "v": 0,
+      "e": 1,
+      "d": 1,
+      "gp": 2,
+      "gc": 5,
+      "sg": -3,
+      "pts": 1,
+      "fairPlay": -4
+    },
+    {
+      "team": "Catar",
+      "flag": "🇶🇦",
       "pj": 1,
       "v": 0,
       "e": 1,

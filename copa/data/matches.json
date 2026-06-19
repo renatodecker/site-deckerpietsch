@@ -406,9 +406,11 @@
       "home": "Estados Unidos",
       "away": "Austrália",
       "venue": "Seattle",
-      "status": "scheduled",
-      "time": "15h ET",
-      "espnId": "760442"
+      "status": "live",
+      "espnId": "760442",
+      "homeScore": 0,
+      "awayScore": 0,
+      "scorers": []
     },
     {
       "id": 22,

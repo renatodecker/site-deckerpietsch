@@ -1,9 +1,19 @@
 {
   "scorers": [
     {
+      "name": "Jonathan David",
+      "country": "🇨🇦 Canadá",
+      "goals": 3
+    },
+    {
       "name": "Lionel Messi",
       "country": "🇦🇷 Argentina",
       "goals": 3
+    },
+    {
+      "name": "Cyle Larin",
+      "country": "🇨🇦 Canadá",
+      "goals": 2
     },
     {
       "name": "Johan Manzambi",
@@ -39,16 +49,6 @@
       "name": "Erling Haaland",
       "country": "🇳🇴 Noruega",
       "goals": 2
-    },
-    {
-      "name": "Harry Kane",
-      "country": "🏴󠁧󠁢󠁥󠁮󠁧󠁿 Inglaterra",
-      "goals": 2
-    },
-    {
-      "name": "Julián Quiñones",
-      "country": "🇲🇽 México",
-      "goals": 1
     }
   ]
 }

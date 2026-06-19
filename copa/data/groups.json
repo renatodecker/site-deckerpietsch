@@ -57,6 +57,19 @@
   ],
   "B": [
     {
+      "team": "Canadá",
+      "flag": "🇨🇦",
+      "pj": 2,
+      "v": 1,
+      "e": 1,
+      "d": 0,
+      "gp": 7,
+      "gc": 1,
+      "sg": 6,
+      "pts": 4,
+      "fairPlay": 0
+    },
+    {
       "team": "Suíça",
       "flag": "🇨🇭",
       "pj": 2,
@@ -67,19 +80,6 @@
       "gc": 2,
       "sg": 3,
       "pts": 4,
-      "fairPlay": 0
-    },
-    {
-      "team": "Canadá",
-      "flag": "🇨🇦",
-      "pj": 1,
-      "v": 0,
-      "e": 1,
-      "d": 0,
-      "gp": 1,
-      "gc": 1,
-      "sg": 0,
-      "pts": 1,
       "fairPlay": 0
     },
     {
@@ -99,15 +99,15 @@
     {
       "team": "Catar",
       "flag": "🇶🇦",
-      "pj": 1,
+      "pj": 2,
       "v": 0,
       "e": 1,
-      "d": 0,
+      "d": 1,
       "gp": 1,
-      "gc": 1,
-      "sg": 0,
+      "gc": 7,
+      "sg": -6,
       "pts": 1,
-      "fairPlay": 0
+      "fairPlay": -8
     }
   ],
   "C": [

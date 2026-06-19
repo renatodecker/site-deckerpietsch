@@ -197,11 +197,37 @@
       "home": "Canadá",
       "away": "Catar",
       "venue": "Vancouver",
-      "status": "live",
+      "status": "finished",
       "espnId": "760440",
-      "homeScore": 0,
+      "homeScore": 6,
       "awayScore": 0,
-      "scorers": []
+      "scorers": [
+        {
+          "player": "Cyle Larin",
+          "team": "Canadá"
+        },
+        {
+          "player": "Jonathan David",
+          "team": "Canadá"
+        },
+        {
+          "player": "Jonathan David",
+          "team": "Canadá"
+        },
+        {
+          "player": "Nathan Saliba",
+          "team": "Canadá"
+        },
+        {
+          "player": "Jonathan David",
+          "team": "Canadá"
+        }
+      ],
+      "cards": {
+        "home": 0,
+        "away": -8
+      },
+      "detailsFetched": true
     },
     {
       "id": 11,
@@ -481,7 +507,8 @@
       "away": "Costa do Marfim",
       "venue": "Toronto",
       "status": "scheduled",
-      "time": "16h ET"
+      "time": "16h ET",
+      "espnId": "760448"
     },
     {
       "id": 28,
@@ -491,7 +518,8 @@
       "away": "Curaçao",
       "venue": "Kansas City",
       "status": "scheduled",
-      "time": "20h ET"
+      "time": "20h ET",
+      "espnId": "760446"
     },
     {
       "id": 29,
@@ -591,7 +619,8 @@
       "away": "Suécia",
       "venue": "Houston",
       "status": "scheduled",
-      "time": "13h"
+      "time": "13h",
+      "espnId": "760447"
     },
     {
       "id": 34,

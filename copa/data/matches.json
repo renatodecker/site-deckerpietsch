@@ -310,9 +310,16 @@
       "home": "Escócia",
       "away": "Marrocos",
       "venue": "Foxborough",
-      "status": "scheduled",
-      "time": "18h",
-      "espnId": "760445"
+      "status": "live",
+      "espnId": "760445",
+      "homeScore": 0,
+      "awayScore": 1,
+      "scorers": [
+        {
+          "player": "Ismael Saibari",
+          "team": "Marrocos"
+        }
+      ]
     },
     {
       "id": 16,
@@ -406,7 +413,7 @@
       "home": "Estados Unidos",
       "away": "Austrália",
       "venue": "Seattle",
-      "status": "live",
+      "status": "finished",
       "espnId": "760442",
       "homeScore": 2,
       "awayScore": 0,
@@ -415,7 +422,8 @@
           "player": "Alex Freeman",
           "team": "Estados Unidos"
         }
-      ]
+      ],
+      "detailsFetched": true
     },
     {
       "id": 22,

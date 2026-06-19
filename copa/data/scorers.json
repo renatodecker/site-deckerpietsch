@@ -21,6 +21,11 @@
       "goals": 2
     },
     {
+      "name": "Ismael Saibari",
+      "country": "🇲🇦 Marrocos",
+      "goals": 2
+    },
+    {
       "name": "Folarin Balogun",
       "country": "🇺🇸 Estados Unidos",
       "goals": 2
@@ -43,11 +48,6 @@
     {
       "name": "Kylian Mbappé",
       "country": "🇫🇷 França",
-      "goals": 2
-    },
-    {
-      "name": "Erling Haaland",
-      "country": "🇳🇴 Noruega",
       "goals": 2
     }
   ]

@@ -408,9 +408,14 @@
       "venue": "Seattle",
       "status": "live",
       "espnId": "760442",
-      "homeScore": 0,
+      "homeScore": 2,
       "awayScore": 0,
-      "scorers": []
+      "scorers": [
+        {
+          "player": "Alex Freeman",
+          "team": "Estados Unidos"
+        }
+      ]
     },
     {
       "id": 22,

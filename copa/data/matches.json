@@ -85,9 +85,17 @@
       "home": "México",
       "away": "Coreia do Sul",
       "venue": "Guadalajara",
-      "status": "scheduled",
-      "time": "21h",
-      "espnId": "760441"
+      "status": "finished",
+      "espnId": "760441",
+      "homeScore": 1,
+      "awayScore": 0,
+      "scorers": [
+        {
+          "player": "Luis Romo",
+          "team": "México"
+        }
+      ],
+      "detailsFetched": true
     },
     {
       "id": 5,

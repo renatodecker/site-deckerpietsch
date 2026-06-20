@@ -7,6 +7,12 @@
       "matches": 1
     },
     {
+      "name": "Deniz Undav",
+      "country": "🇩🇪 Alemanha",
+      "goals": 3,
+      "matches": 2
+    },
+    {
       "name": "Lionel Messi",
       "country": "🇦🇷 Argentina",
       "goals": 3,
@@ -53,12 +59,6 @@
       "country": "🇩🇪 Alemanha",
       "goals": 2,
       "matches": 1
-    },
-    {
-      "name": "Crysencio Summerville",
-      "country": "🇳🇱 Países Baixos",
-      "goals": 2,
-      "matches": 2
     }
   ]
 }

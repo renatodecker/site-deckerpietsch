@@ -1218,14 +1218,22 @@
       "home": "Alemanha",
       "away": "Costa do Marfim",
       "venue": "Toronto",
-      "status": "live",
+      "status": "finished",
       "espnId": "760448",
-      "homeScore": 0,
+      "homeScore": 2,
       "awayScore": 1,
       "scorers": [
         {
           "player": "Franck Kessié",
           "team": "Costa do Marfim"
+        },
+        {
+          "player": "Deniz Undav",
+          "team": "Alemanha"
+        },
+        {
+          "player": "Deniz Undav",
+          "team": "Alemanha"
         }
       ],
       "events": [
@@ -1236,8 +1244,25 @@
           "minute": "30'",
           "period": null,
           "detail": ""
+        },
+        {
+          "type": "goal",
+          "player": "Deniz Undav",
+          "team": "Alemanha",
+          "minute": "68'",
+          "period": null,
+          "detail": ""
+        },
+        {
+          "type": "goal",
+          "player": "Deniz Undav",
+          "team": "Alemanha",
+          "minute": "90'+4'",
+          "period": null,
+          "detail": ""
         }
-      ]
+      ],
+      "detailsFetched": true
     },
     {
       "id": 28,

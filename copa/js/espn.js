@@ -395,6 +395,48 @@ export function computeScorersFromMatches(matches, teams) {
   return { scorers: Object.values(totals).sort((a, b) => b.goals - a.goals).slice(0, 10) };
 }
 
+/* ============================================================
+   OPENFOOTBALL — fallback para gols com minutos quando a ESPN
+   não retorna detalhes (endpoint summary retorna 403 etc.)
+   ============================================================ */
+const OPENFOOTBALL_URL = 'https://raw.githubusercontent.com/openfootball/worldcup.json/master/2026/worldcup.json';
+
+export async function fetchOpenfootball() {
+  const res = await fetch(OPENFOOTBALL_URL);
+  if (!res.ok) throw new Error(`openfootball HTTP ${res.status}`);
+  return res.json();
+}
+
+function parseMinuteBase(min) {
+  return parseInt(String(min), 10) || 0;
+}
+
+function minutePeriod(min) {
+  const base = parseMinuteBase(min);
+  if (base <= 45) return 1;
+  if (base <= 90) return 2;
+  if (base <= 120) return 3;
+  return 4;
+}
+
+export function applyOpenfootballEvents(match, ofMatch) {
+  const events = [];
+
+  const processGoals = (goals, teamName) => {
+    (goals || []).forEach(g => {
+      const minute = g.minute ? `${g.minute}'` : null;
+      const detail = g.penalty ? 'pen.' : (g.owngoal ? 'gol contra' : '');
+      events.push({ type: 'goal', player: g.name, team: teamName, minute, period: minutePeriod(minute), detail });
+    });
+  };
+
+  processGoals(ofMatch.goals1, match.home);
+  processGoals(ofMatch.goals2, match.away);
+
+  events.sort((a, b) => parseMinuteBase(a.minute) - parseMinuteBase(b.minute));
+  return events;
+}
+
 // Busca o placar da ESPN para ontem/hoje/amanhã (UTC) e aplica em uma cópia
 // de `matches`, incluindo cartões e artilheiros dos jogos em andamento ou
 // recém-finalizados (via fetchMatchSummary). Retorna
@@ -437,7 +479,8 @@ export async function fetchLiveUpdate(matches, teams, aliases) {
   for (const m of (updatedMatches.groupStage || [])) {
     if (!m.espnId) continue;
     if (m.status !== 'live' && m.status !== 'finished') continue;
-    if (m.detailsFetched) continue;
+    const hasFullEvents = m.detailsFetched && Array.isArray(m.events) && m.events.length > 0;
+    if (hasFullEvents) continue;
 
     try {
       const summary = await fetchMatchSummary(m.espnId);
@@ -476,6 +519,55 @@ export async function fetchLiveUpdate(matches, teams, aliases) {
       }
     } catch {
       // Sem detalhes desta vez; tenta novamente na próxima atualização.
+    }
+  }
+
+  // Fallback: para jogos finalizados que ficaram sem events (ESPN não
+  // retornou detalhes), tenta buscar gols com minutos do openfootball.
+  const needsOpenfootball = (updatedMatches.groupStage || []).some(
+    m => m.status === 'finished' && (!m.events || m.events.length === 0)
+  );
+  if (needsOpenfootball) {
+    try {
+      const ofData = await fetchOpenfootball();
+      const ofMatches = ofData.matches || [];
+      const ofAliases = {
+        'mexico': 'México', 'south africa': 'África do Sul', 'south korea': 'Coreia do Sul',
+        'czech republic': 'Tchéquia', 'czechia': 'Tchéquia',
+        'canada': 'Canadá', 'bosnia & herzegovina': 'Bósnia e Herzegovina',
+        'qatar': 'Catar', 'switzerland': 'Suíça', 'brazil': 'Brasil',
+        'morocco': 'Marrocos', 'haiti': 'Haiti', 'scotland': 'Escócia',
+        'usa': 'Estados Unidos', 'paraguay': 'Paraguai', 'australia': 'Austrália',
+        'turkey': 'Turquia', 'germany': 'Alemanha', 'curaçao': 'Curaçao',
+        'ivory coast': 'Costa do Marfim', 'ecuador': 'Equador',
+        'netherlands': 'Países Baixos', 'japan': 'Japão', 'sweden': 'Suécia',
+        'tunisia': 'Tunísia', 'belgium': 'Bélgica', 'egypt': 'Egito',
+        'iran': 'Irã', 'new zealand': 'Nova Zelândia', 'spain': 'Espanha',
+        'cape verde': 'Cabo Verde', 'saudi arabia': 'Arábia Saudita',
+        'uruguay': 'Uruguai', 'france': 'França', 'senegal': 'Senegal',
+        'iraq': 'Iraque', 'norway': 'Noruega', 'argentina': 'Argentina',
+        'algeria': 'Argélia', 'austria': 'Áustria', 'jordan': 'Jordânia',
+        'portugal': 'Portugal', 'dr congo': 'RD Congo', 'uzbekistan': 'Uzbequistão',
+        'colombia': 'Colômbia', 'england': 'Inglaterra', 'croatia': 'Croácia',
+        'ghana': 'Gana', 'panama': 'Panamá',
+      };
+      for (const m of (updatedMatches.groupStage || [])) {
+        if (m.status !== 'finished' || (m.events && m.events.length > 0)) continue;
+        const ofMatch = ofMatches.find(o => {
+          const h = ofAliases[normalize(o.team1)] || o.team1;
+          const a = ofAliases[normalize(o.team2)] || o.team2;
+          return h === m.home && a === m.away;
+        });
+        if (!ofMatch || (!ofMatch.goals1?.length && !ofMatch.goals2?.length)) continue;
+        const newEvents = applyOpenfootballEvents(m, ofMatch);
+        if (newEvents.length > 0) {
+          m.events = [...newEvents, ...(m.events || []).filter(e => e.type !== 'goal')];
+          m.events.sort((a, b) => parseMinuteBase(a.minute) - parseMinuteBase(b.minute));
+          changed = true;
+        }
+      }
+    } catch {
+      // openfootball indisponível, continua sem events.
     }
   }
 

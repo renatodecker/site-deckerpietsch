@@ -1517,14 +1517,12 @@ body.modal-open { overflow: hidden; }
 }
 
 .match-modal__minute {
-  flex: 0 0 48px;
+  flex: 0 0 auto;
+  min-width: 36px;
   text-align: center;
   font-size: .75rem;
   font-weight: 700;
   color: var(--navy-700, #334155);
-  background: var(--white);
-  position: relative;
-  z-index: 1;
 }
 
 .match-modal__spacer {
@@ -1550,17 +1548,22 @@ body.modal-open { overflow: hidden; }
 
 .match-modal__goal-icon {
   position: relative;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+  display: inline-block;
 }
 
 .match-modal__goal-count {
   position: absolute;
+  top: -5px;
+  right: -8px;
   font-size: .55rem;
-  font-weight: 900;
-  color: var(--navy-900);
-  pointer-events: none;
+  font-weight: 800;
+  color: var(--white);
+  background: var(--navy-900);
+  border-radius: 50%;
+  width: 13px;
+  height: 13px;
+  line-height: 13px;
+  text-align: center;
 }
 
 /* --- Simplified view (no events, only scorers) --- */

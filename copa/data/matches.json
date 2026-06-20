@@ -1290,16 +1290,6 @@
       {
         "id": 75,
         "date": "2026-06-29",
-        "venue": "Houston",
-        "status": "scheduled",
-        "home": null,
-        "away": null,
-        "homeSource": "1C",
-        "awaySource": "2F"
-      },
-      {
-        "id": 76,
-        "date": "2026-06-30",
         "venue": "Monterrey",
         "status": "scheduled",
         "home": null,
@@ -1308,17 +1298,17 @@
         "awaySource": "2C"
       },
       {
-        "id": 77,
-        "date": "2026-06-30",
-        "venue": "Dallas",
+        "id": 76,
+        "date": "2026-06-29",
+        "venue": "Houston",
         "status": "scheduled",
         "home": null,
         "away": null,
-        "homeSource": "2E",
-        "awaySource": "2I"
+        "homeSource": "1C",
+        "awaySource": "2F"
       },
       {
-        "id": 78,
+        "id": 77,
         "date": "2026-06-30",
         "venue": "East Rutherford (NY/NJ)",
         "status": "scheduled",
@@ -1326,6 +1316,16 @@
         "away": null,
         "homeSource": "1I",
         "awaySource": "3:C,D,F,G,H"
+      },
+      {
+        "id": 78,
+        "date": "2026-06-30",
+        "venue": "Dallas",
+        "status": "scheduled",
+        "home": null,
+        "away": null,
+        "homeSource": "2E",
+        "awaySource": "2I"
       },
       {
         "id": 79,

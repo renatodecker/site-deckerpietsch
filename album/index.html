@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Controle suas figurinhas do álbum da Copa do Mundo FIFA 2026. Marque as que você tem, as repetidas e acompanhe seu progresso." />
+  <meta name="robots" content="index, follow" />
+  <title>Álbum de Figurinhas | Copa do Mundo FIFA 2026</title>
+  <link rel="canonical" href="https://deckerpietsch.com.br/album" />
+  <link rel="icon" href="../assets/logo.png" type="image/png" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://deckerpietsch.com.br/album" />
+  <meta property="og:title" content="Álbum de Figurinhas | Copa do Mundo FIFA 2026" />
+  <meta property="og:description" content="Controle suas figurinhas do álbum da Copa do Mundo FIFA 2026. Marque as que você tem, as repetidas e acompanhe seu progresso." />
+  <meta property="og:locale" content="pt_BR" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flag-icons@7/css/flag-icons.min.css" />
+  <link rel="stylesheet" href="css/styles.css" />
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-SKL0JMRVYW"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-SKL0JMRVYW');
+  </script>
+</head>
+<body>
+
+  <header class="header" id="header">
+    <div class="container header__inner">
+      <a href="#topo" class="logo">
+        <img src="../assets/logo.png" alt="Decker Pietsch" class="logo__img" />
+        <span class="logo__title">Álbum<small>FIFA 2026</small></span>
+      </a>
+      <nav class="nav" id="nav">
+        <a href="#progresso" class="nav__link">Progresso</a>
+        <a href="#figurinhas" class="nav__link">Figurinhas</a>
+        <a href="#repetidas" class="nav__link">Repetidas</a>
+      </nav>
+      <button class="nav-toggle" id="navToggle" aria-label="Abrir menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <section class="hero" id="topo">
+    <div class="container hero__inner">
+      <h1 class="hero__title">Álbum de Figurinhas <span>FIFA 2026</span></h1>
+      <p class="hero__subtitle">
+        Controle suas figurinhas da Copa do Mundo. Marque as que você tem,
+        registre as repetidas e acompanhe o que falta para completar o álbum.
+      </p>
+    </div>
+  </section>
+
+  <section class="stats-bar" id="progresso">
+    <div class="container">
+      <div class="stats-bar__grid" id="statsBar">
+        <div class="stat-card stat-card--total">
+          <span class="stat-card__value" id="statTotal">0 / 900</span>
+          <span class="stat-card__label">Coladas</span>
+          <div class="stat-card__bar"><div class="stat-card__fill" id="statTotalFill"></div></div>
+        </div>
+        <div class="stat-card stat-card--missing">
+          <span class="stat-card__value" id="statMissing">900</span>
+          <span class="stat-card__label">Faltam</span>
+        </div>
+        <div class="stat-card stat-card--dupes">
+          <span class="stat-card__value" id="statDupes">0</span>
+          <span class="stat-card__label">Repetidas</span>
+        </div>
+        <div class="stat-card stat-card--special">
+          <span class="stat-card__value" id="statSpecial">0</span>
+          <span class="stat-card__label">Especiais</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="filters" id="figurinhas">
+    <div class="container">
+      <div class="filters__row">
+        <div class="filter-group">
+          <label class="filter-group__label">Exibir:</label>
+          <div class="filter-buttons" id="filterStatus">
+            <button class="filter-btn active" data-filter="all">Todas</button>
+            <button class="filter-btn" data-filter="collected">Coladas</button>
+            <button class="filter-btn" data-filter="missing">Faltam</button>
+            <button class="filter-btn" data-filter="dupes">Repetidas</button>
+          </div>
+        </div>
+        <div class="filter-group">
+          <input type="text" class="search-input" id="searchInput" placeholder="Buscar figurinha, seleção ou jogador..." />
+        </div>
+        <div class="filter-group">
+          <button class="btn-expand-all" id="expandAll">Expandir tudo</button>
+          <button class="btn-clear" id="clearAll">Limpar tudo</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <main class="album-content">
+    <div class="container">
+      <div id="albumContainer"></div>
+    </div>
+  </main>
+
+  <section class="dupes-section" id="repetidas">
+    <div class="container">
+      <h2 class="section-title">Figurinhas Repetidas</h2>
+      <p class="section-subtitle">Lista de figurinhas disponíveis para troca</p>
+      <div id="dupesContainer" class="dupes-grid"></div>
+      <p id="noDupes" class="no-dupes" hidden>Nenhuma figurinha repetida ainda.</p>
+    </div>
+  </section>
+
+  <div class="modal-overlay" id="modalOverlay" hidden>
+    <div class="modal" id="stickerModal">
+      <button class="modal__close" id="modalClose">&times;</button>
+      <div class="modal__header" id="modalHeader"></div>
+      <div class="modal__body">
+        <div class="modal__field">
+          <label class="modal__label">Tipo especial:</label>
+          <div class="special-buttons" id="specialButtons">
+            <button class="special-btn" data-special="">Normal</button>
+            <button class="special-btn special-btn--silver" data-special="silver">Prata</button>
+            <button class="special-btn special-btn--gold" data-special="gold">Ouro</button>
+            <button class="special-btn special-btn--legend" data-special="legend">Legend</button>
+            <button class="special-btn special-btn--parallel" data-special="parallel">Paralela</button>
+          </div>
+        </div>
+        <div class="modal__field">
+          <label class="modal__label">Repetidas:</label>
+          <div class="dupes-control">
+            <button class="dupes-btn" id="dupesMinus">−</button>
+            <span class="dupes-value" id="dupesValue">0</span>
+            <button class="dupes-btn" id="dupesPlus">+</button>
+          </div>
+        </div>
+        <div class="modal__field">
+          <button class="btn-remove" id="removeSticker">Remover figurinha</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="container">
+      <p>&copy; 2026 Decker & Pietsch. Dados meramente ilustrativos.</p>
+      <a href="/" class="footer__link">Voltar ao site</a>
+    </div>
+  </footer>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>

@@ -894,6 +894,90 @@ img { display: block; max-width: 100%; }
   color: var(--gray-500);
 }
 
+/* --- Pares de jogos (conectores do chaveamento) --- */
+.bracket-pair {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  flex: 1;
+  position: relative;
+}
+
+/* Lado esquerdo: linhas indo para a direita */
+.bracket-pair--left > .bracket-match::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: -10px;
+  width: 10px;
+  border-top: 2px solid var(--gray-300);
+}
+
+.bracket-pair--left::after {
+  content: '';
+  position: absolute;
+  right: -10px;
+  top: 25%;
+  bottom: 25%;
+  border-right: 2px solid var(--gray-300);
+}
+
+.bracket-pair--left::before {
+  content: '';
+  position: absolute;
+  right: -20px;
+  top: 50%;
+  width: 10px;
+  border-top: 2px solid var(--gray-300);
+}
+
+/* Lado direito: linhas indo para a esquerda (espelhado) */
+.bracket-pair--right > .bracket-match::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: -10px;
+  width: 10px;
+  border-top: 2px solid var(--gray-300);
+}
+
+.bracket-pair--right::after {
+  content: '';
+  position: absolute;
+  left: -10px;
+  top: 25%;
+  bottom: 25%;
+  border-left: 2px solid var(--gray-300);
+}
+
+.bracket-pair--right::before {
+  content: '';
+  position: absolute;
+  left: -20px;
+  top: 50%;
+  width: 10px;
+  border-top: 2px solid var(--gray-300);
+}
+
+/* Semifinal (jogo único): linha horizontal até a final */
+.bracket__round--left > .bracket-match::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: -20px;
+  width: 20px;
+  border-top: 2px solid var(--gray-300);
+}
+
+.bracket__round--right > .bracket-match::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: -20px;
+  width: 20px;
+  border-top: 2px solid var(--gray-300);
+}
+
 .bracket-match {
   background: var(--white);
   border: 1px solid var(--gray-300);
@@ -902,7 +986,6 @@ img { display: block; max-width: 100%; }
   font-size: .8rem;
   box-shadow: var(--shadow-sm);
   position: relative;
-  margin: 4px 0;
 }
 
 .bracket-match__id {

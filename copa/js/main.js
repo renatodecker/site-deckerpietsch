@@ -698,6 +698,19 @@ function bracketMatchHTML(match, groups, knockoutFlat, venueIndex) {
   `;
 }
 
+function pairMatchesHTML(matches, side, renderFn) {
+  const pairs = [];
+  for (let i = 0; i < matches.length; i += 2) {
+    pairs.push(`
+      <div class="bracket-pair bracket-pair--${side}">
+        ${renderFn(matches[i])}
+        ${renderFn(matches[i + 1])}
+      </div>
+    `);
+  }
+  return pairs.join('');
+}
+
 function renderBracket(matches, groups, stadiums) {
   const wrap = document.getElementById('bracket');
   const knockout = matches && matches.knockout;
@@ -725,10 +738,14 @@ function renderBracket(matches, groups, stadiums) {
         </div>
       `;
     }
+    const matchesHTML = col.matches.length >= 2
+      ? pairMatchesHTML(col.matches, col.side, (m) => bracketMatchHTML(m, groups, knockoutFlat, venueIndex))
+      : col.matches.map(m => bracketMatchHTML(m, groups, knockoutFlat, venueIndex)).join('');
+
     return `
       <div class="bracket__round bracket__round--${col.side}">
         <div class="bracket__round-title">${KNOCKOUT_LABELS[col.round]}</div>
-        ${col.matches.map(m => bracketMatchHTML(m, groups, knockoutFlat, venueIndex)).join('')}
+        ${matchesHTML}
       </div>
     `;
   }).join('');

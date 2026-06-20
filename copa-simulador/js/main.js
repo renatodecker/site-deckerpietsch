@@ -338,6 +338,19 @@ function bracketMatchHTML(match, sim) {
   `;
 }
 
+function pairMatchesHTML(matches, side, renderFn) {
+  const pairs = [];
+  for (let i = 0; i < matches.length; i += 2) {
+    pairs.push(`
+      <div class="bracket-pair bracket-pair--${side}">
+        ${renderFn(matches[i])}
+        ${renderFn(matches[i + 1])}
+      </div>
+    `);
+  }
+  return pairs.join('');
+}
+
 function renderBracket(knockout, sim) {
   const wrap = document.getElementById('bracket');
   const columns = getBracketColumns(knockout);
@@ -356,10 +369,15 @@ function renderBracket(knockout, sim) {
         </div>
       `;
     }
+
+    const matchesHTML = col.matches.length >= 2
+      ? pairMatchesHTML(col.matches, col.side, (m) => bracketMatchHTML(m, sim))
+      : col.matches.map(m => bracketMatchHTML(m, sim)).join('');
+
     return `
       <div class="bracket__round bracket__round--${col.side}">
         <div class="bracket__round-title">${KNOCKOUT_LABELS[col.round]}</div>
-        ${col.matches.map(m => bracketMatchHTML(m, sim)).join('')}
+        ${matchesHTML}
       </div>
     `;
   }).join('');

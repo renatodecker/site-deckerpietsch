@@ -1,0 +1,37 @@
+{
+  "entries": [
+    {
+      "date": "2026-06-20",
+      "items": [
+        "**Modal de detalhes do jogo** — clique no placar de qualquer jogo finalizado para ver gols e cartões em formato de linha do tempo, separados por 1º tempo, 2º tempo e prorrogação.",
+        "**Minuto dos gols** — todos os gols da fase de grupos agora mostram o minuto exato em que foram marcados.",
+        "**Cartões amarelos e vermelhos** — cartões aparecem na linha do tempo do jogo, com nome do jogador e minuto.",
+        "**Contagem de gols** — quando um jogador marca mais de 1 gol, um badge numérico aparece sobre o ícone do gol.",
+        "**Placar clicável** — o placar dos jogos finalizados agora tem sublinhado para indicar que é um link.",
+        "**Atualização automática** — gols com minutos e cartões agora são buscados automaticamente junto com os placares, com fallback para fonte alternativa (openfootball).",
+        "**Modal de Novidades** — botão no footer para ver o histórico de melhorias do site."
+      ]
+    },
+    {
+      "date": "2026-06-19",
+      "items": [
+        "**Traços de conexão no chaveamento** — linhas estilo fluxograma conectam os jogos entre as fases do mata-mata.",
+        "**Alinhamento do chaveamento** — balões das oitavas, quartas e semifinais ficam centralizados entre os jogos da fase anterior.",
+        "**Número do jogo** — cada caixa do chaveamento mostra o número do jogo (ex: Jogo 75).",
+        "**Coluna de jogos na artilharia** — tabela de artilheiros agora mostra quantas partidas cada jogador disputou.",
+        "**Link para Copa 2026 na home** — a página principal do site Decker Pietsch agora tem link direto para a Copa.",
+        "**Correção do chaveamento** — jogos 75-78 da fase de 32 estavam trocados em relação ao bracket oficial da FIFA."
+      ]
+    },
+    {
+      "date": "2026-06-18",
+      "items": [
+        "**Bandeiras por imagem** — substituição de emojis de bandeira por imagens CSS (flag-icons) para compatibilidade com Windows/Chrome.",
+        "**Chaveamento em árvore** — mata-mata reorganizado como árvore esquerda/direita convergindo para a final.",
+        "**Atualização automática de gols e cartões via ESPN** — artilharia e fair play atualizados automaticamente.",
+        "**Mata-mata automático** — classificação para fase de 32 preenchida automaticamente conforme grupos terminam.",
+        "**Simulador da Copa** — nova página /copa-simulador para simular placares e ver classificação em tempo real."
+      ]
+    }
+  ]
+}

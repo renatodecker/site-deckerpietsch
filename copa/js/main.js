@@ -1222,6 +1222,33 @@ function setupMatchModal() {
 /* ============================================================
    MODAL DE NOVIDADES (CHANGELOG)
    ============================================================ */
+const MONTH_NAMES = ['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];
+
+function formatChangelogDate(iso) {
+  const [y, m, d] = iso.split('-');
+  return `${parseInt(d)} de ${MONTH_NAMES[parseInt(m) - 1]} de ${y}`;
+}
+
+function renderChangelog(data) {
+  const wrap = document.getElementById('changelogBody');
+  if (!wrap || !data || !data.entries) return;
+
+  let html = '<h2 class="changelog__title">Novidades</h2>';
+  html += '<p class="changelog__subtitle">Melhorias e ajustes recentes no site da Copa do Mundo FIFA 2026.</p>';
+
+  data.entries.forEach(entry => {
+    html += `<div class="changelog__date">${formatChangelogDate(entry.date)}</div>`;
+    html += '<ul class="changelog__list">';
+    entry.items.forEach(item => {
+      const rendered = item.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+      html += `<li>${rendered}</li>`;
+    });
+    html += '</ul>';
+  });
+
+  wrap.innerHTML = html;
+}
+
 function openChangelogModal() {
   const modal = document.getElementById('changelogModal');
   if (modal) { modal.hidden = false; document.body.classList.add('modal-open'); }
@@ -1232,12 +1259,16 @@ function closeChangelogModal() {
   if (modal) { modal.hidden = true; document.body.classList.remove('modal-open'); }
 }
 
-function setupChangelogModal() {
+async function setupChangelogModal() {
   const btn = document.getElementById('openChangelog');
   if (btn) btn.addEventListener('click', openChangelogModal);
   document.querySelectorAll('[data-changelog-close]').forEach(el => {
     el.addEventListener('click', closeChangelogModal);
   });
+  try {
+    const res = await fetch('data/changelog.json');
+    if (res.ok) renderChangelog(await res.json());
+  } catch { /* changelog indisponível */ }
 }
 
 function handleMatchScoreClick(e) {

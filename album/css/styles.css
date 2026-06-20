@@ -122,6 +122,49 @@ button { cursor: pointer; font-family: inherit; }
 }
 
 /* ============================================================
+   ALBUM SELECTOR
+   ============================================================ */
+.album-selector {
+  background: var(--navy-900);
+  padding: 10px 0;
+}
+.album-selector__row {
+  display: flex; align-items: center; gap: 8px;
+  flex-wrap: wrap;
+}
+.album-selector__label {
+  font-size: .85rem; font-weight: 600;
+  color: var(--gold-400);
+}
+.album-selector__select {
+  padding: 6px 30px 6px 12px;
+  border-radius: 999px; border: 1px solid rgba(255,255,255,.2);
+  background: rgba(255,255,255,.1); color: var(--white);
+  font-size: .85rem; font-weight: 600;
+  font-family: inherit; outline: none;
+  cursor: pointer; min-width: 160px;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23ffdf00' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+}
+.album-selector__select option { background: var(--navy-900); color: var(--white); }
+.album-selector__btn {
+  width: 30px; height: 30px; border-radius: 50%;
+  border: 1px solid rgba(255,255,255,.2);
+  background: rgba(255,255,255,.1);
+  color: var(--white); font-size: 1rem;
+  display: flex; align-items: center; justify-content: center;
+  transition: all var(--transition); line-height: 1;
+}
+.album-selector__btn:hover {
+  background: rgba(255,255,255,.2);
+  border-color: var(--gold-400);
+}
+.album-selector__btn--new { color: var(--gold-400); font-size: 1.2rem; }
+.album-selector__btn--delete:hover { background: rgba(220,38,38,.4); border-color: var(--red-500); }
+
+/* ============================================================
    STATS BAR
    ============================================================ */
 .stats-bar {
@@ -275,25 +318,30 @@ button { cursor: pointer; font-family: inherit; }
    ============================================================ */
 .sticker-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
   gap: 10px;
 }
 
+/* ============================================================
+   STICKER CARD (Panini-style)
+   ============================================================ */
 .sticker {
+  --sticker-color: var(--gray-500);
   position: relative;
   border-radius: var(--radius-sm);
   border: 2px dashed var(--gray-300);
   background: var(--gray-100);
-  padding: 8px 6px;
+  padding: 8px 6px 6px;
   text-align: center;
   cursor: pointer;
   transition: all var(--transition);
-  min-height: 130px;
+  aspect-ratio: 3 / 4;
   display: flex; flex-direction: column;
   align-items: center; justify-content: center;
-  gap: 4px;
+  gap: 2px;
   user-select: none;
   -webkit-user-select: none;
+  overflow: hidden;
 }
 .sticker:hover {
   border-color: var(--gray-500);
@@ -302,42 +350,58 @@ button { cursor: pointer; font-family: inherit; }
 }
 .sticker:active { transform: translateY(0); }
 
-.sticker__number {
-  font-size: .65rem; font-weight: 700;
-  color: var(--gray-500); letter-spacing: .5px;
+.sticker__local-num {
+  font-size: .6rem; font-weight: 700;
+  color: var(--gray-400); letter-spacing: .5px;
+  position: absolute; top: 4px; left: 0; right: 0;
 }
-.sticker__icon {
-  font-size: 2rem; line-height: 1;
-  opacity: .3; margin: 4px 0;
+
+.sticker__avatar {
+  width: 46px; height: 46px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 800; font-size: 1rem;
+  color: rgba(255,255,255,.4);
+  background: var(--gray-300);
+  margin: 4px 0 2px;
+  flex-shrink: 0;
+  transition: all var(--transition);
 }
+
 .sticker__pos {
-  font-size: .6rem; font-weight: 600;
-  color: var(--gray-500); text-transform: uppercase;
+  font-size: .55rem; font-weight: 700;
+  color: var(--gray-400); text-transform: uppercase;
   letter-spacing: .5px;
 }
 .sticker__name {
-  font-size: .7rem; font-weight: 500;
+  font-size: .65rem; font-weight: 500;
   color: var(--gray-500); line-height: 1.2;
   overflow: hidden; text-overflow: ellipsis;
   white-space: nowrap; max-width: 100%;
+}
+.sticker__number {
+  font-size: .55rem; font-weight: 600;
+  color: var(--gray-400);
 }
 
 /* Collected state */
 .sticker.collected {
   border-style: solid;
-  border-color: var(--navy-400);
-  background: linear-gradient(145deg, var(--navy-50), var(--green-100));
+  border-color: var(--sticker-color);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--sticker-color) 8%, white) 0%, white 100%);
 }
-.sticker.collected .sticker__icon { opacity: 1; }
-.sticker.collected .sticker__number { color: var(--navy-700); }
-.sticker.collected .sticker__pos { color: var(--navy-600); }
-.sticker.collected .sticker__name {
-  color: var(--gray-900); font-weight: 600;
+.sticker.collected .sticker__avatar {
+  background: var(--sticker-color);
+  color: rgba(255,255,255,.95);
+  box-shadow: 0 2px 8px color-mix(in srgb, var(--sticker-color) 40%, transparent);
 }
+.sticker.collected .sticker__local-num { color: var(--sticker-color); }
+.sticker.collected .sticker__pos { color: var(--sticker-color); }
+.sticker.collected .sticker__name { color: var(--gray-900); font-weight: 600; }
+.sticker.collected .sticker__number { color: var(--gray-600); }
 
 /* Special types */
 .sticker.special-silver {
-  border-color: #a8b2bc;
+  border-color: #8898a8;
   background: linear-gradient(145deg, #e8ecf0, #d4dbe3);
 }
 .sticker.special-silver::after {
@@ -345,6 +409,7 @@ button { cursor: pointer; font-family: inherit; }
   border-radius: 4px;
   background: linear-gradient(135deg, transparent 30%, rgba(255,255,255,.6) 50%, transparent 70%);
   pointer-events: none;
+  animation: shimmer 3s infinite;
 }
 .sticker.special-gold {
   border-color: var(--gold-500);
@@ -353,44 +418,51 @@ button { cursor: pointer; font-family: inherit; }
 .sticker.special-gold::after {
   content: ''; position: absolute; inset: 0;
   border-radius: 4px;
-  background: linear-gradient(135deg, transparent 30%, rgba(255,215,0,.3) 50%, transparent 70%);
+  background: linear-gradient(135deg, transparent 30%, rgba(255,215,0,.4) 50%, transparent 70%);
   pointer-events: none;
+  animation: shimmer 3s infinite;
 }
 .sticker.special-legend {
   border-color: var(--purple-500);
   background: linear-gradient(145deg, #f3e8ff, #ede0ff);
+}
+.sticker.special-legend::after {
+  content: ''; position: absolute; inset: 0;
+  border-radius: 4px;
+  background: linear-gradient(135deg, transparent 30%, rgba(139,92,246,.2) 50%, transparent 70%);
+  pointer-events: none;
+  animation: shimmer 3s infinite;
 }
 .sticker.special-parallel {
   border-color: #06b6d4;
   background: linear-gradient(145deg, #ecfeff, #cffafe);
 }
 
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+.sticker.special-silver::after,
+.sticker.special-gold::after,
+.sticker.special-legend::after {
+  background-size: 200% 100%;
+}
+
 /* Badges */
 .sticker__badge-special {
-  position: absolute; top: 4px; right: 4px;
-  font-size: .7rem; line-height: 1;
+  position: absolute; top: 3px; right: 3px;
+  font-size: .65rem; line-height: 1; z-index: 1;
 }
 .sticker__badge-dupes {
-  position: absolute; top: 4px; left: 4px;
-  font-size: .6rem; font-weight: 700;
+  position: absolute; bottom: 3px; left: 3px;
+  font-size: .55rem; font-weight: 700;
   background: var(--blue-500); color: var(--white);
   border-radius: 999px; padding: 1px 5px;
-  line-height: 1.3;
+  line-height: 1.3; z-index: 1;
 }
 
 /* Hidden by filter */
 .sticker.hidden-filter { display: none; }
-
-/* Sticker type icons */
-.sticker--badge .sticker__icon::before { content: '🏛️'; }
-.sticker--team .sticker__icon::before { content: '📸'; }
-.sticker--gol .sticker__icon::before { content: '🧤'; }
-.sticker--zag .sticker__icon::before { content: '🛡️'; }
-.sticker--mei .sticker__icon::before { content: '⚙️'; }
-.sticker--ata .sticker__icon::before { content: '⚽'; }
-.sticker--stadium .sticker__icon::before { content: '🏟️'; }
-.sticker--logo .sticker__icon::before { content: '🏆'; }
-.sticker--mascot .sticker__icon::before { content: '🎭'; }
 
 /* ============================================================
    INTRO SECTION (FIFA/stadiums)
@@ -429,7 +501,7 @@ button { cursor: pointer; font-family: inherit; }
 }
 .dupes-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 10px;
 }
 .dupe-item {
@@ -439,7 +511,7 @@ button { cursor: pointer; font-family: inherit; }
 }
 .dupe-item__number {
   font-size: .75rem; font-weight: 700;
-  color: var(--navy-700); min-width: 40px;
+  color: var(--navy-700); min-width: 50px;
 }
 .dupe-item__name {
   font-size: .8rem; color: var(--gray-700);
@@ -480,6 +552,12 @@ button { cursor: pointer; font-family: inherit; }
 .modal__header {
   text-align: center; margin-bottom: 20px;
   padding-bottom: 16px; border-bottom: 1px solid var(--gray-200);
+}
+.modal__header-avatar {
+  width: 64px; height: 64px; border-radius: 50%;
+  margin: 0 auto 10px; display: flex;
+  align-items: center; justify-content: center;
+  font-size: 1.5rem; font-weight: 800; color: #fff;
 }
 .modal__header-num {
   font-size: .8rem; font-weight: 700;
@@ -559,9 +637,7 @@ button { cursor: pointer; font-family: inherit; }
   .hero__title { font-size: 1.5rem; }
   .hero__subtitle { font-size: .9rem; }
 
-  .stats-bar__grid {
-    grid-template-columns: 1fr 1fr;
-  }
+  .stats-bar__grid { grid-template-columns: 1fr 1fr; }
   .stat-card--total { grid-column: 1 / -1; }
   .stat-card__value { font-size: 1.2rem; }
 
@@ -570,12 +646,11 @@ button { cursor: pointer; font-family: inherit; }
   .search-input { width: 100%; }
 
   .sticker-grid {
-    grid-template-columns: repeat(auto-fill, minmax(85px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
     gap: 8px;
   }
-  .sticker { min-height: 110px; padding: 6px 4px; }
+  .sticker__avatar { width: 38px; height: 38px; font-size: .85rem; }
   .sticker__name { font-size: .6rem; }
-  .sticker__icon { font-size: 1.6rem; }
 
   .nav { display: none; }
   .nav.open { display: flex; }
@@ -602,11 +677,14 @@ button { cursor: pointer; font-family: inherit; }
   .stat-card__value { font-size: 1rem; }
 
   .sticker-grid {
-    grid-template-columns: repeat(auto-fill, minmax(75px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
     gap: 6px;
   }
-  .sticker { min-height: 100px; }
-  .sticker__icon { font-size: 1.4rem; }
+  .sticker__avatar { width: 32px; height: 32px; font-size: .75rem; }
+  .sticker__name { font-size: .55rem; }
 
   .filter-buttons { flex-wrap: wrap; }
+
+  .album-selector__row { gap: 6px; }
+  .album-selector__select { min-width: 120px; font-size: .8rem; }
 }

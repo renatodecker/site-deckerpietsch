@@ -2,10 +2,188 @@
    STICKER ALBUM TRACKER – Copa do Mundo FIFA 2026
    ============================================================ */
 
-const STORAGE_KEY = 'albumFigurinhas2026';
 const POS_LABELS = { GOL: 'Goleiro', ZAG: 'Zagueiro', MEI: 'Meia', ATA: 'Atacante' };
 const POS_ORDER = ['GOL','GOL','ZAG','ZAG','ZAG','ZAG','ZAG','MEI','MEI','MEI','MEI','MEI','ATA','ATA','ATA','ATA'];
 const SPECIAL_ICONS = { silver: '🥈', gold: '🥇', legend: '⭐', parallel: '🔷' };
+
+/* ============================================================
+   COOKIE HELPERS
+   ============================================================ */
+const COOKIE_MAX_AGE = 60 * 60 * 24 * 365;
+
+function setCookie(name, value) {
+  document.cookie = `${encodeURIComponent(name)}=${encodeURIComponent(value)}; path=/album; max-age=${COOKIE_MAX_AGE}; SameSite=Lax`;
+}
+
+function getCookie(name) {
+  const encoded = encodeURIComponent(name);
+  const match = document.cookie.match(new RegExp(`(?:^|; )${encoded.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}=([^;]*)`));
+  return match ? decodeURIComponent(match[1]) : null;
+}
+
+function deleteCookie(name) {
+  document.cookie = `${encodeURIComponent(name)}=; path=/album; max-age=0`;
+}
+
+/* ============================================================
+   MULTI-ALBUM STORAGE (cookies, compact encoding)
+
+   albumIdx cookie  → JSON { albums:["name1","name2"], active:"name1" }
+   alb__name1       → compact sticker data
+   alb__name2       → compact sticker data
+
+   Compact format:  collected_nums | specials | dupes
+     collected_nums: comma-separated sticker numbers
+     specials:       num+code pairs (g=gold s=silver l=legend p=parallel)
+     dupes:          num:count pairs
+   Example: "37,38,181|37g,181s|38:2,181:1"
+   ============================================================ */
+function slugify(name) {
+  return name.replace(/[^a-zA-Z0-9À-ÿ ]/g, '').trim().substring(0, 40);
+}
+
+function albumCookieKey(name) {
+  return `alb__${slugify(name)}`;
+}
+
+function loadAlbumIndex() {
+  const raw = getCookie('albumIdx');
+  if (!raw) return { albums: [], active: null };
+  try {
+    const parsed = JSON.parse(raw);
+    if (parsed && Array.isArray(parsed.albums)) return parsed;
+  } catch {}
+  return { albums: [], active: null };
+}
+
+function saveAlbumIndex(idx) {
+  setCookie('albumIdx', JSON.stringify(idx));
+}
+
+const SPECIAL_TO_CODE = { gold: 'g', silver: 's', legend: 'l', parallel: 'p' };
+const CODE_TO_SPECIAL = { g: 'gold', s: 'silver', l: 'legend', p: 'parallel' };
+
+function encodeAlbumData(state) {
+  const collected = [];
+  const specials = [];
+  const dupes = [];
+  for (const num in state) {
+    if (!state[num]) continue;
+    collected.push(num);
+    if (state[num].s) specials.push(`${num}${SPECIAL_TO_CODE[state[num].s] || ''}`);
+    if (state[num].d && state[num].d > 0) dupes.push(`${num}:${state[num].d}`);
+  }
+  return `${collected.join(',')}|${specials.join(',')}|${dupes.join(',')}`;
+}
+
+function decodeAlbumData(raw) {
+  if (!raw) return {};
+  const parts = raw.split('|');
+  const state = {};
+  const collectedStr = parts[0] || '';
+  const specialsStr = parts[1] || '';
+  const dupesStr = parts[2] || '';
+
+  if (collectedStr) {
+    collectedStr.split(',').forEach(n => {
+      const num = n.trim();
+      if (num) state[num] = { c: true };
+    });
+  }
+  if (specialsStr) {
+    specialsStr.split(',').forEach(entry => {
+      if (!entry) return;
+      const code = entry.slice(-1);
+      const num = entry.slice(0, -1);
+      if (state[num] && CODE_TO_SPECIAL[code]) state[num].s = CODE_TO_SPECIAL[code];
+    });
+  }
+  if (dupesStr) {
+    dupesStr.split(',').forEach(entry => {
+      if (!entry) return;
+      const [num, count] = entry.split(':');
+      if (state[num]) state[num].d = parseInt(count) || 0;
+    });
+  }
+  return state;
+}
+
+function loadAlbumState(name) {
+  return decodeAlbumData(getCookie(albumCookieKey(name)));
+}
+
+function saveAlbumState(name, st) {
+  setCookie(albumCookieKey(name), encodeAlbumData(st));
+}
+
+function deleteAlbumState(name) {
+  deleteCookie(albumCookieKey(name));
+}
+
+/* ============================================================
+   ACTIVE ALBUM STATE
+   ============================================================ */
+let albumIndex = loadAlbumIndex();
+let state = {};
+let activeAlbumName = null;
+
+function ensureDefaultAlbum() {
+  if (albumIndex.albums.length === 0) {
+    albumIndex.albums.push('Meu Álbum');
+    albumIndex.active = 'Meu Álbum';
+    saveAlbumIndex(albumIndex);
+  }
+  activeAlbumName = albumIndex.active || albumIndex.albums[0];
+  state = loadAlbumState(activeAlbumName);
+}
+
+function switchAlbum(name) {
+  activeAlbumName = name;
+  albumIndex.active = name;
+  saveAlbumIndex(albumIndex);
+  state = loadAlbumState(name);
+  renderAlbum();
+  updateStats();
+}
+
+function createAlbum(name) {
+  if (!name || albumIndex.albums.includes(name)) return false;
+  albumIndex.albums.push(name);
+  albumIndex.active = name;
+  saveAlbumIndex(albumIndex);
+  activeAlbumName = name;
+  state = {};
+  saveAlbumState(name, state);
+  return true;
+}
+
+function renameAlbum(oldName, newName) {
+  if (!newName || oldName === newName || albumIndex.albums.includes(newName)) return false;
+  const oldState = loadAlbumState(oldName);
+  deleteAlbumState(oldName);
+  const idx = albumIndex.albums.indexOf(oldName);
+  if (idx !== -1) albumIndex.albums[idx] = newName;
+  if (albumIndex.active === oldName) albumIndex.active = newName;
+  saveAlbumIndex(albumIndex);
+  activeAlbumName = newName;
+  saveAlbumState(newName, oldState);
+  return true;
+}
+
+function deleteAlbum(name) {
+  if (albumIndex.albums.length <= 1) return false;
+  deleteAlbumState(name);
+  albumIndex.albums = albumIndex.albums.filter(n => n !== name);
+  if (albumIndex.active === name) albumIndex.active = albumIndex.albums[0];
+  saveAlbumIndex(albumIndex);
+  activeAlbumName = albumIndex.active;
+  state = loadAlbumState(activeAlbumName);
+  return true;
+}
+
+function saveState() {
+  saveAlbumState(activeAlbumName, state);
+}
 
 /* ============================================================
    STICKER DATA
@@ -50,74 +228,74 @@ const INTRO_STICKERS = [
 ];
 
 const TEAMS_RAW = [
-  // [code, name, flag, group, startNum, players...]
+  // [code, name, flag, group, startNum, players, teamColor]
   // Group A
-  ['MEX','México','🇲🇽','A',37,['G. Ochoa','L. Malagón','J. Sánchez','C. Montes','J. Vásquez','J. Gallardo','K. Álvarez','E. Álvarez','L. Chávez','O. Pineda','C. Rodríguez','D. Lainez','H. Lozano','S. Giménez','R. Jiménez','J. Quiñones']],
-  ['KOR','Coreia do Sul','🇰🇷','A',55,['Kim Seung-gyu','Jo Hyeon-woo','Kim Min-jae','Kim Young-gwon','Cho Yu-min','Lee Ki-je','Kim Jin-su','Son Heung-min','Hwang In-beom','Lee Jae-sung','Lee Kang-in','Jung Woo-young','Hwang Hee-chan','Cho Gue-sung','Oh Hyeon-gyu','Jang Yun-ho']],
-  ['CZE','Tchéquia','🇨🇿','A',73,['J. Staněk','T. Vaclík','V. Coufal','R. Hranáč','T. Holeš','D. Zima','L. Krejčí','T. Souček','A. Král','L. Provod','M. Sadílek','A. Hložek','P. Schick','M. Chytil','J. Kuchta','T. Chorý']],
-  ['RSA','África do Sul','🇿🇦','A',91,['R. Williams','V. Mothwa','M. Mvala','R. Dortley','G. Kekana','A. Modiba','S. Xulu','T. Mokoena','T. Zwane','M. Saleng','L. Le Roux','B. Aubaas','P. Tau','E. Makgopa','I. Rayners','L. Mothiba']],
+  ['MEX','México','🇲🇽','A',37,['G. Ochoa','L. Malagón','J. Sánchez','C. Montes','J. Vásquez','J. Gallardo','K. Álvarez','E. Álvarez','L. Chávez','O. Pineda','C. Rodríguez','D. Lainez','H. Lozano','S. Giménez','R. Jiménez','J. Quiñones'],'#0B5C36'],
+  ['KOR','Coreia do Sul','🇰🇷','A',55,['Kim Seung-gyu','Jo Hyeon-woo','Kim Min-jae','Kim Young-gwon','Cho Yu-min','Lee Ki-je','Kim Jin-su','Son Heung-min','Hwang In-beom','Lee Jae-sung','Lee Kang-in','Jung Woo-young','Hwang Hee-chan','Cho Gue-sung','Oh Hyeon-gyu','Jang Yun-ho'],'#001F4D'],
+  ['CZE','Tchéquia','🇨🇿','A',73,['J. Staněk','T. Vaclík','V. Coufal','R. Hranáč','T. Holeš','D. Zima','L. Krejčí','T. Souček','A. Král','L. Provod','M. Sadílek','A. Hložek','P. Schick','M. Chytil','J. Kuchta','T. Chorý'],'#11457E'],
+  ['RSA','África do Sul','🇿🇦','A',91,['R. Williams','V. Mothwa','M. Mvala','R. Dortley','G. Kekana','A. Modiba','S. Xulu','T. Mokoena','T. Zwane','M. Saleng','L. Le Roux','B. Aubaas','P. Tau','E. Makgopa','I. Rayners','L. Mothiba'],'#007A4D'],
   // Group B
-  ['CAN','Canadá','🇨🇦','B',109,['M. Crépeau','D. St. Clair','A. Davies','A. Johnston','K. Miller','D. Cornelius','S. Adekugbe','S. Eustáquio','I. Koné','J. Osorio','T. Buchanan','M.A. Kaye','J. David','C. Larin','L. Millar','J. Shaffelburg']],
-  ['BIH','Bósnia-Herz.','🇧🇦','B',127,['N. Vasilj','I. Šehić','S. Kolašinac','E. Bičakčić','D. Hadžikadunić','A. Hadžiahmetović','S. Lončar','M. Pjanić','A. Gigović','A. Gojak','H. Hajradinović','B. Tahirović','E. Džeko','E. Demirović','L. Menalo','S. Prevljak']],
-  ['QAT','Catar','🇶🇦','B',145,['S. Al-Sheeb','M. Barsham','P. Miguel','B. Al-Rawi','T. Salman','B. Khoukhi','H. Ahmed','H. Al-Haydos','K. Boudiaf','A. Hatem','A. Madibo','A. Afif','A. Ali','M. Muntari','A. Alaaeldin','Y. Abdurisag']],
-  ['SUI','Suíça','🇨🇭','B',163,['Y. Sommer','G. Kobel','M. Akanji','F. Schär','N. Elvedi','R. Rodríguez','S. Widmer','G. Xhaka','D. Zakaria','R. Freuler','X. Shaqiri','D. Sow','B. Embolo','N. Okafor','R. Vargas','Z. Amdouni']],
+  ['CAN','Canadá','🇨🇦','B',109,['M. Crépeau','D. St. Clair','A. Davies','A. Johnston','K. Miller','D. Cornelius','S. Adekugbe','S. Eustáquio','I. Koné','J. Osorio','T. Buchanan','M.A. Kaye','J. David','C. Larin','L. Millar','J. Shaffelburg'],'#D52B1E'],
+  ['BIH','Bósnia-Herz.','🇧🇦','B',127,['N. Vasilj','I. Šehić','S. Kolašinac','E. Bičakčić','D. Hadžikadunić','A. Hadžiahmetović','S. Lončar','M. Pjanić','A. Gigović','A. Gojak','H. Hajradinović','B. Tahirović','E. Džeko','E. Demirović','L. Menalo','S. Prevljak'],'#002B7F'],
+  ['QAT','Catar','🇶🇦','B',145,['S. Al-Sheeb','M. Barsham','P. Miguel','B. Al-Rawi','T. Salman','B. Khoukhi','H. Ahmed','H. Al-Haydos','K. Boudiaf','A. Hatem','A. Madibo','A. Afif','A. Ali','M. Muntari','A. Alaaeldin','Y. Abdurisag'],'#8A1538'],
+  ['SUI','Suíça','🇨🇭','B',163,['Y. Sommer','G. Kobel','M. Akanji','F. Schär','N. Elvedi','R. Rodríguez','S. Widmer','G. Xhaka','D. Zakaria','R. Freuler','X. Shaqiri','D. Sow','B. Embolo','N. Okafor','R. Vargas','Z. Amdouni'],'#B22222'],
   // Group C
-  ['BRA','Brasil','🇧🇷','C',181,['Alisson','Ederson','Marquinhos','Militão','Bremer','Danilo','Wendell','Casemiro','Bruno Guimarães','L. Paquetá','Raphinha','Rodrygo','Vinícius Jr.','Endrick','Savinho','Estêvão']],
-  ['MAR','Marrocos','🇲🇦','C',199,['Y. Bounou','M. Mohamedi','A. Hakimi','N. Mazraoui','N. Aguerd','R. Saïss','A. Masina','S. Amrabat','A. Ounahi','B. El Khannouss','H. Ziyech','A. Sabiri','Y. En-Nesyri','B. Díaz','A. El Kaabi','I. Akhomach']],
-  ['HAI','Haiti','🇭🇹','C',217,['J. Duverger','A. Pierre','C. Arcus','R. Adé','C. Théodat','M. Cantave','F. Pierrot','D. Etienne Jr.','M. Guilavogui','R. Rodelin','S. Jérôme','K. Francillon','F. Milord','B. Désiré','D. Jean-Baptiste','C. Hérold']],
-  ['SCO','Escócia','🏴󠁧󠁢󠁳󠁣󠁴󠁿','C',235,['A. Gunn','Z. Clark','A. Robertson','K. Tierney','S. McKenna','J. Hendry','G. Hanley','S. McTominay','J. McGinn','B. Gilmour','C. McGregor','R. Christie','C. Adams','L. Dykes','L. Shankland','K. Nisbet']],
+  ['BRA','Brasil','🇧🇷','C',181,['Alisson','Ederson','Marquinhos','Militão','Bremer','Danilo','Wendell','Casemiro','Bruno Guimarães','L. Paquetá','Raphinha','Rodrygo','Vinícius Jr.','Endrick','Savinho','Estêvão'],'#0B4A2C'],
+  ['MAR','Marrocos','🇲🇦','C',199,['Y. Bounou','M. Mohamedi','A. Hakimi','N. Mazraoui','N. Aguerd','R. Saïss','A. Masina','S. Amrabat','A. Ounahi','B. El Khannouss','H. Ziyech','A. Sabiri','Y. En-Nesyri','B. Díaz','A. El Kaabi','I. Akhomach'],'#C1272D'],
+  ['HAI','Haiti','🇭🇹','C',217,['J. Duverger','A. Pierre','C. Arcus','R. Adé','C. Théodat','M. Cantave','F. Pierrot','D. Etienne Jr.','M. Guilavogui','R. Rodelin','S. Jérôme','K. Francillon','F. Milord','B. Désiré','D. Jean-Baptiste','C. Hérold'],'#00209F'],
+  ['SCO','Escócia','🏴󠁧󠁢󠁳󠁣󠁴󠁿','C',235,['A. Gunn','Z. Clark','A. Robertson','K. Tierney','S. McKenna','J. Hendry','G. Hanley','S. McTominay','J. McGinn','B. Gilmour','C. McGregor','R. Christie','C. Adams','L. Dykes','L. Shankland','K. Nisbet'],'#0065BF'],
   // Group D
-  ['USA','Estados Unidos','🇺🇸','D',253,['M. Turner','E. Horvath','S. Dest','T. Robinson','C. Richards','T. Ream','A. Robinson','W. McKennie','T. Adams','Y. Musah','G. Reyna','B. Aaronson','C. Pulisic','T. Weah','F. Balogun','R. Pepi']],
-  ['PAR','Paraguai','🇵🇾','D',271,['R. Fernández','A. Silva','G. Gómez','F. Balbuena','O. Alderete','J. Alonso','R. Rojas','M. Villasanti','A. Cubas','D. Gómez','H. Velázquez','R. Sánchez','A. Enciso','J. Arce','I. Romero','A. Sanabria']],
-  ['AUS','Austrália','🇦🇺','D',289,['M. Ryan','J. Langerak','A. Souttar','K. Rowles','N. Atkinson','A. Behich','J. King','J. Irvine','A. Hrustic','C. Goodwin','R. McGree','K. Baccus','M. Duke','M. Leckie','J. Maclaren','C. Kuol']],
-  ['TUR','Turquia','🇹🇷','D',307,['A. Bayındır','U. Çakır','M. Demiral','F. Kadıoğlu','S. Özkacar','K. Ayhan','Z. Çelik','H. Çalhanoğlu','A. Güler','Y. Yazıcı','K. Aktürkoğlu','S. Kökçü','B. Yılmaz','E. Ünder','K. Kılıç','Y. Akgün']],
+  ['USA','Estados Unidos','🇺🇸','D',253,['M. Turner','E. Horvath','S. Dest','T. Robinson','C. Richards','T. Ream','A. Robinson','W. McKennie','T. Adams','Y. Musah','G. Reyna','B. Aaronson','C. Pulisic','T. Weah','F. Balogun','R. Pepi'],'#0A3161'],
+  ['PAR','Paraguai','🇵🇾','D',271,['R. Fernández','A. Silva','G. Gómez','F. Balbuena','O. Alderete','J. Alonso','R. Rojas','M. Villasanti','A. Cubas','D. Gómez','H. Velázquez','R. Sánchez','A. Enciso','J. Arce','I. Romero','A. Sanabria'],'#0038A8'],
+  ['AUS','Austrália','🇦🇺','D',289,['M. Ryan','J. Langerak','A. Souttar','K. Rowles','N. Atkinson','A. Behich','J. King','J. Irvine','A. Hrustic','C. Goodwin','R. McGree','K. Baccus','M. Duke','M. Leckie','J. Maclaren','C. Kuol'],'#00843D'],
+  ['TUR','Turquia','🇹🇷','D',307,['A. Bayındır','U. Çakır','M. Demiral','F. Kadıoğlu','S. Özkacar','K. Ayhan','Z. Çelik','H. Çalhanoğlu','A. Güler','Y. Yazıcı','K. Aktürkoğlu','S. Kökçü','B. Yılmaz','E. Ünder','K. Kılıç','Y. Akgün'],'#C8102E'],
   // Group E
-  ['GER','Alemanha','🇩🇪','E',325,['M. ter Stegen','O. Baumann','A. Rüdiger','J. Tah','D. Raum','N. Schlotterbeck','B. Henrichs','J. Kimmich','T. Kroos','İ. Gündoğan','F. Wirtz','J. Musiala','L. Sané','K. Havertz','N. Füllkrug','T. Werner']],
-  ['CUW','Curaçao','🇨🇼','E',343,['E. Room','Z. Breinburg','J. Bacuna','C. Martina','G. Donk','D. van den Bergh','R. Arendsz','L. Bacuna','K. Pietersz','S. Vijverberg','R. Hooi','G. Nepomuceno','Juninho Bacuna','R. Leerdam','E. Hooi','K. Brandao']],
-  ['CIV','Costa do Marfim','🇨🇮','E',361,['Y. Fofana','B. Sangaré','S. Aurier','W. Boly','E. Bailly','O. Diomandé','G. Konan','F. Kessié','I. Sangaré','J. Faivre','S. Haller','N. Pépé','W. Zaha','M. Bamba','K. Boli','C. Kouamé']],
-  ['ECU','Equador','🇪🇨','E',379,['H. Galíndez','A. Domínguez','P. Hincapié','F. Torres','R. Arboleda','A. Pacho','D. Palacios','M. Caicedo','J. Franco','A. Sarmiento','G. Plata','K. Rodríguez','E. Valencia','M. Estrada','J. Corozo','L. Campana']],
+  ['GER','Alemanha','🇩🇪','E',325,['M. ter Stegen','O. Baumann','A. Rüdiger','J. Tah','D. Raum','N. Schlotterbeck','B. Henrichs','J. Kimmich','T. Kroos','İ. Gündoğan','F. Wirtz','J. Musiala','L. Sané','K. Havertz','N. Füllkrug','T. Werner'],'#1A1A1A'],
+  ['CUW','Curaçao','🇨🇼','E',343,['E. Room','Z. Breinburg','J. Bacuna','C. Martina','G. Donk','D. van den Bergh','R. Arendsz','L. Bacuna','K. Pietersz','S. Vijverberg','R. Hooi','G. Nepomuceno','Juninho Bacuna','R. Leerdam','E. Hooi','K. Brandao'],'#002B7F'],
+  ['CIV','Costa do Marfim','🇨🇮','E',361,['Y. Fofana','B. Sangaré','S. Aurier','W. Boly','E. Bailly','O. Diomandé','G. Konan','F. Kessié','I. Sangaré','J. Faivre','S. Haller','N. Pépé','W. Zaha','M. Bamba','K. Boli','C. Kouamé'],'#E25303'],
+  ['ECU','Equador','🇪🇨','E',379,['H. Galíndez','A. Domínguez','P. Hincapié','F. Torres','R. Arboleda','A. Pacho','D. Palacios','M. Caicedo','J. Franco','A. Sarmiento','G. Plata','K. Rodríguez','E. Valencia','M. Estrada','J. Corozo','L. Campana'],'#034EA2'],
   // Group F
-  ['NED','Países Baixos','🇳🇱','F',397,['B. Verbruggen','M. Bijlow','V. van Dijk','N. Aké','D. Dumfries','J. Timber','L. de Ligt','F. de Jong','R. Gravenberch','X. Simons','T. Reijnders','D. Klaassen','C. Gakpo','M. Depay','D. Malen','J. Weghorst']],
-  ['JPN','Japão','🇯🇵','F',415,['S. Suzuki','D. Ōsako','T. Tomiyasu','K. Itakura','Y. Nagatomo','H. Sakai','M. Yoshida','W. Endo','H. Dōan','T. Kubo','K. Mitoma','D. Kamada','J. Ito','A. Ueda','K. Furuhashi','D. Maeda']],
-  ['SWE','Suécia','🇸🇪','F',433,['R. Olsen','P. Dahlberg','V. Lindelöf','A. Danielson','L. Augustinsson','E. Krafth','C. Starfelt','D. Kulusevski','E. Forsberg','A. Ekdal','J. Svanberg','M. Sema','A. Isak','V. Gyökeres','J. Larsson','A. Elanga']],
-  ['TUN','Tunísia','🇹🇳','F',451,['A. Dahmen','B. Hassen','M. Talbi','Y. Meriah','D. Bronn','A. Abdi','W. Kechrida','E. Skhiri','A. Laidouni','H. Mejbri','N. Sliti','Y. Msakni','S. Jaziri','I. Jebali','W. Khazri','A. Khenissi']],
+  ['NED','Países Baixos','🇳🇱','F',397,['B. Verbruggen','M. Bijlow','V. van Dijk','N. Aké','D. Dumfries','J. Timber','L. de Ligt','F. de Jong','R. Gravenberch','X. Simons','T. Reijnders','D. Klaassen','C. Gakpo','M. Depay','D. Malen','J. Weghorst'],'#FF6600'],
+  ['JPN','Japão','🇯🇵','F',415,['S. Suzuki','D. Ōsako','T. Tomiyasu','K. Itakura','Y. Nagatomo','H. Sakai','M. Yoshida','W. Endo','H. Dōan','T. Kubo','K. Mitoma','D. Kamada','J. Ito','A. Ueda','K. Furuhashi','D. Maeda'],'#0033A0'],
+  ['SWE','Suécia','🇸🇪','F',433,['R. Olsen','P. Dahlberg','V. Lindelöf','A. Danielson','L. Augustinsson','E. Krafth','C. Starfelt','D. Kulusevski','E. Forsberg','A. Ekdal','J. Svanberg','M. Sema','A. Isak','V. Gyökeres','J. Larsson','A. Elanga'],'#006AA7'],
+  ['TUN','Tunísia','🇹🇳','F',451,['A. Dahmen','B. Hassen','M. Talbi','Y. Meriah','D. Bronn','A. Abdi','W. Kechrida','E. Skhiri','A. Laidouni','H. Mejbri','N. Sliti','Y. Msakni','S. Jaziri','I. Jebali','W. Khazri','A. Khenissi'],'#CE1126'],
   // Group G
-  ['BEL','Bélgica','🇧🇪','G',469,['T. Courtois','K. Casteels','J. Vertonghen','T. Alderweireld','A. Theate','T. Meunier','Z. Debast','K. De Bruyne','Y. Tielemans','A. Onana','O. Denda','L. Trossard','R. Lukaku','J. Doku','L. Openda','C. De Ketelaere']],
-  ['EGY','Egito','🇪🇬','G',487,['M. El-Shenawy','E. El-Hadary','A. Hegazi','M. Abdel-Moneim','O. Kamal','A. Fatouh','Y. Hamdi','M. Elneny','A. Trezeguet','H. Ashour','M. Ibrahim','E. Ashour','M. Salah','M. Hassan','M. Sherif','O. Marmoush']],
-  ['IRN','Irã','🇮🇷','G',505,['A. Beiranvand','P. Niazmand','S. Hosseini','M. Pouraliganji','E. Hajsafi','S. Moharrami','R. Rezaeian','A. Jahanbakhsh','S. Azmoun','S. Ezatolahi','A. Noorollahi','M. Torabi','M. Taremi','K. Ansarifard','S. Ghoddos','A. Gholizadeh']],
-  ['NZL','Nova Zelândia','🇳🇿','G',523,['S. Sail','O. Bray','T. Smith','M. Boxall','N. De Vries','L. Cacace','D. Payne','J. Bell','M. Stamenic','S. Thomas','C. Wood','A. Waine','B. Old','M. Garbett','E. Just','C. Cacace']],
+  ['BEL','Bélgica','🇧🇪','G',469,['T. Courtois','K. Casteels','J. Vertonghen','T. Alderweireld','A. Theate','T. Meunier','Z. Debast','K. De Bruyne','Y. Tielemans','A. Onana','O. Denda','L. Trossard','R. Lukaku','J. Doku','L. Openda','C. De Ketelaere'],'#000000'],
+  ['EGY','Egito','🇪🇬','G',487,['M. El-Shenawy','E. El-Hadary','A. Hegazi','M. Abdel-Moneim','O. Kamal','A. Fatouh','Y. Hamdi','M. Elneny','A. Trezeguet','H. Ashour','M. Ibrahim','E. Ashour','M. Salah','M. Hassan','M. Sherif','O. Marmoush'],'#CE1126'],
+  ['IRN','Irã','🇮🇷','G',505,['A. Beiranvand','P. Niazmand','S. Hosseini','M. Pouraliganji','E. Hajsafi','S. Moharrami','R. Rezaeian','A. Jahanbakhsh','S. Azmoun','S. Ezatolahi','A. Noorollahi','M. Torabi','M. Taremi','K. Ansarifard','S. Ghoddos','A. Gholizadeh'],'#CC1B1B'],
+  ['NZL','Nova Zelândia','🇳🇿','G',523,['S. Sail','O. Bray','T. Smith','M. Boxall','N. De Vries','L. Cacace','D. Payne','J. Bell','M. Stamenic','S. Thomas','C. Wood','A. Waine','B. Old','M. Garbett','E. Just','C. Cacace'],'#000000'],
   // Group H
-  ['ESP','Espanha','🇪🇸','H',541,['U. Simón','D. Raya','D. Carvajal','R. Le Normand','A. Laporte','M. Cucurella','J. Nacho','Rodri','Pedri','D. Olmo','F. López','Gavi','L. Yamal','A. Morata','N. Williams','F. Torres']],
-  ['CPV','Cabo Verde','🇨🇻','H',559,['V. Osório','M. Rosa','S. Lopes','K. Brito','R. Fortes','L. Nando','C. Gracelino','J. Garry','N. Borges','K. Rodrigues','W. Furtado','P. Mendes','R. Brito','G. Rodrigues','L. Lopes','D. Tavares']],
-  ['KSA','Arábia Saudita','🇸🇦','H',577,['M. Al-Owais','M. Al-Rubaie','Y. Al-Shahrani','A. Al-Amri','S. Al-Dawsari','H. Al-Burayk','A. Al-Bulayhi','S. Al-Dawsari','M. Kanno','A. Al-Malki','A. Al-Abed','F. Al-Muwallad','S. Al-Shehri','F. Al-Buraikan','A. Al-Ghannam','H. Hamdallah']],
-  ['URU','Uruguai','🇺🇾','H',595,['S. Rochet','F. Muslera','J.M. Giménez','R. Araújo','S. Coates','M. Viña','N. Nández','F. Valverde','R. Bentancur','M. Vecino','N. De la Cruz','G. De Arrascaeta','D. Núñez','L. Suárez','F. Pellistri','M. Araújo']],
+  ['ESP','Espanha','🇪🇸','H',541,['U. Simón','D. Raya','D. Carvajal','R. Le Normand','A. Laporte','M. Cucurella','J. Nacho','Rodri','Pedri','D. Olmo','F. López','Gavi','L. Yamal','A. Morata','N. Williams','F. Torres'],'#AA151B'],
+  ['CPV','Cabo Verde','🇨🇻','H',559,['V. Osório','M. Rosa','S. Lopes','K. Brito','R. Fortes','L. Nando','C. Gracelino','J. Garry','N. Borges','K. Rodrigues','W. Furtado','P. Mendes','R. Brito','G. Rodrigues','L. Lopes','D. Tavares'],'#003893'],
+  ['KSA','Arábia Saudita','🇸🇦','H',577,['M. Al-Owais','M. Al-Rubaie','Y. Al-Shahrani','A. Al-Amri','S. Al-Dawsari','H. Al-Burayk','A. Al-Bulayhi','S. Al-Dawsari','M. Kanno','A. Al-Malki','A. Al-Abed','F. Al-Muwallad','S. Al-Shehri','F. Al-Buraikan','A. Al-Ghannam','H. Hamdallah'],'#006C35'],
+  ['URU','Uruguai','🇺🇾','H',595,['S. Rochet','F. Muslera','J.M. Giménez','R. Araújo','S. Coates','M. Viña','N. Nández','F. Valverde','R. Bentancur','M. Vecino','N. De la Cruz','G. De Arrascaeta','D. Núñez','L. Suárez','F. Pellistri','M. Araújo'],'#0038A8'],
   // Group I
-  ['FRA','França','🇫🇷','I',613,['M. Maignan','B. Samba','D. Upamecano','W. Saliba','T. Hernández','J. Koundé','I. Konaté','A. Tchouaméni','E. Camavinga','A. Rabiot','A. Griezmann','O. Dembélé','K. Mbappé','M. Thuram','R. Kolo Muani','B. Barcola']],
-  ['SEN','Senegal','🇸🇳','I',631,['É. Mendy','S. Dieng','K. Koulibaly','A. Diallo','Y. Sabaly','P. Sarr','F. Diagne','I. Gueye','N. Mendy','P. Gueye','C. Kouyaté','K. Diatta','S. Mané','I. Sarr','B. Dia','N. Jackson']],
-  ['IRQ','Iraque','🇮🇶','I',649,['J. Noor Sabri','F. Hameed','A. Fadhel','R. Yaser','A. Hadi','I. Bayesh','S. Abbas','I. Bayat','A. Al-Lami','M. Dawood','A. Tahseen','H. Abdulzahra','A. Mhawi','M. Ali','Y. Al-Amiri','A. Attwan']],
-  ['NOR','Noruega','🇳🇴','I',667,['Ø. Nyland','M. Dyngeland','K. Ajer','L. Ostigard','B. Meling','S. Strandberg','J. Ryerson','M. Ødegaard','S. Berge','F. Aursnes','A. Moi Elyounoussi','M. Thorsby','E. Haaland','A. Sørloth','J. Strand Larsen','O. Nyland']],
+  ['FRA','França','🇫🇷','I',613,['M. Maignan','B. Samba','D. Upamecano','W. Saliba','T. Hernández','J. Koundé','I. Konaté','A. Tchouaméni','E. Camavinga','A. Rabiot','A. Griezmann','O. Dembélé','K. Mbappé','M. Thuram','R. Kolo Muani','B. Barcola'],'#0055A4'],
+  ['SEN','Senegal','🇸🇳','I',631,['É. Mendy','S. Dieng','K. Koulibaly','A. Diallo','Y. Sabaly','P. Sarr','F. Diagne','I. Gueye','N. Mendy','P. Gueye','C. Kouyaté','K. Diatta','S. Mané','I. Sarr','B. Dia','N. Jackson'],'#00853F'],
+  ['IRQ','Iraque','🇮🇶','I',649,['J. Noor Sabri','F. Hameed','A. Fadhel','R. Yaser','A. Hadi','I. Bayesh','S. Abbas','I. Bayat','A. Al-Lami','M. Dawood','A. Tahseen','H. Abdulzahra','A. Mhawi','M. Ali','Y. Al-Amiri','A. Attwan'],'#CE1126'],
+  ['NOR','Noruega','🇳🇴','I',667,['Ø. Nyland','M. Dyngeland','K. Ajer','L. Ostigard','B. Meling','S. Strandberg','J. Ryerson','M. Ødegaard','S. Berge','F. Aursnes','A. Moi Elyounoussi','M. Thorsby','E. Haaland','A. Sørloth','J. Strand Larsen','O. Nyland'],'#BA0C2F'],
   // Group J
-  ['ARG','Argentina','🇦🇷','J',685,['E. Martínez','F. Armani','N. Otamendi','C. Romero','L. Martínez Quarta','N. Molina','M. Acuña','R. De Paul','L. Paredes','E. Fernández','A. Mac Allister','G. Lo Celso','L. Messi','L. Martínez','J. Álvarez','Á. Di María']],
-  ['ALG','Argélia','🇩🇿','J',703,['R. M\'Bolhi','A. Mandrea','A. Mandi','D. Benlamri','R. Bensebaini','Y. Atal','H. Belkebla','S. Bennacer','I. Bennacer','R. Mahrez','S. Feghouli','Y. Belaïli','I. Slimani','A. Bounedjah','M. Boulaya','S. Benrahma']],
-  ['AUT','Áustria','🇦🇹','J',721,['P. Pentz','H. Lindner','D. Alaba','K. Danso','P. Lienhart','S. Posch','M. Wöber','K. Laimer','M. Sabitzer','F. Grillitsch','C. Baumgartner','X. Schlager','M. Arnautović','M. Gregoritsch','J. Seiwald','P. Wimmer']],
-  ['JOR','Jordânia','🇯🇴','J',739,['Y. Al-Shafi','W. Garaibeh','A. Al-Bakhit','S. Al-Naimat','A. Hammad','F. Al-Tamari','N. Abu Zuraik','M. Abu Zuraik','Y. Al-Rawashdeh','B. Al-Saify','O. Al-Dardour','H. Al-Dmeiri','A. Al-Ersan','M. Al-Taamari','J. Haidar','S. Al-Naimat']],
+  ['ARG','Argentina','🇦🇷','J',685,['E. Martínez','F. Armani','N. Otamendi','C. Romero','L. Martínez Quarta','N. Molina','M. Acuña','R. De Paul','L. Paredes','E. Fernández','A. Mac Allister','G. Lo Celso','L. Messi','L. Martínez','J. Álvarez','Á. Di María'],'#6CACE4'],
+  ['ALG','Argélia','🇩🇿','J',703,['R. M\'Bolhi','A. Mandrea','A. Mandi','D. Benlamri','R. Bensebaini','Y. Atal','H. Belkebla','S. Bennacer','I. Bennacer','R. Mahrez','S. Feghouli','Y. Belaïli','I. Slimani','A. Bounedjah','M. Boulaya','S. Benrahma'],'#006233'],
+  ['AUT','Áustria','🇦🇹','J',721,['P. Pentz','H. Lindner','D. Alaba','K. Danso','P. Lienhart','S. Posch','M. Wöber','K. Laimer','M. Sabitzer','F. Grillitsch','C. Baumgartner','X. Schlager','M. Arnautović','M. Gregoritsch','J. Seiwald','P. Wimmer'],'#ED2939'],
+  ['JOR','Jordânia','🇯🇴','J',739,['Y. Al-Shafi','W. Garaibeh','A. Al-Bakhit','S. Al-Naimat','A. Hammad','F. Al-Tamari','N. Abu Zuraik','M. Abu Zuraik','Y. Al-Rawashdeh','B. Al-Saify','O. Al-Dardour','H. Al-Dmeiri','A. Al-Ersan','M. Al-Taamari','J. Haidar','S. Al-Naimat'],'#CE1126'],
   // Group K
-  ['POR','Portugal','🇵🇹','K',757,['D. Costa','R. Silva','Pepe','R. Dias','N. Mendes','J. Cancelo','D. Dalot','B. Fernandes','B. Silva','V. Vitinha','J. Palhinha','J. Neves','Cristiano Ronaldo','R. Leão','G. Ramos','P. Neto']],
-  ['COD','RD Congo','🇨🇩','K',775,['J. Kiassumbua','L. Mokonzi','C. Luyindama','A. Mbemba','N. Mukoko','A. Masuaku','I. Wissa','G. Kakuta','S. Bakambu','Y. Bolasie','C. Akolo','N. Mbemba','C. Bakambu','D. Mbokani','J. Malango','B. Dibu']],
-  ['UZB','Uzbequistão','🇺🇿','K',793,['E. Nematov','B. Abdullaev','R. Khamdamov','A. Tuhtasinov','H. Alikulov','I. Ganiev','D. Nazarov','J. Khasanov','E. Shomurodov','O. Azizbek','A. Fayzullaev','D. Khashimov','I. Jaloliddinov','A. Sergeev','E. Zoteev','S. Rashidov']],
-  ['COL','Colômbia','🇨🇴','K',811,['D. Ospina','C. Vargas','Y. Mina','D. Sánchez','J. Mojica','D. Muñoz','S. Arias','J. Cuadrado','J. Arias','J. Rodríguez','J. Lerma','L. Díaz','R. Falcao','D. Borré','L. Sinisterra','J. Durán']],
+  ['POR','Portugal','🇵🇹','K',757,['D. Costa','R. Silva','Pepe','R. Dias','N. Mendes','J. Cancelo','D. Dalot','B. Fernandes','B. Silva','V. Vitinha','J. Palhinha','J. Neves','Cristiano Ronaldo','R. Leão','G. Ramos','P. Neto'],'#006600'],
+  ['COD','RD Congo','🇨🇩','K',775,['J. Kiassumbua','L. Mokonzi','C. Luyindama','A. Mbemba','N. Mukoko','A. Masuaku','I. Wissa','G. Kakuta','S. Bakambu','Y. Bolasie','C. Akolo','N. Mbemba','C. Bakambu','D. Mbokani','J. Malango','B. Dibu'],'#0033A0'],
+  ['UZB','Uzbequistão','🇺🇿','K',793,['E. Nematov','B. Abdullaev','R. Khamdamov','A. Tuhtasinov','H. Alikulov','I. Ganiev','D. Nazarov','J. Khasanov','E. Shomurodov','O. Azizbek','A. Fayzullaev','D. Khashimov','I. Jaloliddinov','A. Sergeev','E. Zoteev','S. Rashidov'],'#0099B5'],
+  ['COL','Colômbia','🇨🇴','K',811,['D. Ospina','C. Vargas','Y. Mina','D. Sánchez','J. Mojica','D. Muñoz','S. Arias','J. Cuadrado','J. Arias','J. Rodríguez','J. Lerma','L. Díaz','R. Falcao','D. Borré','L. Sinisterra','J. Durán'],'#003893'],
   // Group L
-  ['ENG','Inglaterra','🏴󠁧󠁢󠁥󠁮󠁧󠁿','L',829,['J. Pickford','A. Ramsdale','J. Stones','H. Maguire','M. Guéhi','K. Walker','T. Alexander-Arnold','J. Bellingham','D. Rice','C. Gallagher','P. Foden','B. Saka','H. Kane','O. Watkins','A. Gordon','C. Palmer']],
-  ['CRO','Croácia','🇭🇷','L',847,['D. Livaković','I. Grbić','D. Lovren','J. Gvardiol','J. Šutalo','B. Sosa','J. Stanišić','L. Modrić','M. Brozović','M. Kovačić','L. Sučić','M. Pašalić','I. Perišić','A. Kramarić','B. Petković','M. Livaja']],
-  ['GHA','Gana','🇬🇭','L',865,['R. Ati-Zigi','L. Ofori','D. Amartey','A. Djiku','T. Lamptey','A. Rahman Baba','G. Mensah','T. Partey','M. Kudus','I. Sulemana','A. Salis','E. Kyereh','I. Williams','A. Ayew','J. Ayew','A. Bukari']],
-  ['PAN','Panamá','🇵🇦','L',883,['L. Mejía','O. Mosquera','F. Escobar','H. Cummings','E. Davis','M. Murillo','A. Godoy','A. Carrasquilla','É. Bárcenas','C. Martínez','A. Cooper','J. Rodríguez','G. Torres','J. Fajardo','R. Blackburn','I. Díaz']],
+  ['ENG','Inglaterra','🏴󠁧󠁢󠁥󠁮󠁧󠁿','L',829,['J. Pickford','A. Ramsdale','J. Stones','H. Maguire','M. Guéhi','K. Walker','T. Alexander-Arnold','J. Bellingham','D. Rice','C. Gallagher','P. Foden','B. Saka','H. Kane','O. Watkins','A. Gordon','C. Palmer'],'#1A1A1A'],
+  ['CRO','Croácia','🇭🇷','L',847,['D. Livaković','I. Grbić','D. Lovren','J. Gvardiol','J. Šutalo','B. Sosa','J. Stanišić','L. Modrić','M. Brozović','M. Kovačić','L. Sučić','M. Pašalić','I. Perišić','A. Kramarić','B. Petković','M. Livaja'],'#C8102E'],
+  ['GHA','Gana','🇬🇭','L',865,['R. Ati-Zigi','L. Ofori','D. Amartey','A. Djiku','T. Lamptey','A. Rahman Baba','G. Mensah','T. Partey','M. Kudus','I. Sulemana','A. Salis','E. Kyereh','I. Williams','A. Ayew','J. Ayew','A. Bukari'],'#006B3F'],
+  ['PAN','Panamá','🇵🇦','L',883,['L. Mejía','O. Mosquera','F. Escobar','H. Cummings','E. Davis','M. Murillo','A. Godoy','A. Carrasquilla','É. Bárcenas','C. Martínez','A. Cooper','J. Rodríguez','G. Torres','J. Fajardo','R. Blackburn','I. Díaz'],'#072357'],
 ];
 
 function buildTeams() {
-  return TEAMS_RAW.map(([code, name, flag, group, start, players]) => {
+  return TEAMS_RAW.map(([code, name, flag, group, start, players, color]) => {
     const stickers = [
-      { num: start, label: 'Emblema', type: 'badge', team: code, teamName: name },
-      { num: start + 1, label: 'Foto da Equipe', type: 'team', team: code, teamName: name },
+      { num: start, label: 'Emblema', type: 'badge', team: code, teamName: name, localNum: 1, color },
+      { num: start + 1, label: 'Foto da Equipe', type: 'team', team: code, teamName: name, localNum: 2, color },
     ];
     players.forEach((pName, i) => {
       const pos = POS_ORDER[i];
@@ -128,16 +306,18 @@ function buildTeams() {
         pos,
         team: code,
         teamName: name,
+        localNum: i + 3,
+        color,
       });
     });
-    return { code, name, flag, group, stickers };
+    return { code, name, flag, group, color, stickers };
   });
 }
 
 const TEAMS = buildTeams();
 
 function getAllStickers() {
-  const all = INTRO_STICKERS.map(s => ({ ...s, team: 'FWC', teamName: 'FIFA World Cup' }));
+  const all = INTRO_STICKERS.map(s => ({ ...s, team: 'FWC', teamName: 'FIFA World Cup', localNum: s.num, color: '#8a6d00' }));
   TEAMS.forEach(t => all.push(...t.stickers));
   return all;
 }
@@ -145,69 +325,43 @@ function getAllStickers() {
 const ALL_STICKERS = getAllStickers();
 const TOTAL_STICKERS = ALL_STICKERS.length;
 
+const STICKER_MAP = {};
+ALL_STICKERS.forEach(s => { STICKER_MAP[s.num] = s; });
+
 /* ============================================================
-   STATE (localStorage)
+   STATE HELPERS
    ============================================================ */
-function loadState() {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return {};
-    const parsed = JSON.parse(raw);
-    return (parsed && typeof parsed === 'object') ? parsed : {};
-  } catch { return {}; }
-}
-
-function saveState(state) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-}
-
-let state = loadState();
-
-function getStickerState(num) {
-  return state[num] || null;
-}
-
-function isCollected(num) {
-  return !!state[num];
-}
+function getStickerState(num) { return state[num] || null; }
+function isCollected(num) { return !!state[num]; }
 
 function toggleCollected(num) {
-  if (state[num]) {
-    delete state[num];
-  } else {
-    state[num] = { c: true };
-  }
-  saveState(state);
+  if (state[num]) delete state[num];
+  else state[num] = { c: true };
+  saveState();
 }
 
 function setSpecial(num, special) {
   if (!state[num]) state[num] = { c: true };
-  if (special) {
-    state[num].s = special;
-  } else {
-    delete state[num].s;
-  }
-  saveState(state);
+  if (special) state[num].s = special;
+  else delete state[num].s;
+  saveState();
 }
 
 function setDuplicates(num, count) {
   if (!state[num]) state[num] = { c: true };
-  if (count > 0) {
-    state[num].d = count;
-  } else {
-    delete state[num].d;
-  }
-  saveState(state);
+  if (count > 0) state[num].d = count;
+  else delete state[num].d;
+  saveState();
 }
 
 function removeSticker(num) {
   delete state[num];
-  saveState(state);
+  saveState();
 }
 
 function clearAllState() {
   state = {};
-  saveState(state);
+  saveState();
 }
 
 /* ============================================================
@@ -216,9 +370,9 @@ function clearAllState() {
 function calcStats() {
   let collected = 0, dupes = 0, special = 0;
   for (const key in state) {
-    if (state[key].c) collected++;
-    if (state[key].d) dupes += state[key].d;
-    if (state[key].s) special++;
+    if (state[key]) collected++;
+    if (state[key]?.d) dupes += state[key].d;
+    if (state[key]?.s) special++;
   }
   return { collected, missing: TOTAL_STICKERS - collected, dupes, special };
 }
@@ -231,7 +385,6 @@ function updateStats() {
   document.getElementById('statSpecial').textContent = s.special;
   const pct = TOTAL_STICKERS > 0 ? (s.collected / TOTAL_STICKERS * 100) : 0;
   document.getElementById('statTotalFill').style.width = `${pct}%`;
-
   updateGroupProgress();
   updateDupesList();
 }
@@ -260,41 +413,63 @@ function flagHTML(emoji) {
 }
 
 /* ============================================================
-   RENDER
+   AVATAR HELPERS
    ============================================================ */
-function stickerTypeClass(type) {
-  const map = { badge: 'badge', team: 'team', gol: 'gol', zag: 'zag', mei: 'mei', ata: 'ata', stadium: 'stadium', logo: 'logo', mascot: 'mascot' };
-  return map[type] || '';
+function getInitials(label) {
+  if (!label) return '?';
+  const parts = label.split(/[\s.]+/).filter(Boolean);
+  if (parts.length >= 2) return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+  return label.substring(0, 2).toUpperCase();
 }
 
+function avatarContent(s, collected) {
+  if (!collected) {
+    if (s.type === 'badge') return '🏛️';
+    if (s.type === 'team') return '📸';
+    if (s.type === 'stadium') return '🏟️';
+    if (s.type === 'logo') return '🏆';
+    if (s.type === 'mascot') return '🎭';
+    return '?';
+  }
+  if (s.type === 'badge') return '🏛️';
+  if (s.type === 'team') return '📸';
+  if (s.type === 'stadium') return '🏟️';
+  if (s.type === 'logo') return '🏆';
+  if (s.type === 'mascot') return '🎭';
+  return getInitials(s.label);
+}
+
+/* ============================================================
+   RENDER STICKERS
+   ============================================================ */
 function renderSticker(s) {
   const st = getStickerState(s.num);
   const collected = !!st;
   const special = st?.s || '';
   const dupCount = st?.d || 0;
 
-  const classes = ['sticker', `sticker--${stickerTypeClass(s.type)}`];
+  const classes = ['sticker'];
   if (collected) classes.push('collected');
   if (special) classes.push(`special-${special}`);
 
-  const posLabel = s.pos ? POS_LABELS[s.pos] : (s.type === 'badge' ? 'Emblema' : s.type === 'team' ? 'Equipe' : '');
+  const posLabel = s.pos ? POS_LABELS[s.pos] : (s.type === 'badge' ? 'Emblema' : s.type === 'team' ? 'Equipe' : s.type === 'stadium' ? 'Estádio' : '');
+  const color = s.color || '#6b7280';
+  const isPlayer = !!s.pos;
 
-  return `
-    <div class="${classes.join(' ')}" data-num="${s.num}" data-team="${s.team || ''}" data-name="${(s.label || '').toLowerCase()}" data-collected="${collected ? '1' : '0'}" data-dupes="${dupCount}">
+  return `<div class="${classes.join(' ')}" data-num="${s.num}" data-team="${s.team || ''}" data-name="${(s.label || '').toLowerCase()}" data-collected="${collected ? '1' : '0'}" data-dupes="${dupCount}" style="--sticker-color:${color}">
       ${special ? `<span class="sticker__badge-special">${SPECIAL_ICONS[special]}</span>` : ''}
       ${dupCount > 0 ? `<span class="sticker__badge-dupes">&times;${dupCount}</span>` : ''}
-      <span class="sticker__number">#${s.num}</span>
-      <span class="sticker__icon"></span>
+      <span class="sticker__local-num">${s.team} ${s.localNum}</span>
+      <span class="sticker__avatar">${avatarContent(s, collected)}</span>
       <span class="sticker__pos">${posLabel}</span>
       <span class="sticker__name" title="${s.label}">${s.label}</span>
-    </div>
-  `;
+      <span class="sticker__number">#${s.num}</span>
+    </div>`;
 }
 
 function renderIntroSection() {
   const collectedCount = INTRO_STICKERS.filter(s => isCollected(s.num)).length;
-  return `
-    <div class="intro-section" data-section="FWC">
+  return `<div class="intro-section" data-section="FWC">
       <div class="intro-header">
         <span class="intro-header__badge">🏆</span>
         <span class="intro-header__title">FIFA World Cup 2026</span>
@@ -303,12 +478,11 @@ function renderIntroSection() {
       <div class="team-card open">
         <div class="team-card__body" style="display:block">
           <div class="sticker-grid">
-            ${INTRO_STICKERS.map(s => renderSticker({ ...s, team: 'FWC', teamName: 'FIFA World Cup' })).join('')}
+            ${INTRO_STICKERS.map(s => renderSticker({ ...s, team: 'FWC', teamName: 'FIFA World Cup', localNum: s.num, color: '#8a6d00' })).join('')}
           </div>
         </div>
       </div>
-    </div>
-  `;
+    </div>`;
 }
 
 function renderTeamCard(team) {
@@ -316,8 +490,7 @@ function renderTeamCard(team) {
   const total = team.stickers.length;
   const pct = total > 0 ? (collectedCount / total * 100) : 0;
 
-  return `
-    <div class="team-card" data-team-code="${team.code}" data-group="${team.group}">
+  return `<div class="team-card" data-team-code="${team.code}" data-group="${team.group}">
       <button class="team-card__header" aria-expanded="false">
         <span class="team-card__flag">${flagHTML(team.flag)}</span>
         <span class="team-card__name">${team.name}</span>
@@ -326,28 +499,23 @@ function renderTeamCard(team) {
         <svg class="team-card__chevron" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.17l3.71-3.94a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"/></svg>
       </button>
       <div class="team-card__body">
-        <div class="sticker-grid">
-          ${team.stickers.map(s => renderSticker(s)).join('')}
-        </div>
+        <div class="sticker-grid">${team.stickers.map(s => renderSticker(s)).join('')}</div>
       </div>
-    </div>
-  `;
+    </div>`;
 }
 
 function renderGroupSection(group, teams) {
   const allStickers = teams.flatMap(t => t.stickers);
   const collectedCount = allStickers.filter(s => isCollected(s.num)).length;
 
-  return `
-    <div class="group-section" data-group="${group}">
+  return `<div class="group-section" data-group="${group}">
       <div class="group-header">
         <span class="group-header__badge">${group}</span>
         <span class="group-header__title">Grupo ${group}</span>
         <span class="group-header__progress" data-progress="group-${group}">${collectedCount}/${allStickers.length}</span>
       </div>
       ${teams.map(t => renderTeamCard(t)).join('')}
-    </div>
-  `;
+    </div>`;
 }
 
 function renderAlbum() {
@@ -359,16 +527,14 @@ function renderAlbum() {
   });
 
   let html = renderIntroSection();
-  const groupOrder = 'ABCDEFGHIJKL'.split('');
-  groupOrder.forEach(g => {
+  'ABCDEFGHIJKL'.split('').forEach(g => {
     if (groups[g]) html += renderGroupSection(g, groups[g]);
   });
-
   container.innerHTML = html;
 }
 
 /* ============================================================
-   GROUP / TEAM PROGRESS UPDATE (without re-render)
+   PROGRESS UPDATE
    ============================================================ */
 function updateGroupProgress() {
   document.querySelectorAll('[data-progress]').forEach(el => {
@@ -384,7 +550,6 @@ function updateGroupProgress() {
       el.textContent = `${count}/${all.length}`;
     }
   });
-
   document.querySelectorAll('.team-card').forEach(card => {
     const code = card.dataset.teamCode;
     const team = TEAMS.find(t => t.code === code);
@@ -406,42 +571,36 @@ function updateDupesList() {
   const container = document.getElementById('dupesContainer');
   const noDupes = document.getElementById('noDupes');
   const items = [];
-
   for (const numStr in state) {
     const s = state[numStr];
-    if (s.d && s.d > 0) {
-      const sticker = ALL_STICKERS.find(st => st.num === parseInt(numStr));
-      if (sticker) {
-        items.push({ num: sticker.num, label: sticker.label, team: sticker.teamName || sticker.team, dupes: s.d });
-      }
+    if (s?.d && s.d > 0) {
+      const sticker = STICKER_MAP[parseInt(numStr)];
+      if (sticker) items.push({ num: sticker.num, label: sticker.label, team: sticker.teamName, localNum: sticker.localNum, teamCode: sticker.team, dupes: s.d });
     }
   }
-
   items.sort((a, b) => a.num - b.num);
-
   if (items.length === 0) {
     container.innerHTML = '';
     noDupes.hidden = false;
   } else {
     noDupes.hidden = true;
-    container.innerHTML = items.map(it => `
-      <div class="dupe-item">
-        <span class="dupe-item__number">#${it.num}</span>
+    container.innerHTML = items.map(it => `<div class="dupe-item">
+        <span class="dupe-item__number">${it.teamCode} ${it.localNum}</span>
         <span class="dupe-item__name" title="${it.team} - ${it.label}">${it.label}</span>
         <span class="dupe-item__count">&times;${it.dupes}</span>
-      </div>
-    `).join('');
+      </div>`).join('');
   }
 }
 
 /* ============================================================
-   STICKER INTERACTIONS
+   STICKER ELEMENT UPDATE
    ============================================================ */
 function updateStickerEl(el, num) {
   const st = getStickerState(num);
   const collected = !!st;
   const special = st?.s || '';
   const dupCount = st?.d || 0;
+  const sticker = STICKER_MAP[num];
 
   el.classList.toggle('collected', collected);
   el.classList.remove('special-silver', 'special-gold', 'special-legend', 'special-parallel');
@@ -449,36 +608,29 @@ function updateStickerEl(el, num) {
   el.dataset.collected = collected ? '1' : '0';
   el.dataset.dupes = dupCount;
 
+  const avatarEl = el.querySelector('.sticker__avatar');
+  if (avatarEl && sticker) avatarEl.textContent = avatarContent(sticker, collected);
+
   let specialBadge = el.querySelector('.sticker__badge-special');
   if (special) {
-    if (!specialBadge) {
-      specialBadge = document.createElement('span');
-      specialBadge.className = 'sticker__badge-special';
-      el.prepend(specialBadge);
-    }
+    if (!specialBadge) { specialBadge = document.createElement('span'); specialBadge.className = 'sticker__badge-special'; el.prepend(specialBadge); }
     specialBadge.textContent = SPECIAL_ICONS[special];
-  } else if (specialBadge) {
-    specialBadge.remove();
-  }
+  } else if (specialBadge) { specialBadge.remove(); }
 
   let dupesBadge = el.querySelector('.sticker__badge-dupes');
   if (dupCount > 0) {
-    if (!dupesBadge) {
-      dupesBadge = document.createElement('span');
-      dupesBadge.className = 'sticker__badge-dupes';
-      el.prepend(dupesBadge);
-    }
+    if (!dupesBadge) { dupesBadge = document.createElement('span'); dupesBadge.className = 'sticker__badge-dupes'; el.prepend(dupesBadge); }
     dupesBadge.innerHTML = `&times;${dupCount}`;
-  } else if (dupesBadge) {
-    dupesBadge.remove();
-  }
+  } else if (dupesBadge) { dupesBadge.remove(); }
 }
 
+/* ============================================================
+   STICKER INTERACTIONS
+   ============================================================ */
 function handleStickerClick(e) {
   const stickerEl = e.target.closest('.sticker');
   if (!stickerEl) return;
   const num = parseInt(stickerEl.dataset.num);
-
   if (isCollected(num)) {
     openModal(num, stickerEl);
   } else {
@@ -510,25 +662,22 @@ let modalCurrentEl = null;
 function openModal(num, stickerEl) {
   modalCurrentNum = num;
   modalCurrentEl = stickerEl;
-
-  const sticker = ALL_STICKERS.find(s => s.num === num);
+  const sticker = STICKER_MAP[num];
   const st = getStickerState(num);
+  const color = sticker?.color || '#6b7280';
 
   const header = document.getElementById('modalHeader');
   header.innerHTML = `
-    <span class="modal__header-num">#${num}</span>
+    <div class="modal__header-avatar" style="background:${color}">${avatarContent(sticker, true)}</div>
+    <span class="modal__header-num">${sticker?.team || ''} ${sticker?.localNum || ''} &middot; #${num}</span>
     <span class="modal__header-name">${sticker?.label || ''}</span>
-    <span class="modal__header-team">${sticker?.teamName || ''}</span>
-  `;
+    <span class="modal__header-team">${sticker?.teamName || ''}</span>`;
 
   const special = st?.s || '';
   document.querySelectorAll('#specialButtons .special-btn').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.special === special);
   });
-
-  const dupCount = st?.d || 0;
-  document.getElementById('dupesValue').textContent = dupCount;
-
+  document.getElementById('dupesValue').textContent = st?.d || 0;
   document.getElementById('modalOverlay').hidden = false;
 }
 
@@ -549,9 +698,7 @@ function initModal() {
       if (modalCurrentNum == null) return;
       const special = btn.dataset.special;
       setSpecial(modalCurrentNum, special || null);
-      document.querySelectorAll('#specialButtons .special-btn').forEach(b => {
-        b.classList.toggle('active', b.dataset.special === special);
-      });
+      document.querySelectorAll('#specialButtons .special-btn').forEach(b => b.classList.toggle('active', b.dataset.special === special));
       if (modalCurrentEl) updateStickerEl(modalCurrentEl, modalCurrentNum);
       updateStats();
     });
@@ -559,8 +706,7 @@ function initModal() {
 
   document.getElementById('dupesMinus').addEventListener('click', () => {
     if (modalCurrentNum == null) return;
-    const st = getStickerState(modalCurrentNum);
-    const cur = st?.d || 0;
+    const cur = getStickerState(modalCurrentNum)?.d || 0;
     const next = Math.max(0, cur - 1);
     setDuplicates(modalCurrentNum, next);
     document.getElementById('dupesValue').textContent = next;
@@ -570,11 +716,9 @@ function initModal() {
 
   document.getElementById('dupesPlus').addEventListener('click', () => {
     if (modalCurrentNum == null) return;
-    const st = getStickerState(modalCurrentNum);
-    const cur = st?.d || 0;
-    const next = cur + 1;
-    setDuplicates(modalCurrentNum, next);
-    document.getElementById('dupesValue').textContent = next;
+    const cur = getStickerState(modalCurrentNum)?.d || 0;
+    setDuplicates(modalCurrentNum, cur + 1);
+    document.getElementById('dupesValue').textContent = cur + 1;
     if (modalCurrentEl) updateStickerEl(modalCurrentEl, modalCurrentNum);
     updateStats();
   });
@@ -588,9 +732,7 @@ function initModal() {
   });
 
   document.addEventListener('keydown', e => {
-    if (e.key === 'Escape' && !document.getElementById('modalOverlay').hidden) {
-      closeModal();
-    }
+    if (e.key === 'Escape' && !document.getElementById('modalOverlay').hidden) closeModal();
   });
 }
 
@@ -614,8 +756,7 @@ let currentFilter = 'all';
 let searchQuery = '';
 
 function applyFilters() {
-  const stickers = document.querySelectorAll('.sticker');
-  stickers.forEach(el => {
+  document.querySelectorAll('.sticker').forEach(el => {
     const collected = el.dataset.collected === '1';
     const hasDupes = parseInt(el.dataset.dupes) > 0;
     const name = el.dataset.name || '';
@@ -648,15 +789,11 @@ function initFilters() {
       applyFilters();
     });
   });
-
   const searchInput = document.getElementById('searchInput');
   let searchTimeout;
   searchInput.addEventListener('input', () => {
     clearTimeout(searchTimeout);
-    searchTimeout = setTimeout(() => {
-      searchQuery = searchInput.value.trim();
-      applyFilters();
-    }, 200);
+    searchTimeout = setTimeout(() => { searchQuery = searchInput.value.trim(); applyFilters(); }, 200);
   });
 }
 
@@ -670,25 +807,68 @@ function initActions() {
     allExpanded = !allExpanded;
     document.querySelectorAll('.team-card').forEach(card => {
       card.classList.toggle('open', allExpanded);
-      const header = card.querySelector('.team-card__header');
-      if (header) header.setAttribute('aria-expanded', allExpanded);
+      const h = card.querySelector('.team-card__header');
+      if (h) h.setAttribute('aria-expanded', allExpanded);
     });
     expandBtn.textContent = allExpanded ? 'Recolher tudo' : 'Expandir tudo';
   });
 
   document.getElementById('clearAll').addEventListener('click', () => {
-    if (!confirm('Tem certeza que deseja limpar todas as figurinhas marcadas? Esta ação não pode ser desfeita.')) return;
+    if (!confirm('Tem certeza que deseja limpar todas as figurinhas deste álbum? Esta ação não pode ser desfeita.')) return;
     clearAllState();
-    document.querySelectorAll('.sticker').forEach(el => {
-      const num = parseInt(el.dataset.num);
-      updateStickerEl(el, num);
-    });
+    document.querySelectorAll('.sticker').forEach(el => updateStickerEl(el, parseInt(el.dataset.num)));
     updateStats();
   });
 }
 
 /* ============================================================
-   HEADER SCROLL
+   ALBUM SELECTOR
+   ============================================================ */
+function renderAlbumSelect() {
+  const select = document.getElementById('albumSelect');
+  select.innerHTML = albumIndex.albums.map(name =>
+    `<option value="${name}" ${name === activeAlbumName ? 'selected' : ''}>${name}</option>`
+  ).join('');
+}
+
+function initAlbumSelector() {
+  const select = document.getElementById('albumSelect');
+  select.addEventListener('change', () => {
+    switchAlbum(select.value);
+  });
+
+  document.getElementById('albumNew').addEventListener('click', () => {
+    const name = prompt('Nome do novo álbum:');
+    if (!name || !name.trim()) return;
+    const trimmed = name.trim();
+    if (albumIndex.albums.includes(trimmed)) { alert('Já existe um álbum com esse nome.'); return; }
+    createAlbum(trimmed);
+    renderAlbumSelect();
+    renderAlbum();
+    updateStats();
+  });
+
+  document.getElementById('albumRename').addEventListener('click', () => {
+    const newName = prompt('Novo nome para o álbum:', activeAlbumName);
+    if (!newName || !newName.trim() || newName.trim() === activeAlbumName) return;
+    const trimmed = newName.trim();
+    if (albumIndex.albums.includes(trimmed)) { alert('Já existe um álbum com esse nome.'); return; }
+    renameAlbum(activeAlbumName, trimmed);
+    renderAlbumSelect();
+  });
+
+  document.getElementById('albumDelete').addEventListener('click', () => {
+    if (albumIndex.albums.length <= 1) { alert('Você precisa ter pelo menos um álbum.'); return; }
+    if (!confirm(`Excluir o álbum "${activeAlbumName}"? Esta ação não pode ser desfeita.`)) return;
+    deleteAlbum(activeAlbumName);
+    renderAlbumSelect();
+    renderAlbum();
+    updateStats();
+  });
+}
+
+/* ============================================================
+   HEADER
    ============================================================ */
 function initHeader() {
   const header = document.getElementById('header');
@@ -699,10 +879,7 @@ function initHeader() {
     header.classList.toggle('scrolled', window.scrollY > 10);
   }, { passive: true });
 
-  toggle.addEventListener('click', () => {
-    nav.classList.toggle('open');
-  });
-
+  toggle.addEventListener('click', () => nav.classList.toggle('open'));
   nav.querySelectorAll('.nav__link').forEach(link => {
     link.addEventListener('click', () => nav.classList.remove('open'));
   });
@@ -712,16 +889,20 @@ function initHeader() {
    INIT
    ============================================================ */
 function init() {
+  ensureDefaultAlbum();
+  renderAlbumSelect();
   renderAlbum();
   updateStats();
   initTeamCards();
   initModal();
   initFilters();
   initActions();
+  initAlbumSelector();
   initHeader();
 
-  document.getElementById('albumContainer').addEventListener('click', handleStickerClick);
-  document.getElementById('albumContainer').addEventListener('contextmenu', handleStickerContext);
+  const container = document.getElementById('albumContainer');
+  container.addEventListener('click', handleStickerClick);
+  container.addEventListener('contextmenu', handleStickerContext);
 }
 
 document.addEventListener('DOMContentLoaded', init);

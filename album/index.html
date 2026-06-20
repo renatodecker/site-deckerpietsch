@@ -58,6 +58,19 @@
     </div>
   </section>
 
+  <!-- ALBUM SELECTOR -->
+  <section class="album-selector">
+    <div class="container">
+      <div class="album-selector__row">
+        <label class="album-selector__label">Álbum:</label>
+        <select class="album-selector__select" id="albumSelect"></select>
+        <button class="album-selector__btn album-selector__btn--new" id="albumNew" title="Novo álbum">+</button>
+        <button class="album-selector__btn album-selector__btn--rename" id="albumRename" title="Renomear">&#9998;</button>
+        <button class="album-selector__btn album-selector__btn--delete" id="albumDelete" title="Excluir">&times;</button>
+      </div>
+    </div>
+  </section>
+
   <section class="stats-bar" id="progresso">
     <div class="container">
       <div class="stats-bar__grid" id="statsBar">
@@ -138,7 +151,7 @@
         <div class="modal__field">
           <label class="modal__label">Repetidas:</label>
           <div class="dupes-control">
-            <button class="dupes-btn" id="dupesMinus">−</button>
+            <button class="dupes-btn" id="dupesMinus">&minus;</button>
             <span class="dupes-value" id="dupesValue">0</span>
             <button class="dupes-btn" id="dupesPlus">+</button>
           </div>

@@ -1100,9 +1100,10 @@ function parseMinuteForSort(minute) {
   return Number(m[1]) + (m[2] ? Number(m[2]) : 0);
 }
 
-function eventIconHTML(evt) {
+function eventIconHTML(evt, goalNum) {
   if (evt.type === 'goal') {
-    let text = '⚽';
+    const badge = goalNum > 1 ? `<span class="match-modal__goal-count">${goalNum}</span>` : '';
+    let text = `<span class="match-modal__goal-icon">⚽${badge}</span>`;
     if (evt.detail === 'pen.') text += ' <span class="match-modal__event-detail">(pen.)</span>';
     else if (evt.detail === 'gol contra') text += ' <span class="match-modal__event-detail">(g.c.)</span>';
     return text;
@@ -1133,16 +1134,23 @@ function renderMatchTimeline(match) {
   const periodLabels = { '1': '1º TEMPO', '2': '2º TEMPO', 'extra': 'PRORROGAÇÃO', 'pen': 'PÊNALTIS' };
   const periodOrder = ['1', '2', 'extra', 'pen'];
 
+  const goalCount = {};
   let html = '<div class="match-modal__timeline">';
   periodOrder.forEach(p => {
     if (!periods[p]) return;
     html += `<div class="match-modal__period"><span>${periodLabels[p]}</span></div>`;
     periods[p].forEach(evt => {
+      let num = 0;
+      if (evt.type === 'goal' && evt.detail !== 'gol contra') {
+        const key = `${evt.team}:${evt.player}`;
+        goalCount[key] = (goalCount[key] || 0) + 1;
+        num = goalCount[key];
+      }
       const isHome = evt.team === match.home;
       const side = isHome ? 'home' : 'away';
       html += `
         <div class="match-modal__event match-modal__event--${side}">
-          <div class="match-modal__detail">${evt.player} ${eventIconHTML(evt)}</div>
+          <div class="match-modal__detail">${evt.player} ${eventIconHTML(evt, num)}</div>
           <div class="match-modal__minute">${evt.minute || ''}</div>
           <div class="match-modal__spacer"></div>
         </div>`;

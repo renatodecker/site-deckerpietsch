@@ -759,11 +759,15 @@ img { display: block; max-width: 100%; }
   border: none;
   cursor: pointer;
   font-family: inherit;
-  transition: background .15s;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: var(--gray-400);
+  transition: background .15s, text-decoration-color .15s;
 }
 
 .match-card__score--link:hover {
   background: var(--gold-100, #fef3c7);
+  text-decoration-color: var(--navy-900);
 }
 
 .match-card__score--pending {
@@ -1542,6 +1546,26 @@ body.modal-open { overflow: hidden; }
   color: var(--gray-500, #6b7280);
   font-size: .78rem;
   margin-left: 2px;
+}
+
+.match-modal__goal-icon {
+  position: relative;
+  display: inline-block;
+}
+
+.match-modal__goal-count {
+  position: absolute;
+  top: -6px;
+  right: -10px;
+  font-size: .6rem;
+  font-weight: 800;
+  color: var(--white);
+  background: var(--navy-900);
+  border-radius: 50%;
+  width: 14px;
+  height: 14px;
+  line-height: 14px;
+  text-align: center;
 }
 
 /* --- Simplified view (no events, only scorers) --- */

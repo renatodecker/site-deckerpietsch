@@ -276,30 +276,30 @@
   ],
   "F": [
     {
-      "team": "Suécia",
-      "flag": "🇸🇪",
-      "pj": 1,
-      "v": 1,
-      "e": 0,
-      "d": 0,
-      "gp": 5,
-      "gc": 1,
-      "sg": 4,
-      "pts": 3,
-      "fairPlay": 0
-    },
-    {
       "team": "Países Baixos",
       "short": "P. Baixos",
       "flag": "🇳🇱",
-      "pj": 1,
-      "v": 0,
+      "pj": 2,
+      "v": 1,
       "e": 1,
       "d": 0,
-      "gp": 2,
-      "gc": 2,
+      "gp": 7,
+      "gc": 3,
+      "sg": 4,
+      "pts": 4,
+      "fairPlay": 0
+    },
+    {
+      "team": "Suécia",
+      "flag": "🇸🇪",
+      "pj": 2,
+      "v": 1,
+      "e": 0,
+      "d": 1,
+      "gp": 6,
+      "gc": 6,
       "sg": 0,
-      "pts": 1,
+      "pts": 3,
       "fairPlay": 0
     },
     {

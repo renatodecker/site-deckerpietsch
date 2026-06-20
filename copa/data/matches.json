@@ -1422,10 +1422,10 @@
       "home": "Países Baixos",
       "away": "Suécia",
       "venue": "Houston",
-      "status": "live",
+      "status": "finished",
       "espnId": "760447",
-      "homeScore": 2,
-      "awayScore": 0,
+      "homeScore": 5,
+      "awayScore": 1,
       "scorers": [
         {
           "player": "Brian Brobbey",
@@ -1434,8 +1434,75 @@
         {
           "player": "Brian Brobbey",
           "team": "Países Baixos"
+        },
+        {
+          "player": "Cody Gakpo",
+          "team": "Países Baixos"
+        },
+        {
+          "player": "Cody Gakpo",
+          "team": "Países Baixos"
+        },
+        {
+          "player": "Anthony Elanga",
+          "team": "Suécia"
+        },
+        {
+          "player": "Crysencio Summerville",
+          "team": "Países Baixos"
         }
-      ]
+      ],
+      "events": [
+        {
+          "type": "goal",
+          "player": "Brian Brobbey",
+          "team": "Países Baixos",
+          "minute": "5'",
+          "period": null,
+          "detail": ""
+        },
+        {
+          "type": "goal",
+          "player": "Brian Brobbey",
+          "team": "Países Baixos",
+          "minute": "17'",
+          "period": null,
+          "detail": ""
+        },
+        {
+          "type": "goal",
+          "player": "Cody Gakpo",
+          "team": "Países Baixos",
+          "minute": "47'",
+          "period": null,
+          "detail": ""
+        },
+        {
+          "type": "goal",
+          "player": "Cody Gakpo",
+          "team": "Países Baixos",
+          "minute": "54'",
+          "period": null,
+          "detail": ""
+        },
+        {
+          "type": "goal",
+          "player": "Anthony Elanga",
+          "team": "Suécia",
+          "minute": "59'",
+          "period": null,
+          "detail": ""
+        },
+        {
+          "type": "goal",
+          "player": "Crysencio Summerville",
+          "team": "Países Baixos",
+          "minute": "89'",
+          "period": null,
+          "detail": ""
+        }
+      ],
+      "detailsFetched": true
     },
     {
       "id": 34,

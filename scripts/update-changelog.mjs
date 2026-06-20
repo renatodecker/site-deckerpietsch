@@ -86,7 +86,12 @@ function main() {
   const existing = changelog.entries.find(e => e.date === targetDate);
 
   if (existing) {
-    const newItems = unique.filter(item => !existing.items.includes(item));
+    console.log(`Dia ${targetDate} já tem ${existing.items.length} novidade(s) curadas. Nada a fazer.`);
+    console.log('(Use --force para adicionar commits como rascunho mesmo assim.)');
+    if (!args.includes('--force')) return;
+    const newItems = unique.filter(item => !existing.items.some(
+      ex => ex.toLowerCase().includes(item.toLowerCase().slice(0, 30))
+    ));
     if (newItems.length === 0) {
       console.log('Todas as novidades já estão registradas.');
       return;

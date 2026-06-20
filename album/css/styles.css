@@ -127,8 +127,6 @@ button { cursor: pointer; font-family: inherit; }
 .album-selector {
   background: var(--navy-900);
   padding: 10px 0;
-  position: relative;
-  z-index: 11;
 }
 .album-selector__row {
   display: flex; align-items: center; gap: 8px;
@@ -170,7 +168,7 @@ button { cursor: pointer; font-family: inherit; }
    STATS BAR
    ============================================================ */
 .stats-bar {
-  margin-top: -24px; padding-bottom: 16px;
+  padding: 16px 0;
   position: relative; z-index: 10;
 }
 .stats-bar__grid {

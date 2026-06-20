@@ -690,6 +690,7 @@ function bracketMatchHTML(match, groups, knockoutFlat, venueIndex) {
 
   return `
     <div class="bracket-match">
+      <div class="bracket-match__id">${match.id}</div>
       <div class="bracket-match__team ${homeCls}"><span>${home.html}</span><span>${homeScore}</span></div>
       <div class="bracket-match__team ${awayCls}"><span>${away.html}</span><span>${awayScore}</span></div>
       ${match.date ? `<div class="bracket-match__date">${formatDate(match.date)}${venueHTML ? ' · ' + venueHTML : ''}</div>` : ''}

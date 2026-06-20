@@ -895,6 +895,17 @@ img { display: block; max-width: 100%; }
   padding: 8px 12px;
   font-size: .8rem;
   box-shadow: var(--shadow-sm);
+  position: relative;
+}
+
+.bracket-match__id {
+  position: absolute;
+  top: 4px;
+  right: 6px;
+  font-size: .6rem;
+  font-weight: 700;
+  color: var(--gray-400);
+  line-height: 1;
 }
 
 .bracket-match__team {

@@ -1218,9 +1218,26 @@
       "home": "Alemanha",
       "away": "Costa do Marfim",
       "venue": "Toronto",
-      "status": "scheduled",
-      "time": "16h ET",
-      "espnId": "760448"
+      "status": "live",
+      "espnId": "760448",
+      "homeScore": 0,
+      "awayScore": 1,
+      "scorers": [
+        {
+          "player": "Franck Kessié",
+          "team": "Costa do Marfim"
+        }
+      ],
+      "events": [
+        {
+          "type": "goal",
+          "player": "Franck Kessié",
+          "team": "Costa do Marfim",
+          "minute": "30'",
+          "period": null,
+          "detail": ""
+        }
+      ]
     },
     {
       "id": 28,

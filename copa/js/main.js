@@ -1119,11 +1119,12 @@ function renderMatchTimeline(match) {
 
   const periods = {};
   events.forEach(evt => {
-    const min = parseMinuteForSort(evt.minute);
+    const minStr = String(evt.minute || '');
+    const base = parseInt(minStr, 10) || 0;
     let period;
-    if (min <= 45) period = '1';
-    else if (min <= 90) period = '2';
-    else if (min <= 120) period = 'extra';
+    if (base <= 45) period = '1';
+    else if (base <= 90) period = '2';
+    else if (base <= 120) period = 'extra';
     else period = 'pen';
     if (!periods[period]) periods[period] = [];
     periods[period].push(evt);

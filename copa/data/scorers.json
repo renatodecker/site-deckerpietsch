@@ -3,52 +3,62 @@
     {
       "name": "Jonathan David",
       "country": "🇨🇦 Canadá",
-      "goals": 3
+      "goals": 3,
+      "matches": 1
     },
     {
       "name": "Lionel Messi",
       "country": "🇦🇷 Argentina",
-      "goals": 3
+      "goals": 3,
+      "matches": 1
     },
     {
       "name": "Cyle Larin",
       "country": "🇨🇦 Canadá",
-      "goals": 2
+      "goals": 2,
+      "matches": 2
     },
     {
       "name": "Johan Manzambi",
       "country": "🇨🇭 Suíça",
-      "goals": 2
+      "goals": 2,
+      "matches": 1
     },
     {
       "name": "Ismael Saibari",
       "country": "🇲🇦 Marrocos",
-      "goals": 2
+      "goals": 2,
+      "matches": 2
     },
     {
       "name": "Vinícius Júnior",
       "country": "🇧🇷 Brasil",
-      "goals": 2
+      "goals": 2,
+      "matches": 2
     },
     {
       "name": "Matheus Cunha",
       "country": "🇧🇷 Brasil",
-      "goals": 2
+      "goals": 2,
+      "matches": 1
     },
     {
       "name": "Folarin Balogun",
       "country": "🇺🇸 Estados Unidos",
-      "goals": 2
+      "goals": 2,
+      "matches": 1
     },
     {
       "name": "Kai Havertz",
       "country": "🇩🇪 Alemanha",
-      "goals": 2
+      "goals": 2,
+      "matches": 1
     },
     {
       "name": "Yasin Ayari",
       "country": "🇸🇪 Suécia",
-      "goals": 2
+      "goals": 2,
+      "matches": 1
     }
   ]
 }

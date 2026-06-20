@@ -357,10 +357,12 @@ export function computeScorersFromMatches(matches, teams) {
 
   const totals = {};
   (matches.groupStage || []).forEach(m => {
+    const seen = new Set();
     (m.scorers || []).forEach(({ player, team }) => {
       const key = `${player}|${team}`;
-      if (!totals[key]) totals[key] = { name: player, country: `${flagByTeam[team] || ''} ${team}`.trim(), goals: 0 };
+      if (!totals[key]) totals[key] = { name: player, country: `${flagByTeam[team] || ''} ${team}`.trim(), goals: 0, matches: 0 };
       totals[key].goals += 1;
+      if (!seen.has(key)) { totals[key].matches += 1; seen.add(key); }
     });
   });
 

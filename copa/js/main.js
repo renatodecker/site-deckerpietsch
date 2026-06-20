@@ -763,6 +763,7 @@ function renderScorers(data) {
         <td class="num">${i + 1}</td>
         <td>${s.name}</td>
         <td>${countryHTML(s.country)}</td>
+        <td class="num">${s.matches ?? ''}</td>
         <td class="num">${s.goals}</td>
       </tr>
     `).join('');
@@ -770,7 +771,7 @@ function renderScorers(data) {
   wrap.innerHTML = `
     <table class="scorers-table">
       <thead>
-        <tr><th>#</th><th>Jogador</th><th>Seleção</th><th>Gols</th></tr>
+        <tr><th>#</th><th>Jogador</th><th>Seleção</th><th>Jogos</th><th>Gols</th></tr>
       </thead>
       <tbody>${rows}</tbody>
     </table>

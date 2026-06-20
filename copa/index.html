@@ -263,6 +263,15 @@
     </div>
   </div>
 
+  <!-- MODAL: DETALHES DO JOGO -->
+  <div class="modal" id="matchModal" hidden>
+    <div class="modal__overlay" data-match-modal-close></div>
+    <div class="modal__dialog modal__dialog--match">
+      <button type="button" class="modal__close" data-match-modal-close aria-label="Fechar">&times;</button>
+      <div class="modal__body" id="modalMatchBody"></div>
+    </div>
+  </div>
+
   <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
   <script type="module" src="js/main.js"></script>
 </body>

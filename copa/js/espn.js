@@ -319,6 +319,7 @@ export function extractMatchDetails(summary, aliasIndex) {
 
   const cards = {};
   const goals = [];
+  const events = [];
   const yellowCount = {};
 
   details.forEach(d => {
@@ -328,24 +329,49 @@ export function extractMatchDetails(summary, aliasIndex) {
     const type = ((d.type && d.type.text) || '').toLowerCase();
     const athlete = d.participants && d.participants[0] && d.participants[0].athlete && d.participants[0].athlete.displayName;
 
+    // Extract minute from clock data
+    let minute = null;
+    if (d.clock) {
+      if (d.clock.displayValue) {
+        minute = d.clock.displayValue;
+      } else if (d.clock.value != null) {
+        minute = String(Math.floor(d.clock.value / 60)) + "'";
+      }
+    }
+
+    const period = d.period && d.period.number ? d.period.number : null;
+
     const isYellowCard = type.includes('yellow card') || d.yellowCard === true;
     const isRedCard = type.includes('red card') || d.redCard === true;
     const isGoal = !d.ownGoal && (d.scoringPlay === true
       || (type.includes('goal') && !type.includes('own goal'))
       || (type.includes('penalty') && type.includes('scor')));
+    const isOwnGoal = d.ownGoal === true || type.includes('own goal');
 
     if (isYellowCard) {
       const key = `${d.team.id}:${athlete}`;
       yellowCount[key] = (yellowCount[key] || 0) + 1;
-      cards[teamName] = (cards[teamName] || 0) + (yellowCount[key] >= 2 ? -2 : -1);
+      const isSecondYellow = yellowCount[key] >= 2;
+      cards[teamName] = (cards[teamName] || 0) + (isSecondYellow ? -2 : -1);
+      if (athlete) {
+        events.push({
+          type: isSecondYellow ? 'second-yellow' : 'yellow',
+          player: athlete, team: teamName, minute, period, detail: ''
+        });
+      }
     } else if (isRedCard) {
       cards[teamName] = (cards[teamName] || 0) - 4;
-    } else if (isGoal && athlete) {
-      goals.push({ player: athlete, team: teamName });
+      if (athlete) {
+        events.push({ type: 'red', player: athlete, team: teamName, minute, period, detail: '' });
+      }
+    } else if ((isGoal || isOwnGoal) && athlete) {
+      if (!isOwnGoal) goals.push({ player: athlete, team: teamName });
+      const detail = d.penaltyKick ? 'pen.' : (isOwnGoal ? 'gol contra' : '');
+      events.push({ type: 'goal', player: athlete, team: teamName, minute, period, detail });
     }
   });
 
-  return { cards, goals };
+  return { cards, goals, events };
 }
 
 /* ============================================================
@@ -435,6 +461,13 @@ export async function fetchLiveUpdate(matches, teams, aliases) {
       if (JSON.stringify(m.scorers) !== JSON.stringify(extracted.goals)) {
         m.scorers = extracted.goals;
         changed = true;
+      }
+
+      if (extracted.events && extracted.events.length > 0) {
+        if (JSON.stringify(m.events) !== JSON.stringify(extracted.events)) {
+          m.events = extracted.events;
+          changed = true;
+        }
       }
 
       if (m.status === 'finished') {

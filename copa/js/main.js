@@ -534,7 +534,9 @@ function matchCardHTML(match, groups, knockoutFlat, venueIndex) {
   const isLive = match.status === 'live';
 
   let scoreHTML;
-  if (isFinished || isLive) {
+  if (isFinished) {
+    scoreHTML = `<button type="button" class="match-card__score match-card__score--link" data-match-id="${match.id}">${match.homeScore} - ${match.awayScore}</button>`;
+  } else if (isLive) {
     scoreHTML = `<span class="match-card__score">${match.homeScore} - ${match.awayScore}</span>`;
   } else {
     scoreHTML = `<span class="match-card__score match-card__score--pending">vs</span>`;
@@ -668,6 +670,9 @@ function renderMatches(matches, groups, stadiums) {
     const stadium = (stadiums || []).find(s => s.id === btn.dataset.stadium);
     if (stadium) openStadiumModal(stadium);
   });
+
+  // Abre o modal de detalhes ao clicar no placar
+  listWrap.addEventListener('click', handleMatchScoreClick);
 }
 
 /* ============================================================
@@ -688,8 +693,11 @@ function bracketMatchHTML(match, groups, knockoutFlat, venueIndex) {
         : `<span class="match-card__venue match-card__venue--plain">${match.venue}</span>`)
     : '';
 
+  const isFinished = match.status === 'finished';
+  const bracketClickAttr = isFinished ? ` data-match-id="${match.id}" style="cursor:pointer"` : '';
+
   return `
-    <div class="bracket-match">
+    <div class="bracket-match"${bracketClickAttr}>
       <div class="bracket-match__id">${match.id}</div>
       <div class="bracket-match__team ${homeCls}"><span>${home.html}</span><span>${homeScore}</span></div>
       <div class="bracket-match__team ${awayCls}"><span>${away.html}</span><span>${awayScore}</span></div>
@@ -757,6 +765,12 @@ function renderBracket(matches, groups, stadiums) {
       if (!btn) return;
       const stadium = (currentStadiums || []).find(s => s.id === btn.dataset.stadium);
       if (stadium) openStadiumModal(stadium);
+    });
+    wrap.addEventListener('click', (e) => {
+      const card = e.target.closest('.bracket-match[data-match-id]');
+      if (!card || e.target.closest('.match-card__venue')) return;
+      const match = matchIndex[card.dataset.matchId];
+      if (match) openMatchModal(match);
     });
   }
 }
@@ -1066,6 +1080,141 @@ function setupStadiumModal() {
 }
 
 /* ============================================================
+   MODAL DE DETALHES DO JOGO
+   ============================================================ */
+let matchIndex = {};
+
+function buildMatchIndex(matches) {
+  const idx = {};
+  (matches.groupStage || []).forEach(m => { if (m.id) idx[m.id] = m; });
+  Object.values(matches.knockout || {}).forEach(list => {
+    (list || []).forEach(m => { if (m.id) idx[m.id] = m; });
+  });
+  return idx;
+}
+
+function parseMinuteForSort(minute) {
+  if (!minute) return 999;
+  const m = String(minute).match(/^(\d+)(?:['+](\d+))?/);
+  if (!m) return 999;
+  return Number(m[1]) + (m[2] ? Number(m[2]) : 0);
+}
+
+function eventIconHTML(evt) {
+  if (evt.type === 'goal') {
+    let text = '⚽';
+    if (evt.detail === 'pen.') text += ' <span class="match-modal__event-detail">(pen.)</span>';
+    else if (evt.detail === 'gol contra') text += ' <span class="match-modal__event-detail">(g.c.)</span>';
+    return text;
+  }
+  if (evt.type === 'yellow') return '<span class="match-modal__card match-modal__card--yellow"></span>';
+  if (evt.type === 'red') return '<span class="match-modal__card match-modal__card--red"></span>';
+  if (evt.type === 'second-yellow') return '<span class="match-modal__card match-modal__card--yellow"></span><span class="match-modal__card match-modal__card--red"></span>';
+  return '';
+}
+
+function renderMatchTimeline(match) {
+  const events = (match.events || []).slice().sort((a, b) => parseMinuteForSort(a.minute) - parseMinuteForSort(b.minute));
+  if (events.length === 0) return '';
+
+  const periods = {};
+  events.forEach(evt => {
+    const min = parseMinuteForSort(evt.minute);
+    let period;
+    if (min <= 45) period = '1';
+    else if (min <= 90) period = '2';
+    else if (min <= 120) period = 'extra';
+    else period = 'pen';
+    if (!periods[period]) periods[period] = [];
+    periods[period].push(evt);
+  });
+
+  const periodLabels = { '1': '1º TEMPO', '2': '2º TEMPO', 'extra': 'PRORROGAÇÃO', 'pen': 'PÊNALTIS' };
+  const periodOrder = ['1', '2', 'extra', 'pen'];
+
+  let html = '<div class="match-modal__timeline">';
+  periodOrder.forEach(p => {
+    if (!periods[p]) return;
+    html += `<div class="match-modal__period"><span>${periodLabels[p]}</span></div>`;
+    periods[p].forEach(evt => {
+      const isHome = evt.team === match.home;
+      const side = isHome ? 'home' : 'away';
+      html += `
+        <div class="match-modal__event match-modal__event--${side}">
+          <div class="match-modal__detail">${evt.player} ${eventIconHTML(evt)}</div>
+          <div class="match-modal__minute">${evt.minute || ''}</div>
+          <div class="match-modal__spacer"></div>
+        </div>`;
+    });
+  });
+  html += '</div>';
+  return html;
+}
+
+function renderSimpleScorers(match) {
+  const scorers = match.scorers || [];
+  const homePlayers = scorers.filter(s => s.team === match.home);
+  const awayPlayers = scorers.filter(s => s.team === match.away);
+
+  const renderSide = (teamName, players) => {
+    const lines = players.length > 0
+      ? players.map(p => `<p>⚽ ${p.player}</p>`).join('')
+      : '<p>—</p>';
+    return `<div class="match-modal__simple-side"><h4>${teamName}</h4>${lines}</div>`;
+  };
+
+  return `<div class="match-modal__simple">${renderSide(match.home, homePlayers)}${renderSide(match.away, awayPlayers)}</div>`;
+}
+
+function openMatchModal(match) {
+  const modal = document.getElementById('matchModal');
+  const body = document.getElementById('modalMatchBody');
+  if (!modal || !body) return;
+
+  const headerHTML = `
+    <div class="match-modal__header">
+      <div class="match-modal__team">${teamFlagHTML(match.home)}${match.home}</div>
+      <div class="match-modal__score">${match.homeScore} - ${match.awayScore}</div>
+      <div class="match-modal__team">${teamFlagHTML(match.away)}${match.away}</div>
+    </div>`;
+
+  let contentHTML;
+  if (match.events && match.events.length > 0) {
+    contentHTML = renderMatchTimeline(match);
+  } else if (match.scorers && match.scorers.length > 0) {
+    contentHTML = renderSimpleScorers(match);
+  } else {
+    contentHTML = '<div class="match-modal__empty">Detalhes não disponíveis</div>';
+  }
+
+  body.innerHTML = headerHTML + contentHTML;
+  modal.hidden = false;
+  document.body.classList.add('modal-open');
+}
+
+function closeMatchModal() {
+  const modal = document.getElementById('matchModal');
+  if (modal) modal.hidden = true;
+  document.body.classList.remove('modal-open');
+}
+
+function setupMatchModal() {
+  document.querySelectorAll('[data-match-modal-close]').forEach(el => {
+    el.addEventListener('click', closeMatchModal);
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeMatchModal();
+  });
+}
+
+function handleMatchScoreClick(e) {
+  const btn = e.target.closest('.match-card__score--link');
+  if (!btn) return;
+  const match = matchIndex[btn.dataset.matchId];
+  if (match) openMatchModal(match);
+}
+
+/* ============================================================
    ÚLTIMOS / PRÓXIMOS JOGOS (cards ao lado de "Datas-chave")
    ============================================================ */
 const RECENT_ICON = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><path d='M3 12a9 9 0 1 0 2.6-6.4L3 8'/><path d='M3 3v5h5'/><path d='M12 7v5l3 3'/></svg>`;
@@ -1174,6 +1323,7 @@ async function refreshData() {
   if (groups) currentGroups = groups;
   if (matches) currentMatches = matches;
   if (stadiums) currentStadiums = stadiums;
+  if (matches) matchIndex = buildMatchIndex(currentMatches);
 
   const sortedGroups = buildSortedGroups(currentGroups, currentMatches);
 
@@ -1228,6 +1378,8 @@ async function refreshData() {
   renderFlagBar(teams);
   renderStadiums(stadiums);
   setupStadiumModal();
+  setupMatchModal();
+  matchIndex = buildMatchIndex(matches);
 
   const refreshBtn = document.getElementById('refreshNow');
   if (refreshBtn) refreshBtn.addEventListener('click', refreshData);

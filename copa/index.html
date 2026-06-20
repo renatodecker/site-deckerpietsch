@@ -49,6 +49,7 @@
         <a href="#mata-mata" class="nav__link">Mata-mata</a>
         <a href="#sedes" class="nav__link">Sedes</a>
         <a href="#artilharia" class="nav__link">Artilharia</a>
+        <a href="#selecoes" class="nav__link">Seleções</a>
         <a href="#simulacao" class="nav__link">Simulação</a>
       </nav>
       <button class="nav-toggle" id="navToggle" aria-label="Abrir menu">
@@ -228,8 +229,33 @@
     </div>
   </section>
 
+  <!-- SELEÇÕES -->
+  <section class="section section--alt" id="selecoes">
+    <div class="container">
+      <div class="section__header">
+        <span class="section__tag">Elencos</span>
+        <h2 class="section__title">Seleções</h2>
+        <p class="section__desc">
+          Clique em uma seleção para ver o elenco completo de 26 convocados e o técnico.
+        </p>
+      </div>
+      <div class="squads-grid" id="squadsGrid">
+        <!-- preenchido via JS a partir de data/squads.json -->
+      </div>
+    </div>
+  </section>
+
+  <!-- MODAL: ELENCO DA SELEÇÃO -->
+  <div class="modal" id="squadModal" hidden>
+    <div class="modal__overlay" data-squad-close></div>
+    <div class="modal__dialog modal__dialog--squad">
+      <button type="button" class="modal__close" data-squad-close aria-label="Fechar">&times;</button>
+      <div class="modal__body" id="squadModalBody"></div>
+    </div>
+  </div>
+
   <!-- SIMULAÇÃO -->
-  <section class="section section--alt" id="simulacao">
+  <section class="section" id="simulacao">
     <div class="container">
       <div class="section__header">
         <span class="section__tag">Simulador</span>

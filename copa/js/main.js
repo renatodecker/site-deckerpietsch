@@ -1279,6 +1279,113 @@ function handleMatchScoreClick(e) {
 }
 
 /* ============================================================
+   SELEÇÕES / ELENCOS
+   ============================================================ */
+const POSITION_LABELS = { GK: 'Goleiro', DF: 'Defensor', MF: 'Meio-campista', FW: 'Atacante' };
+const POSITION_ORDER = { GK: 0, DF: 1, MF: 2, FW: 3 };
+
+let squadsData = null;
+
+function renderSquadsGrid(teams) {
+  const wrap = document.getElementById('squadsGrid');
+  if (!wrap || !squadsData) return;
+
+  const sorted = [...teams].sort((a, b) => a.name.localeCompare(b.name, 'pt-BR'));
+  wrap.innerHTML = sorted.map(t => {
+    const hasSquad = !!squadsData[t.name];
+    return `
+      <button type="button" class="squad-card ${hasSquad ? '' : 'squad-card--disabled'}" data-squad-team="${t.name}">
+        <span class="squad-card__flag">${flagHTML(t.flag)}</span>
+        <span class="squad-card__name">${t.name}</span>
+      </button>`;
+  }).join('');
+}
+
+function playerAge(birthDate) {
+  if (!birthDate) return null;
+  const today = new Date();
+  const bd = new Date(birthDate);
+  let age = today.getFullYear() - bd.getFullYear();
+  if (today.getMonth() < bd.getMonth() || (today.getMonth() === bd.getMonth() && today.getDate() < bd.getDate())) age--;
+  return age;
+}
+
+function openSquadModal(teamName, teams) {
+  const modal = document.getElementById('squadModal');
+  const body = document.getElementById('squadModalBody');
+  if (!modal || !body || !squadsData[teamName]) return;
+
+  const squad = squadsData[teamName];
+  const team = teams.find(t => t.name === teamName);
+  const flagIcon = team ? flagHTML(team.flag) : '';
+
+  const grouped = { GK: [], DF: [], MF: [], FW: [] };
+  (squad.players || []).forEach(p => {
+    const pos = grouped[p.position] ? p.position : 'MF';
+    grouped[pos].push(p);
+  });
+
+  let playersHTML = '';
+  ['GK', 'DF', 'MF', 'FW'].forEach(pos => {
+    if (grouped[pos].length === 0) return;
+    const rows = grouped[pos].sort((a, b) => (a.number || 99) - (b.number || 99)).map(p => {
+      const age = playerAge(p.birthDate);
+      return `
+        <tr>
+          <td class="squad-table__num">${p.number || ''}</td>
+          <td class="squad-table__name">${p.name}</td>
+          <td class="squad-table__club">${p.club || ''}</td>
+          <td class="squad-table__age">${age || ''}</td>
+        </tr>`;
+    }).join('');
+    playersHTML += `
+      <div class="squad-position">
+        <div class="squad-position__label">${POSITION_LABELS[pos]}</div>
+        <table class="squad-table">
+          <thead><tr><th>#</th><th>Jogador</th><th>Clube</th><th>Idade</th></tr></thead>
+          <tbody>${rows}</tbody>
+        </table>
+      </div>`;
+  });
+
+  const coachHTML = squad.coach
+    ? `<div class="squad-coach"><span class="squad-coach__label">Técnico</span><span class="squad-coach__name">${squad.coach.name}</span>${squad.coach.nationality ? `<span class="squad-coach__nat">${squad.coach.nationality}</span>` : ''}</div>`
+    : '';
+
+  body.innerHTML = `
+    <div class="squad-header">
+      <span class="squad-header__flag">${flagIcon}</span>
+      <h2 class="squad-header__name">${teamName}</h2>
+      <span class="squad-header__group">Grupo ${team ? team.group : ''}</span>
+    </div>
+    ${coachHTML}
+    ${playersHTML}`;
+
+  modal.hidden = false;
+  document.body.classList.add('modal-open');
+}
+
+function closeSquadModal() {
+  const modal = document.getElementById('squadModal');
+  if (modal) modal.hidden = true;
+  document.body.classList.remove('modal-open');
+}
+
+function setupSquadModal(teams) {
+  document.querySelectorAll('[data-squad-close]').forEach(el => {
+    el.addEventListener('click', closeSquadModal);
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeSquadModal();
+  });
+  document.addEventListener('click', (e) => {
+    const card = e.target.closest('[data-squad-team]');
+    if (!card || card.classList.contains('squad-card--disabled')) return;
+    openSquadModal(card.dataset.squadTeam, teams);
+  });
+}
+
+/* ============================================================
    ÚLTIMOS / PRÓXIMOS JOGOS (cards ao lado de "Datas-chave")
    ============================================================ */
 const RECENT_ICON = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><path d='M3 12a9 9 0 1 0 2.6-6.4L3 8'/><path d='M3 3v5h5'/><path d='M12 7v5l3 3'/></svg>`;
@@ -1445,6 +1552,12 @@ async function refreshData() {
   setupMatchModal();
   setupChangelogModal();
   matchIndex = buildMatchIndex(matches);
+
+  try {
+    squadsData = await loadJSON('data/squads.json');
+    renderSquadsGrid(teams);
+    setupSquadModal(teams);
+  } catch { /* squads.json ainda não existe */ }
 
   const refreshBtn = document.getElementById('refreshNow');
   if (refreshBtn) refreshBtn.addEventListener('click', refreshData);

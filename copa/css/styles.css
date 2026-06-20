@@ -1687,6 +1687,172 @@ body.modal-open { overflow: hidden; }
 }
 
 /* ============================================================
+   SELEÇÕES / ELENCOS
+   ============================================================ */
+.squads-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 10px;
+}
+
+.squad-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  background: var(--white);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: border-color .15s, box-shadow .15s;
+  font: inherit;
+  text-align: left;
+}
+
+.squad-card:hover {
+  border-color: var(--gold-400);
+  box-shadow: var(--shadow-sm);
+}
+
+.squad-card--disabled {
+  opacity: .4;
+  cursor: default;
+}
+
+.squad-card__flag .fi { font-size: 1.4rem; }
+.squad-card__name { font-size: .85rem; font-weight: 600; color: var(--navy-900); }
+
+/* Modal */
+.modal__dialog--squad {
+  max-width: 620px;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.modal__dialog--squad .modal__body {
+  overflow-y: auto;
+  flex: 1;
+  min-height: 0;
+  padding: 24px;
+}
+
+.squad-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.squad-header__flag .fi { font-size: 2.4rem; }
+
+.squad-header__name {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--navy-900);
+}
+
+.squad-header__group {
+  font-size: .75rem;
+  font-weight: 700;
+  color: var(--gold-700);
+  background: var(--gold-50);
+  border: 1px solid var(--gold-200);
+  border-radius: 999px;
+  padding: 3px 10px;
+}
+
+.squad-coach {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  background: var(--gray-50);
+  border-radius: var(--radius-md);
+  margin-bottom: 20px;
+}
+
+.squad-coach__label {
+  font-size: .7rem;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--gray-500);
+}
+
+.squad-coach__name {
+  font-size: .95rem;
+  font-weight: 700;
+  color: var(--navy-900);
+}
+
+.squad-coach__nat {
+  font-size: .8rem;
+  color: var(--gray-500);
+}
+
+.squad-position {
+  margin-bottom: 16px;
+}
+
+.squad-position__label {
+  font-size: .72rem;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--gold-700);
+  margin-bottom: 6px;
+}
+
+.squad-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: .82rem;
+}
+
+.squad-table th {
+  text-align: left;
+  font-weight: 600;
+  color: var(--gray-500);
+  font-size: .72rem;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  padding: 4px 8px;
+  border-bottom: 1px solid var(--gray-200);
+}
+
+.squad-table td {
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--gray-100);
+  color: var(--navy-900);
+}
+
+.squad-table__num {
+  width: 30px;
+  text-align: center;
+  font-weight: 700;
+  color: var(--gray-500);
+}
+
+.squad-table__name { font-weight: 600; }
+
+.squad-table__club {
+  color: var(--gray-500);
+  font-size: .78rem;
+}
+
+.squad-table__age {
+  width: 40px;
+  text-align: center;
+  color: var(--gray-500);
+}
+
+@media (max-width: 600px) {
+  .squads-grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); }
+  .squad-table__club { display: none; }
+}
+
+/* ============================================================
    CHANGELOG MODAL
    ============================================================ */
 .modal__dialog--changelog {

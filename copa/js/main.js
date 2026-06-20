@@ -1212,7 +1212,31 @@ function setupMatchModal() {
     el.addEventListener('click', closeMatchModal);
   });
   document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') closeMatchModal();
+    if (e.key === 'Escape') {
+      closeMatchModal();
+      closeChangelogModal();
+    }
+  });
+}
+
+/* ============================================================
+   MODAL DE NOVIDADES (CHANGELOG)
+   ============================================================ */
+function openChangelogModal() {
+  const modal = document.getElementById('changelogModal');
+  if (modal) { modal.hidden = false; document.body.classList.add('modal-open'); }
+}
+
+function closeChangelogModal() {
+  const modal = document.getElementById('changelogModal');
+  if (modal) { modal.hidden = true; document.body.classList.remove('modal-open'); }
+}
+
+function setupChangelogModal() {
+  const btn = document.getElementById('openChangelog');
+  if (btn) btn.addEventListener('click', openChangelogModal);
+  document.querySelectorAll('[data-changelog-close]').forEach(el => {
+    el.addEventListener('click', closeChangelogModal);
   });
 }
 
@@ -1388,6 +1412,7 @@ async function refreshData() {
   renderStadiums(stadiums);
   setupStadiumModal();
   setupMatchModal();
+  setupChangelogModal();
   matchIndex = buildMatchIndex(matches);
 
   const refreshBtn = document.getElementById('refreshNow');

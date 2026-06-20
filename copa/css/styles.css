@@ -1314,6 +1314,30 @@ img { display: block; max-width: 100%; }
 
 .footer__back:hover { text-decoration: underline; }
 
+.footer__links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 24px;
+}
+
+.footer__changelog-btn {
+  font-size: .82rem;
+  font-weight: 600;
+  color: var(--gold-400);
+  background: none;
+  border: 1px solid var(--gold-400);
+  border-radius: 999px;
+  padding: 4px 14px;
+  cursor: pointer;
+  transition: background .15s, color .15s;
+}
+
+.footer__changelog-btn:hover {
+  background: var(--gold-400);
+  color: var(--navy-900);
+}
+
 /* ============================================================
    UPDATED BADGE
    ============================================================ */
@@ -1660,4 +1684,72 @@ body.modal-open { overflow: hidden; }
   }
   .team-name__full { display: none; }
   .team-name__short { display: inline; }
+}
+
+/* ============================================================
+   CHANGELOG MODAL
+   ============================================================ */
+.modal__dialog--changelog {
+  max-width: 560px;
+}
+
+.changelog {
+  padding: 24px;
+}
+
+.changelog__title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--navy-900);
+  margin-bottom: 4px;
+}
+
+.changelog__subtitle {
+  font-size: .85rem;
+  color: var(--gray-500);
+  margin-bottom: 24px;
+}
+
+.changelog__date {
+  font-size: .75rem;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--gold-700);
+  background: var(--gold-50);
+  border: 1px solid var(--gold-200);
+  border-radius: 999px;
+  display: inline-block;
+  padding: 3px 12px;
+  margin-bottom: 12px;
+}
+
+.changelog__list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 24px;
+}
+
+.changelog__list li {
+  position: relative;
+  padding-left: 18px;
+  margin-bottom: 10px;
+  font-size: .85rem;
+  line-height: 1.5;
+  color: var(--gray-700);
+}
+
+.changelog__list li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 7px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--gold-400);
+}
+
+.changelog__list li strong {
+  color: var(--navy-900);
 }

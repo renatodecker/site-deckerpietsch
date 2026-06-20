@@ -250,7 +250,10 @@
   <footer class="footer">
     <div class="container footer__inner">
       <p class="footer__copy">Dados não-oficiais, apenas para fins informativos · Atualizado manualmente a cada rodada.</p>
-      <a href="../index.html" class="footer__back">&larr; Voltar ao site da Decker Pietsch</a>
+      <div class="footer__links">
+        <a href="../index.html" class="footer__back">&larr; Voltar ao site da Decker Pietsch</a>
+        <button type="button" class="footer__changelog-btn" id="openChangelog">Novidades</button>
+      </div>
     </div>
   </footer>
 
@@ -269,6 +272,49 @@
     <div class="modal__dialog modal__dialog--match">
       <button type="button" class="modal__close" data-match-modal-close aria-label="Fechar">&times;</button>
       <div class="modal__body" id="modalMatchBody"></div>
+    </div>
+  </div>
+
+  <!-- MODAL: NOVIDADES -->
+  <div class="modal" id="changelogModal" hidden>
+    <div class="modal__overlay" data-changelog-close></div>
+    <div class="modal__dialog modal__dialog--changelog">
+      <button type="button" class="modal__close" data-changelog-close aria-label="Fechar">&times;</button>
+      <div class="modal__body">
+        <div class="changelog">
+          <h2 class="changelog__title">Novidades</h2>
+          <p class="changelog__subtitle">Melhorias e ajustes recentes no site da Copa do Mundo FIFA 2026.</p>
+
+          <div class="changelog__date">20 de junho de 2026</div>
+          <ul class="changelog__list">
+            <li><strong>Modal de detalhes do jogo</strong> — clique no placar de qualquer jogo finalizado para ver gols e cartões em formato de linha do tempo, separados por 1º tempo, 2º tempo e prorrogação.</li>
+            <li><strong>Minuto dos gols</strong> — todos os gols da fase de grupos agora mostram o minuto exato em que foram marcados.</li>
+            <li><strong>Cartões amarelos e vermelhos</strong> — cartões aparecem na linha do tempo do jogo, com nome do jogador e minuto.</li>
+            <li><strong>Contagem de gols</strong> — quando um jogador marca mais de 1 gol, um badge numérico aparece sobre o ícone do gol.</li>
+            <li><strong>Placar clicável</strong> — o placar dos jogos finalizados agora tem sublinhado para indicar que é um link.</li>
+            <li><strong>Atualização automática</strong> — gols com minutos e cartões agora são buscados automaticamente junto com os placares, com fallback para fonte alternativa (openfootball).</li>
+          </ul>
+
+          <div class="changelog__date">19 de junho de 2026</div>
+          <ul class="changelog__list">
+            <li><strong>Traços de conexão no chaveamento</strong> — linhas estilo fluxograma conectam os jogos entre as fases do mata-mata.</li>
+            <li><strong>Alinhamento do chaveamento</strong> — balões das oitavas, quartas e semifinais ficam centralizados entre os jogos da fase anterior.</li>
+            <li><strong>Número do jogo</strong> — cada caixa do chaveamento mostra o número do jogo (ex: Jogo 75).</li>
+            <li><strong>Coluna de jogos na artilharia</strong> — tabela de artilheiros agora mostra quantas partidas cada jogador disputou.</li>
+            <li><strong>Link para Copa 2026 na home</strong> — a página principal do site Decker Pietsch agora tem link direto para a Copa.</li>
+            <li><strong>Correção do chaveamento</strong> — jogos 75-78 da fase de 32 estavam trocados em relação ao bracket oficial da FIFA.</li>
+          </ul>
+
+          <div class="changelog__date">18 de junho de 2026</div>
+          <ul class="changelog__list">
+            <li><strong>Bandeiras por imagem</strong> — substituição de emojis de bandeira por imagens CSS (flag-icons) para compatibilidade com Windows/Chrome.</li>
+            <li><strong>Chaveamento em árvore</strong> — mata-mata reorganizado como árvore esquerda/direita convergindo para a final.</li>
+            <li><strong>Atualização automática de gols e cartões via ESPN</strong> — artilharia e fair play atualizados automaticamente.</li>
+            <li><strong>Mata-mata automático</strong> — classificação para fase de 32 preenchida automaticamente conforme grupos terminam.</li>
+            <li><strong>Simulador da Copa</strong> — nova página /copa-simulador para simular placares e ver classificação em tempo real.</li>
+          </ul>
+        </div>
+      </div>
     </div>
   </div>
 

@@ -26,6 +26,16 @@
       "goals": 2
     },
     {
+      "name": "Vinícius Júnior",
+      "country": "🇧🇷 Brasil",
+      "goals": 2
+    },
+    {
+      "name": "Matheus Cunha",
+      "country": "🇧🇷 Brasil",
+      "goals": 2
+    },
+    {
       "name": "Folarin Balogun",
       "country": "🇺🇸 Estados Unidos",
       "goals": 2
@@ -38,16 +48,6 @@
     {
       "name": "Yasin Ayari",
       "country": "🇸🇪 Suécia",
-      "goals": 2
-    },
-    {
-      "name": "Elijah Just",
-      "country": "🇳🇿 Nova Zelândia",
-      "goals": 2
-    },
-    {
-      "name": "Kylian Mbappé",
-      "country": "🇫🇷 França",
       "goals": 2
     }
   ]

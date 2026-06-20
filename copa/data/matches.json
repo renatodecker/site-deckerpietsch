@@ -310,7 +310,7 @@
       "home": "Escócia",
       "away": "Marrocos",
       "venue": "Foxborough",
-      "status": "live",
+      "status": "finished",
       "espnId": "760445",
       "homeScore": 0,
       "awayScore": 1,
@@ -319,7 +319,8 @@
           "player": "Ismael Saibari",
           "team": "Marrocos"
         }
-      ]
+      ],
+      "detailsFetched": true
     },
     {
       "id": 16,
@@ -328,9 +329,25 @@
       "home": "Brasil",
       "away": "Haiti",
       "venue": "Filadélfia",
-      "status": "scheduled",
-      "time": "20h30",
-      "espnId": "760444"
+      "status": "finished",
+      "espnId": "760444",
+      "homeScore": 3,
+      "awayScore": 0,
+      "scorers": [
+        {
+          "player": "Matheus Cunha",
+          "team": "Brasil"
+        },
+        {
+          "player": "Matheus Cunha",
+          "team": "Brasil"
+        },
+        {
+          "player": "Vinícius Júnior",
+          "team": "Brasil"
+        }
+      ],
+      "detailsFetched": true
     },
     {
       "id": 17,
@@ -432,9 +449,20 @@
       "home": "Turquia",
       "away": "Paraguai",
       "venue": "Santa Clara",
-      "status": "scheduled",
-      "time": "23h ET",
-      "espnId": "760443"
+      "status": "live",
+      "espnId": "760443",
+      "homeScore": 0,
+      "awayScore": 1,
+      "cards": {
+        "home": 0,
+        "away": -4
+      },
+      "scorers": [
+        {
+          "player": "Matías Galarza",
+          "team": "Paraguai"
+        }
+      ]
     },
     {
       "id": 23,
@@ -653,7 +681,8 @@
       "away": "Japão",
       "venue": "Monterrey",
       "status": "scheduled",
-      "time": "00h"
+      "time": "00h",
+      "espnId": "760449"
     },
     {
       "id": 35,
@@ -733,7 +762,8 @@
       "away": "Irã",
       "venue": "Inglewood",
       "status": "scheduled",
-      "time": "15h ET"
+      "time": "15h ET",
+      "espnId": "760451"
     },
     {
       "id": 40,
@@ -743,7 +773,8 @@
       "away": "Egito",
       "venue": "Vancouver",
       "status": "scheduled",
-      "time": "21h ET"
+      "time": "21h ET",
+      "espnId": "760452"
     },
     {
       "id": 41,
@@ -810,7 +841,8 @@
       "away": "Arábia Saudita",
       "venue": "Atlanta",
       "status": "scheduled",
-      "time": "12h"
+      "time": "12h",
+      "espnId": "760453"
     },
     {
       "id": 46,
@@ -820,7 +852,8 @@
       "away": "Cabo Verde",
       "venue": "Miami",
       "status": "scheduled",
-      "time": "18h"
+      "time": "18h",
+      "espnId": "760450"
     },
     {
       "id": 47,

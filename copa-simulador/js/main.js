@@ -48,9 +48,30 @@ function formatDayLabel(iso) {
 }
 
 let teamFlagIndex = {};
+
+function flagEmojiToClass(emoji) {
+  if (!emoji) return '';
+  const codePoints = [...emoji].map(c => c.codePointAt(0));
+  if (codePoints[0] === 0x1F3F4) {
+    const letters = codePoints.slice(1, -1).map(cp => String.fromCharCode(cp - 0xE0000)).join('');
+    if (letters.length === 5) return `fi-${letters.slice(0, 2)}-${letters.slice(2)}`.toLowerCase();
+    return '';
+  }
+  if (codePoints.length === 2) {
+    const letters = codePoints.map(cp => String.fromCharCode(cp - 0x1F1E6 + 65)).join('');
+    return `fi-${letters}`.toLowerCase();
+  }
+  return '';
+}
+
+function flagHTML(emoji) {
+  const cls = flagEmojiToClass(emoji);
+  return cls ? `<span class="fi ${cls}"></span>` : '';
+}
+
 function teamFlagHTML(name) {
   const flag = teamFlagIndex[name];
-  return flag ? `<span class="team-flag">${flag}</span>` : '';
+  return flag ? `<span class="team-flag">${flagHTML(flag)}</span>` : '';
 }
 
 // Converte o valor de um <input type="number"> em inteiro 0-99, ou `null`
@@ -302,6 +323,7 @@ function bracketMatchHTML(match, sim) {
 
   return `
     <div class="bracket-match" ${canScore ? `data-match-id="${match.id}"` : ''}>
+      <div class="bracket-match__id">${match.id}</div>
       <div class="bracket-match__team ${homeResolved ? '' : 'bracket-match__team--tbd'}">
         <span>${homeLabel}</span>
         ${homeScoreHTML}
@@ -358,7 +380,7 @@ function renderChampion(champion) {
   wrap.innerHTML = `
     <img class="champion-banner__trophy" src="assets/copa-do-mundo-da-FIFA-800x450.jpg" alt="Taça da Copa do Mundo" />
     <div class="champion-banner__label">Campeão da Copa do Mundo FIFA 2026 (simulação)</div>
-    <div class="champion-banner__team"><span class="champion-banner__flag">${teamFlagIndex[champion] || ''}</span>${champion}</div>
+    <div class="champion-banner__team"><span class="champion-banner__flag">${flagHTML(teamFlagIndex[champion])}</span>${champion}</div>
   `;
 }
 

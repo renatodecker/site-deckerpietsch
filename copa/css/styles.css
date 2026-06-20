@@ -856,17 +856,22 @@ img { display: block; max-width: 100%; }
   display: flex;
   flex-direction: column;
   justify-content: space-around;
-  gap: 16px;
+  gap: 0;
+  position: relative;
+  padding-top: 22px;
 }
 
 .bracket__round-title {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
   font-size: .72rem;
   font-weight: 700;
   letter-spacing: .1em;
   text-transform: uppercase;
   color: var(--gold-600);
   text-align: center;
-  margin-bottom: 4px;
 }
 
 /* Coluna central: final + disputa de 3º lugar, onde as duas metades do
@@ -874,7 +879,7 @@ img { display: block; max-width: 100%; }
 .bracket__round--center {
   justify-content: center;
   gap: 28px;
-  padding: 0 4px;
+  padding-top: 22px;
 }
 
 .bracket__round--center .bracket-match:first-of-type {
@@ -884,6 +889,7 @@ img { display: block; max-width: 100%; }
 }
 
 .bracket__round-title--third {
+  position: static;
   margin-top: 4px;
   color: var(--gray-500);
 }
@@ -896,6 +902,7 @@ img { display: block; max-width: 100%; }
   font-size: .8rem;
   box-shadow: var(--shadow-sm);
   position: relative;
+  margin: 4px 0;
 }
 
 .bracket-match__id {

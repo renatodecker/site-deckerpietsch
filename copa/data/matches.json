@@ -449,7 +449,7 @@
       "home": "Turquia",
       "away": "Paraguai",
       "venue": "Santa Clara",
-      "status": "live",
+      "status": "finished",
       "espnId": "760443",
       "homeScore": 0,
       "awayScore": 1,
@@ -462,7 +462,8 @@
           "player": "Matías Galarza",
           "team": "Paraguai"
         }
-      ]
+      ],
+      "detailsFetched": true
     },
     {
       "id": 23,

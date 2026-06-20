@@ -670,9 +670,20 @@
       "home": "Países Baixos",
       "away": "Suécia",
       "venue": "Houston",
-      "status": "scheduled",
-      "time": "13h",
-      "espnId": "760447"
+      "status": "live",
+      "espnId": "760447",
+      "homeScore": 2,
+      "awayScore": 0,
+      "scorers": [
+        {
+          "player": "Brian Brobbey",
+          "team": "Países Baixos"
+        },
+        {
+          "player": "Brian Brobbey",
+          "team": "Países Baixos"
+        }
+      ]
     },
     {
       "id": 34,

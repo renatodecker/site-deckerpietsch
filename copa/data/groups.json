@@ -250,27 +250,27 @@
     {
       "team": "Equador",
       "flag": "🇪🇨",
-      "pj": 1,
+      "pj": 2,
       "v": 0,
-      "e": 0,
+      "e": 1,
       "d": 1,
       "gp": 0,
       "gc": 1,
       "sg": -1,
-      "pts": 0,
+      "pts": 1,
       "fairPlay": 0
     },
     {
       "team": "Curaçao",
       "flag": "🇨🇼",
-      "pj": 1,
+      "pj": 2,
       "v": 0,
-      "e": 0,
+      "e": 1,
       "d": 1,
       "gp": 1,
       "gc": 7,
       "sg": -6,
-      "pts": 0,
+      "pts": 1,
       "fairPlay": 0
     }
   ],

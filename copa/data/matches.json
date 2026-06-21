@@ -1271,11 +1271,12 @@
       "home": "Equador",
       "away": "Curaçao",
       "venue": "Kansas City",
-      "status": "live",
+      "status": "finished",
       "espnId": "760446",
       "homeScore": 0,
       "awayScore": 0,
-      "scorers": []
+      "scorers": [],
+      "detailsFetched": true
     },
     {
       "id": 29,
@@ -1555,9 +1556,38 @@
       "home": "Tunísia",
       "away": "Japão",
       "venue": "Monterrey",
-      "status": "scheduled",
-      "time": "00h",
-      "espnId": "760449"
+      "status": "live",
+      "espnId": "760449",
+      "homeScore": 0,
+      "awayScore": 2,
+      "scorers": [
+        {
+          "player": "Daichi Kamada",
+          "team": "Japão"
+        },
+        {
+          "player": "Ayase Ueda",
+          "team": "Japão"
+        }
+      ],
+      "events": [
+        {
+          "type": "goal",
+          "player": "Daichi Kamada",
+          "team": "Japão",
+          "minute": "4'",
+          "period": null,
+          "detail": ""
+        },
+        {
+          "type": "goal",
+          "player": "Ayase Ueda",
+          "team": "Japão",
+          "minute": "31'",
+          "period": null,
+          "detail": ""
+        }
+      ]
     },
     {
       "id": 35,

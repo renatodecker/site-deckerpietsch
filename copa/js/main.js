@@ -150,7 +150,7 @@ function renderLastUpdated() {
 // Nome do time nas tabelas de classificação: em telas estreitas, a versão
 // abreviada (t.short) substitui o nome completo para a tabela não estourar.
 function teamNameHTML(t) {
-  return `<span class="team-name__full">${t.team}</span><span class="team-name__short">${t.short || t.team}</span>`;
+  return `<span class="team-name__full" data-squad-team="${t.team}">${t.team}</span><span class="team-name__short" data-squad-team="${t.team}">${t.short || t.team}</span>`;
 }
 
 /* ============================================================
@@ -259,7 +259,7 @@ function renderGroups(sortedGroups, matches) {
       return `
         <tr class="${cls}">
           <td>${i + 1}</td>
-          <td class="team-cell"><span class="team-flag">${flagHTML(t.flag)}</span>${teamNameHTML(t)}${t.live ? '<span class="live-dot" title="Jogo em andamento"></span>' : ''}</td>
+          <td class="team-cell"><span class="team-flag" data-squad-team="${t.team}">${flagHTML(t.flag)}</span>${teamNameHTML(t)}${t.live ? '<span class="live-dot" title="Jogo em andamento"></span>' : ''}</td>
           <td>${t.pj}</td>
           <td>${t.v}</td>
           <td>${t.e}</td>
@@ -321,7 +321,7 @@ function renderThirdPlaced(sortedGroups) {
       <tr class="${cls}">
         <td>${i + 1}</td>
         <td class="group-cell">${t.group}</td>
-        <td class="team-cell"><span class="team-flag">${flagHTML(t.flag)}</span>${teamNameHTML(t)}${t.live ? '<span class="live-dot" title="Jogo em andamento"></span>' : ''}</td>
+        <td class="team-cell"><span class="team-flag" data-squad-team="${t.team}">${flagHTML(t.flag)}</span>${teamNameHTML(t)}${t.live ? '<span class="live-dot" title="Jogo em andamento"></span>' : ''}</td>
         <td>${t.pj}</td>
         <td>${t.v}</td>
         <td>${t.e}</td>
@@ -486,11 +486,11 @@ function teamFlagHTML(name) {
 // homeSource/awaySource against current standings when the team isn't set yet.
 function resolveTeamDisplay(match, side, groups, knockoutFlat) {
   const team = match[side];
-  if (team) return { html: `${teamFlagHTML(team)}${team}`, tbd: false };
+  if (team) return { html: `<span data-squad-team="${team}">${teamFlagHTML(team)}${team}</span>`, tbd: false };
 
   const slot = resolveSlot(match[`${side}Source`], groups, knockoutFlat);
   if (!slot) return { html: 'A definir', tbd: true };
-  if (slot.resolved) return { html: `${teamFlagHTML(slot.team)}${slot.team} <span class="slot-tag">(${slot.label})</span>`, tbd: false };
+  if (slot.resolved) return { html: `<span data-squad-team="${slot.team}">${teamFlagHTML(slot.team)}${slot.team}</span> <span class="slot-tag">(${slot.label})</span>`, tbd: false };
   return { html: slot.label, tbd: true };
 }
 

@@ -1722,6 +1722,17 @@ body.modal-open { overflow: hidden; }
 .squad-card__flag .fi { font-size: 1.4rem; }
 .squad-card__name { font-size: .85rem; font-weight: 600; color: var(--navy-900); }
 
+/* Squad links (nomes/bandeiras clicáveis em tabelas e jogos) */
+[data-squad-team] {
+  cursor: pointer;
+}
+.team-cell [data-squad-team]:hover,
+.match-card__team [data-squad-team]:hover {
+  text-decoration: underline;
+  text-decoration-color: var(--gold-500);
+  text-underline-offset: 2px;
+}
+
 /* Modal */
 .modal__dialog--squad {
   max-width: 620px;

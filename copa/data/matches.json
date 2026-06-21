@@ -1775,11 +1775,26 @@
       "home": "Bélgica",
       "away": "Irã",
       "venue": "Inglewood",
-      "status": "live",
+      "status": "finished",
       "espnId": "760451",
       "homeScore": 0,
       "awayScore": 0,
-      "scorers": []
+      "scorers": [],
+      "cards": {
+        "home": -4,
+        "away": 0
+      },
+      "events": [
+        {
+          "type": "red",
+          "player": "Nathan Ngoy",
+          "team": "Bélgica",
+          "minute": "66'",
+          "period": null,
+          "detail": ""
+        }
+      ],
+      "detailsFetched": true
     },
     {
       "id": 40,

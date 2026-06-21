@@ -333,15 +333,28 @@
     {
       "team": "Irã",
       "flag": "🇮🇷",
-      "pj": 1,
+      "pj": 2,
       "v": 0,
-      "e": 1,
+      "e": 2,
       "d": 0,
       "gp": 2,
       "gc": 2,
       "sg": 0,
-      "pts": 1,
+      "pts": 2,
       "fairPlay": 0
+    },
+    {
+      "team": "Bélgica",
+      "flag": "🇧🇪",
+      "pj": 2,
+      "v": 0,
+      "e": 2,
+      "d": 0,
+      "gp": 1,
+      "gc": 1,
+      "sg": 0,
+      "pts": 2,
+      "fairPlay": -4
     },
     {
       "team": "Nova Zelândia",
@@ -353,19 +366,6 @@
       "d": 0,
       "gp": 2,
       "gc": 2,
-      "sg": 0,
-      "pts": 1,
-      "fairPlay": 0
-    },
-    {
-      "team": "Bélgica",
-      "flag": "🇧🇪",
-      "pj": 1,
-      "v": 0,
-      "e": 1,
-      "d": 0,
-      "gp": 1,
-      "gc": 1,
       "sg": 0,
       "pts": 1,
       "fairPlay": 0

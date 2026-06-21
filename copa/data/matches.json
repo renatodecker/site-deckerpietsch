@@ -1775,9 +1775,11 @@
       "home": "Bélgica",
       "away": "Irã",
       "venue": "Inglewood",
-      "status": "scheduled",
-      "time": "15h ET",
-      "espnId": "760451"
+      "status": "live",
+      "espnId": "760451",
+      "homeScore": 0,
+      "awayScore": 0,
+      "scorers": []
     },
     {
       "id": 40,

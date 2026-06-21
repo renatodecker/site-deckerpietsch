@@ -8,6 +8,20 @@ const POS_LABELS = { GOL: 'Goleiro', ZAG: 'Zagueiro', MEI: 'Meia', ATA: 'Atacant
 const POS_ORDER = ['GOL','GOL','ZAG','ZAG','ZAG','ZAG','ZAG','MEI','MEI','MEI','MEI','MEI','ATA','ATA','ATA','ATA'];
 const SPECIAL_ICONS = { silver: '🥈', gold: '🥇', legend: '⭐', parallel: '🔷' };
 
+let imageMap = {};
+async function loadImageMap() {
+  try {
+    const res = await fetch('data/image-map.json');
+    if (res.ok) imageMap = await res.json();
+  } catch {}
+}
+
+function stickerImageUrl(num, width = 200) {
+  const filename = imageMap[num];
+  if (!filename) return null;
+  return `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(filename.replace(/ /g, '_'))}?width=${width}`;
+}
+
 /* ============================================================
    API HELPERS
    ============================================================ */
@@ -476,21 +490,22 @@ function getInitials(label) {
   return label.substring(0, 2).toUpperCase();
 }
 
-function avatarContent(s, collected) {
-  if (!collected) {
-    if (s.type === 'badge') return '🏛️';
-    if (s.type === 'team') return '📸';
-    if (s.type === 'stadium') return '🏟️';
-    if (s.type === 'logo') return '🏆';
-    if (s.type === 'mascot') return '🎭';
-    return '?';
-  }
+function avatarFallback(s, collected) {
   if (s.type === 'badge') return '🏛️';
   if (s.type === 'team') return '📸';
   if (s.type === 'stadium') return '🏟️';
   if (s.type === 'logo') return '🏆';
   if (s.type === 'mascot') return '🎭';
-  return getInitials(s.label);
+  return collected ? getInitials(s.label) : '?';
+}
+
+function avatarContent(s, collected) {
+  const fallback = avatarFallback(s, collected);
+  if (collected && imageMap[s.num]) {
+    const url = stickerImageUrl(s.num, 200);
+    return `<img src="${url}" alt="${s.label}" loading="lazy" class="sticker__photo" onerror="this.remove()">${fallback}`;
+  }
+  return fallback;
 }
 
 /* ============================================================
@@ -663,7 +678,7 @@ function updateStickerEl(el, num) {
   el.dataset.dupes = dupCount;
 
   const avatarEl = el.querySelector('.sticker__avatar');
-  if (avatarEl && sticker) avatarEl.textContent = avatarContent(sticker, collected);
+  if (avatarEl && sticker) avatarEl.innerHTML = avatarContent(sticker, collected);
 
   let specialBadge = el.querySelector('.sticker__badge-special');
   if (special) {
@@ -738,8 +753,12 @@ function openModal(num, stickerEl) {
   const color = sticker?.color || '#6b7280';
 
   const header = document.getElementById('modalHeader');
+  const modalImgUrl = stickerImageUrl(num, 400);
+  const modalAvatar = modalImgUrl
+    ? `<img src="${modalImgUrl}" alt="${sticker?.label || ''}" class="modal__header-photo" onerror="this.remove()">${avatarFallback(sticker, true)}`
+    : avatarFallback(sticker, true);
   header.innerHTML = `
-    <div class="modal__header-avatar" style="background:${color}">${avatarContent(sticker, true)}</div>
+    <div class="modal__header-avatar" style="background:${color}">${modalAvatar}</div>
     <span class="modal__header-num">${sticker?.team || ''} ${sticker?.localNum || ''} &middot; #${num}</span>
     <span class="modal__header-name">${sticker?.label || ''}</span>
     <span class="modal__header-team">${sticker?.teamName || ''}</span>`;
@@ -1193,6 +1212,7 @@ function initHeader() {
    INIT
    ============================================================ */
 async function init() {
+  await loadImageMap();
   initHeader();
   initTeamCards();
   initModal();

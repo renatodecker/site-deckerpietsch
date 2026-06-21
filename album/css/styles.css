@@ -593,6 +593,13 @@ body[data-view="loading"] .dupes-section { display: none !important; }
   margin: 4px 0 2px;
   flex-shrink: 0;
   transition: all var(--transition);
+  position: relative;
+  overflow: hidden;
+}
+.sticker__photo {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover; border-radius: 50%;
 }
 
 .sticker__pos {
@@ -802,6 +809,12 @@ body[data-view="loading"] .dupes-section { display: none !important; }
   margin: 0 auto 10px; display: flex;
   align-items: center; justify-content: center;
   font-size: 1.5rem; font-weight: 800; color: #fff;
+  position: relative; overflow: hidden;
+}
+.modal__header-photo {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover; border-radius: 50%;
 }
 .modal__header-num {
   font-size: .8rem; font-weight: 700;

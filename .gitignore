@@ -1,2 +1,4 @@
 node_modules/
 .claude/
+album/images/stickers/
+album/data/.image-cache.json

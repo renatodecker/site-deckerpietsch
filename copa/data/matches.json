@@ -1976,9 +1976,50 @@
       "home": "Uruguai",
       "away": "Cabo Verde",
       "venue": "Miami",
-      "status": "scheduled",
-      "time": "18h",
-      "espnId": "760450"
+      "status": "live",
+      "espnId": "760450",
+      "homeScore": 2,
+      "awayScore": 1,
+      "scorers": [
+        {
+          "player": "Kevin Pina",
+          "team": "Cabo Verde"
+        },
+        {
+          "player": "Maxi Araújo",
+          "team": "Uruguai"
+        },
+        {
+          "player": "Agustín Cano",
+          "team": "Uruguai"
+        }
+      ],
+      "events": [
+        {
+          "type": "goal",
+          "player": "Kevin Pina",
+          "team": "Cabo Verde",
+          "minute": "21'",
+          "period": null,
+          "detail": ""
+        },
+        {
+          "type": "goal",
+          "player": "Maxi Araújo",
+          "team": "Uruguai",
+          "minute": "44'",
+          "period": null,
+          "detail": ""
+        },
+        {
+          "type": "goal",
+          "player": "Agustín Cano",
+          "team": "Uruguai",
+          "minute": "45'+6'",
+          "period": null,
+          "detail": ""
+        }
+      ]
     },
     {
       "id": 47,

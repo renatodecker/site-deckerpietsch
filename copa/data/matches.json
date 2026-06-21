@@ -1898,13 +1898,21 @@
       "home": "Espanha",
       "away": "Arábia Saudita",
       "venue": "Atlanta",
-      "status": "live",
+      "status": "finished",
       "espnId": "760453",
-      "homeScore": 1,
+      "homeScore": 4,
       "awayScore": 0,
       "scorers": [
         {
           "player": "Lamine Yamal",
+          "team": "Espanha"
+        },
+        {
+          "player": "Mikel Oyarzabal",
+          "team": "Espanha"
+        },
+        {
+          "player": "Mikel Oyarzabal",
           "team": "Espanha"
         }
       ],
@@ -1916,8 +1924,33 @@
           "minute": "10'",
           "period": null,
           "detail": ""
+        },
+        {
+          "type": "goal",
+          "player": "Mikel Oyarzabal",
+          "team": "Espanha",
+          "minute": "21'",
+          "period": null,
+          "detail": ""
+        },
+        {
+          "type": "goal",
+          "player": "Mikel Oyarzabal",
+          "team": "Espanha",
+          "minute": "24'",
+          "period": null,
+          "detail": ""
+        },
+        {
+          "type": "goal",
+          "player": "Hassan Al-Tambakti",
+          "team": "Espanha",
+          "minute": "49'",
+          "period": null,
+          "detail": "gol contra"
         }
-      ]
+      ],
+      "detailsFetched": true
     },
     {
       "id": 46,

@@ -1329,20 +1329,23 @@ function openSquadModal(teamName, teams) {
   ['GK', 'DF', 'MF', 'FW'].forEach(pos => {
     if (grouped[pos].length === 0) return;
     const rows = grouped[pos].sort((a, b) => (a.number || 99) - (b.number || 99)).map(p => {
-      const age = playerAge(p.birthDate);
+      const dob = p.dob ? p.dob.split('/').reverse().join('-') : p.birthDate;
+      const age = playerAge(dob);
       return `
         <tr>
           <td class="squad-table__num">${p.number || ''}</td>
           <td class="squad-table__name">${p.name}</td>
           <td class="squad-table__club">${p.club || ''}</td>
           <td class="squad-table__age">${age || ''}</td>
+          <td class="squad-table__caps">${p.caps != null ? p.caps : ''}</td>
+          <td class="squad-table__goals">${p.goals || ''}</td>
         </tr>`;
     }).join('');
     playersHTML += `
       <div class="squad-position">
         <div class="squad-position__label">${POSITION_LABELS[pos]}</div>
         <table class="squad-table">
-          <thead><tr><th>#</th><th>Jogador</th><th>Clube</th><th>Idade</th></tr></thead>
+          <thead><tr><th>#</th><th>Jogador</th><th>Clube</th><th>Idade</th><th>Jogos</th><th>Gols</th></tr></thead>
           <tbody>${rows}</tbody>
         </table>
       </div>`;

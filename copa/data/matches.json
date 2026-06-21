@@ -1271,9 +1271,11 @@
       "home": "Equador",
       "away": "Curaçao",
       "venue": "Kansas City",
-      "status": "scheduled",
-      "time": "20h ET",
-      "espnId": "760446"
+      "status": "live",
+      "espnId": "760446",
+      "homeScore": 0,
+      "awayScore": 0,
+      "scorers": []
     },
     {
       "id": 29,
@@ -2022,7 +2024,8 @@
       "away": "Iraque",
       "venue": "Filadélfia",
       "status": "scheduled",
-      "time": "17h"
+      "time": "17h",
+      "espnId": "760457"
     },
     {
       "id": 52,
@@ -2032,7 +2035,8 @@
       "away": "Senegal",
       "venue": "East Rutherford",
       "status": "scheduled",
-      "time": "20h"
+      "time": "20h",
+      "espnId": "760454"
     },
     {
       "id": 53,
@@ -2184,7 +2188,8 @@
       "away": "Áustria",
       "venue": "Arlington",
       "status": "scheduled",
-      "time": "13h ET"
+      "time": "13h ET",
+      "espnId": "760456"
     },
     {
       "id": 58,
@@ -2194,7 +2199,8 @@
       "away": "Argélia",
       "venue": "Santa Clara",
       "status": "scheduled",
-      "time": "23h ET"
+      "time": "23h ET",
+      "espnId": "760455"
     },
     {
       "id": 59,

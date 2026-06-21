@@ -1898,9 +1898,26 @@
       "home": "Espanha",
       "away": "Arábia Saudita",
       "venue": "Atlanta",
-      "status": "scheduled",
-      "time": "12h",
-      "espnId": "760453"
+      "status": "live",
+      "espnId": "760453",
+      "homeScore": 1,
+      "awayScore": 0,
+      "scorers": [
+        {
+          "player": "Lamine Yamal",
+          "team": "Espanha"
+        }
+      ],
+      "events": [
+        {
+          "type": "goal",
+          "player": "Lamine Yamal",
+          "team": "Espanha",
+          "minute": "10'",
+          "period": null,
+          "detail": ""
+        }
+      ]
     },
     {
       "id": 46,

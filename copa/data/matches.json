@@ -1556,13 +1556,21 @@
       "home": "Tunísia",
       "away": "Japão",
       "venue": "Monterrey",
-      "status": "live",
+      "status": "finished",
       "espnId": "760449",
       "homeScore": 0,
-      "awayScore": 2,
+      "awayScore": 4,
       "scorers": [
         {
           "player": "Daichi Kamada",
+          "team": "Japão"
+        },
+        {
+          "player": "Ayase Ueda",
+          "team": "Japão"
+        },
+        {
+          "player": "Junya Ito",
           "team": "Japão"
         },
         {
@@ -1586,8 +1594,25 @@
           "minute": "31'",
           "period": null,
           "detail": ""
+        },
+        {
+          "type": "goal",
+          "player": "Junya Ito",
+          "team": "Japão",
+          "minute": "69'",
+          "period": null,
+          "detail": ""
+        },
+        {
+          "type": "goal",
+          "player": "Ayase Ueda",
+          "team": "Japão",
+          "minute": "83'",
+          "period": null,
+          "detail": ""
         }
-      ]
+      ],
+      "detailsFetched": true
     },
     {
       "id": 35,

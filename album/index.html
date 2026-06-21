@@ -98,8 +98,12 @@
       <div class="stats-bar__grid" id="statsBar">
         <div class="stat-card stat-card--total">
           <span class="stat-card__value" id="statTotal">0 / 900</span>
-          <span class="stat-card__label">Coladas</span>
+          <span class="stat-card__label">Tenho</span>
           <div class="stat-card__bar"><div class="stat-card__fill" id="statTotalFill"></div></div>
+        </div>
+        <div class="stat-card stat-card--pasted">
+          <span class="stat-card__value" id="statPasted">0</span>
+          <span class="stat-card__label">Coladas</span>
         </div>
         <div class="stat-card stat-card--missing">
           <span class="stat-card__value" id="statMissing">900</span>
@@ -124,7 +128,8 @@
           <label class="filter-group__label">Exibir:</label>
           <div class="filter-buttons" id="filterStatus">
             <button class="filter-btn active" data-filter="all">Todas</button>
-            <button class="filter-btn" data-filter="collected">Coladas</button>
+            <button class="filter-btn" data-filter="collected">Tenho</button>
+            <button class="filter-btn" data-filter="pasted">Coladas</button>
             <button class="filter-btn" data-filter="missing">Faltam</button>
             <button class="filter-btn" data-filter="dupes">Repetidas</button>
           </div>
@@ -161,6 +166,13 @@
       <button class="modal__close" id="modalClose">&times;</button>
       <div class="modal__header" id="modalHeader"></div>
       <div class="modal__body">
+        <div class="modal__field">
+          <label class="modal__label">Status:</label>
+          <button class="pasted-toggle" id="pastedToggle">
+            <span class="pasted-toggle__check">&#10003;</span>
+            <span class="pasted-toggle__text">Colada no álbum</span>
+          </button>
+        </div>
         <div class="modal__field">
           <label class="modal__label">Tipo especial:</label>
           <div class="special-buttons" id="specialButtons">

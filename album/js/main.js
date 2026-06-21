@@ -80,14 +80,15 @@ const SPECIAL_TO_CODE = { gold: 'g', silver: 's', legend: 'l', parallel: 'p' };
 const CODE_TO_SPECIAL = { g: 'gold', s: 'silver', l: 'legend', p: 'parallel' };
 
 function encodeAlbumData(st) {
-  const collected = [], specials = [], dupes = [];
+  const collected = [], specials = [], dupes = [], pasted = [];
   for (const num in st) {
     if (!st[num]) continue;
     collected.push(num);
     if (st[num].s) specials.push(`${num}${SPECIAL_TO_CODE[st[num].s] || ''}`);
     if (st[num].d && st[num].d > 0) dupes.push(`${num}:${st[num].d}`);
+    if (st[num].p) pasted.push(num);
   }
-  return `${collected.join(',')}|${specials.join(',')}|${dupes.join(',')}`;
+  return `${collected.join(',')}|${specials.join(',')}|${dupes.join(',')}|${pasted.join(',')}`;
 }
 
 function decodeAlbumData(raw) {
@@ -97,6 +98,7 @@ function decodeAlbumData(raw) {
   const collectedStr = parts[0] || '';
   const specialsStr = parts[1] || '';
   const dupesStr = parts[2] || '';
+  const pastedStr = parts[3] || '';
 
   if (collectedStr) {
     collectedStr.split(',').forEach(n => {
@@ -117,6 +119,12 @@ function decodeAlbumData(raw) {
       if (!entry) return;
       const [num, count] = entry.split(':');
       if (result[num]) result[num].d = parseInt(count) || 0;
+    });
+  }
+  if (pastedStr) {
+    pastedStr.split(',').forEach(n => {
+      const num = n.trim();
+      if (num && result[num]) result[num].p = true;
     });
   }
   return result;
@@ -293,6 +301,14 @@ function setSpecial(num, special) {
   saveState();
 }
 
+function setPasted(num, pasted) {
+  if (readOnly) return;
+  if (!state[num]) state[num] = { c: true };
+  if (pasted) state[num].p = true;
+  else delete state[num].p;
+  saveState();
+}
+
 function setDuplicates(num, count) {
   if (readOnly) return;
   if (!state[num]) state[num] = { c: true };
@@ -319,18 +335,20 @@ function clearAllState() {
    STATS
    ============================================================ */
 function calcStats() {
-  let collected = 0, dupes = 0, special = 0;
+  let collected = 0, pasted = 0, dupes = 0, special = 0;
   for (const key in state) {
     if (state[key]) collected++;
+    if (state[key]?.p) pasted++;
     if (state[key]?.d) dupes += state[key].d;
     if (state[key]?.s) special++;
   }
-  return { collected, missing: TOTAL_STICKERS - collected, dupes, special };
+  return { collected, pasted, missing: TOTAL_STICKERS - collected, dupes, special };
 }
 
 function updateStats() {
   const s = calcStats();
   document.getElementById('statTotal').textContent = `${s.collected} / ${TOTAL_STICKERS}`;
+  document.getElementById('statPasted').textContent = s.pasted;
   document.getElementById('statMissing').textContent = s.missing;
   document.getElementById('statDupes').textContent = s.dupes;
   document.getElementById('statSpecial').textContent = s.special;
@@ -483,8 +501,10 @@ function renderSticker(s) {
   const collected = !!st;
   const special = st?.s || '';
   const dupCount = st?.d || 0;
+  const pasted = !!st?.p;
   const classes = ['sticker'];
   if (collected) classes.push('collected');
+  if (pasted) classes.push('pasted');
   if (special) classes.push(`special-${special}`);
 
   const posLabel = s.pos ? POS_LABELS[s.pos] : (s.type === 'badge' ? 'Emblema' : s.type === 'team' ? 'Equipe' : s.type === 'stadium' ? 'Estádio' : '');
@@ -493,6 +513,7 @@ function renderSticker(s) {
   return `<div class="${classes.join(' ')}" data-num="${s.num}" data-team="${s.team || ''}" data-name="${(s.label || '').toLowerCase()}" data-collected="${collected ? '1' : '0'}" data-dupes="${dupCount}" style="--sticker-color:${color}">
       ${special ? `<span class="sticker__badge-special">${SPECIAL_ICONS[special]}</span>` : ''}
       ${dupCount > 0 ? `<span class="sticker__badge-dupes">&times;${dupCount}</span>` : ''}
+      ${pasted ? `<span class="sticker__badge-pasted">✓</span>` : ''}
       <span class="sticker__local-num">${s.team} ${s.localNum}</span>
       <span class="sticker__avatar">${avatarContent(s, collected)}</span>
       <span class="sticker__pos">${posLabel}</span>
@@ -631,9 +652,11 @@ function updateStickerEl(el, num) {
   const collected = !!st;
   const special = st?.s || '';
   const dupCount = st?.d || 0;
+  const pasted = !!st?.p;
   const sticker = STICKER_MAP[num];
 
   el.classList.toggle('collected', collected);
+  el.classList.toggle('pasted', pasted);
   el.classList.remove('special-silver', 'special-gold', 'special-legend', 'special-parallel');
   if (special) el.classList.add(`special-${special}`);
   el.dataset.collected = collected ? '1' : '0';
@@ -653,6 +676,12 @@ function updateStickerEl(el, num) {
     if (!dupesBadge) { dupesBadge = document.createElement('span'); dupesBadge.className = 'sticker__badge-dupes'; el.prepend(dupesBadge); }
     dupesBadge.innerHTML = `&times;${dupCount}`;
   } else if (dupesBadge) { dupesBadge.remove(); }
+
+  let pastedBadge = el.querySelector('.sticker__badge-pasted');
+  if (pasted) {
+    if (!pastedBadge) { pastedBadge = document.createElement('span'); pastedBadge.className = 'sticker__badge-pasted'; el.prepend(pastedBadge); }
+    pastedBadge.textContent = '✓';
+  } else if (pastedBadge) { pastedBadge.remove(); }
 }
 
 /* ============================================================
@@ -720,6 +749,7 @@ function openModal(num, stickerEl) {
     btn.classList.toggle('active', btn.dataset.special === special);
   });
   document.getElementById('dupesValue').textContent = st?.d || 0;
+  document.getElementById('pastedToggle').classList.toggle('active', !!st?.p);
 
   document.querySelectorAll('#stickerModal .modal__field').forEach(f => { f.hidden = readOnly; });
 
@@ -736,6 +766,16 @@ function initModal() {
   document.getElementById('modalClose').addEventListener('click', closeModal);
   document.getElementById('modalOverlay').addEventListener('click', e => {
     if (e.target === e.currentTarget) closeModal();
+  });
+
+  document.getElementById('pastedToggle').addEventListener('click', () => {
+    if (modalCurrentNum == null || readOnly) return;
+    const st = getStickerState(modalCurrentNum);
+    const newPasted = !st?.p;
+    setPasted(modalCurrentNum, newPasted);
+    document.getElementById('pastedToggle').classList.toggle('active', newPasted);
+    if (modalCurrentEl) updateStickerEl(modalCurrentEl, modalCurrentNum);
+    updateStats();
   });
 
   document.querySelectorAll('#specialButtons .special-btn').forEach(btn => {
@@ -811,8 +851,10 @@ function applyFilters() {
     const name = el.dataset.name || '';
     const team = (el.dataset.team || '').toLowerCase();
     const num = el.dataset.num || '';
+    const isPasted = el.classList.contains('pasted');
     let showByFilter = true;
     if (currentFilter === 'collected') showByFilter = collected;
+    else if (currentFilter === 'pasted') showByFilter = isPasted;
     else if (currentFilter === 'missing') showByFilter = !collected;
     else if (currentFilter === 'dupes') showByFilter = hasDupes;
     let showBySearch = true;

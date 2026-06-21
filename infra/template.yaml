@@ -1,0 +1,132 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: "Sticker Album API - DynamoDB + Lambda + API Gateway"
+
+Resources:
+
+  AlbumsTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: sticker-albums
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: code
+          AttributeType: S
+      KeySchema:
+        - AttributeName: code
+          KeyType: HASH
+
+  LambdaRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: sticker-album-lambda-role
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: sticker-album-dynamo
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - dynamodb:GetItem
+                  - dynamodb:PutItem
+                  - dynamodb:UpdateItem
+                  - dynamodb:DeleteItem
+                Resource: !GetAtt AlbumsTable.Arn
+        - PolicyName: sticker-album-logs
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                Resource: "arn:aws:logs:*:*:*"
+
+  AlbumFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: sticker-album-api
+      Runtime: nodejs20.x
+      Handler: index.handler
+      Code:
+        ZipFile: |
+          // placeholder - will be updated with real code
+          export async function handler() { return { statusCode: 200, body: '{}' }; }
+      Role: !GetAtt LambdaRole.Arn
+      Timeout: 10
+      MemorySize: 128
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref AlbumsTable
+
+  HttpApi:
+    Type: AWS::ApiGatewayV2::Api
+    Properties:
+      Name: sticker-album-api
+      ProtocolType: HTTP
+      CorsConfiguration:
+        AllowOrigins:
+          - "https://deckerpietsch.com.br"
+          - "http://localhost:3000"
+        AllowMethods:
+          - GET
+          - POST
+          - PUT
+          - DELETE
+          - OPTIONS
+        AllowHeaders:
+          - Content-Type
+          - X-Album-Pin
+        MaxAge: 86400
+
+  HttpApiIntegration:
+    Type: AWS::ApiGatewayV2::Integration
+    Properties:
+      ApiId: !Ref HttpApi
+      IntegrationType: AWS_PROXY
+      IntegrationUri: !GetAtt AlbumFunction.Arn
+      PayloadFormatVersion: "2.0"
+
+  HttpApiRoute:
+    Type: AWS::ApiGatewayV2::Route
+    Properties:
+      ApiId: !Ref HttpApi
+      RouteKey: "ANY /api/albums"
+      Target: !Sub "integrations/${HttpApiIntegration}"
+
+  HttpApiRouteWithCode:
+    Type: AWS::ApiGatewayV2::Route
+    Properties:
+      ApiId: !Ref HttpApi
+      RouteKey: "ANY /api/albums/{code}"
+      Target: !Sub "integrations/${HttpApiIntegration}"
+
+  HttpApiStage:
+    Type: AWS::ApiGatewayV2::Stage
+    Properties:
+      ApiId: !Ref HttpApi
+      StageName: "$default"
+      AutoDeploy: true
+
+  LambdaPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !Ref AlbumFunction
+      Action: lambda:InvokeFunction
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub "arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${HttpApi}/*"
+
+Outputs:
+  ApiUrl:
+    Description: "URL base da API"
+    Value: !Sub "https://${HttpApi}.execute-api.${AWS::Region}.amazonaws.com"
+  TableName:
+    Description: "Nome da tabela DynamoDB"
+    Value: !Ref AlbumsTable

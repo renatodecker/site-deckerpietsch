@@ -14,6 +14,10 @@ async function loadImageMap() {
     const res = await fetch('data/image-map.json');
     if (res.ok) imageMap = await res.json();
   } catch {}
+  try {
+    const stored = JSON.parse(localStorage.getItem('imageMap') || '{}');
+    if (Object.keys(stored).length > Object.keys(imageMap).length) imageMap = stored;
+  } catch {}
 }
 
 function stickerImageUrl(num, width = 200) {

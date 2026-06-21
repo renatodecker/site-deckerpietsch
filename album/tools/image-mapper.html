@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gerador de Mapa de Imagens | Album FIFA 2026</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Inter', system-ui, sans-serif; background: #f3f4f6; color: #374151; padding: 20px; }
+    .container { max-width: 800px; margin: 0 auto; }
+    h1 { font-size: 1.4rem; color: #04210f; margin-bottom: 8px; }
+    .subtitle { color: #6b7280; margin-bottom: 24px; font-size: .9rem; }
+    .card { background: #fff; border-radius: 12px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,.08); margin-bottom: 16px; }
+    .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 16px; }
+    .stat { text-align: center; }
+    .stat-val { font-size: 1.5rem; font-weight: 800; }
+    .stat-val.found { color: #16a34a; }
+    .stat-val.miss { color: #dc2626; }
+    .stat-val.skip { color: #6b7280; }
+    .stat-val.total { color: #0c4d27; }
+    .stat-label { font-size: .75rem; color: #6b7280; }
+    .progress-bar { height: 8px; background: #e5e7eb; border-radius: 4px; overflow: hidden; margin-bottom: 12px; }
+    .progress-fill { height: 100%; background: linear-gradient(90deg, #0c4d27, #d4af00); transition: width .3s; width: 0%; }
+    .status { font-size: .85rem; color: #6b7280; min-height: 20px; margin-bottom: 16px; }
+    .btn-row { display: flex; gap: 10px; flex-wrap: wrap; }
+    button { padding: 10px 20px; border-radius: 8px; border: none; font-weight: 600; font-size: .85rem; cursor: pointer; transition: all .2s; }
+    .btn-start { background: #0c4d27; color: #fff; }
+    .btn-start:hover { background: #07371c; }
+    .btn-start:disabled { opacity: .5; cursor: not-allowed; }
+    .btn-stop { background: #dc2626; color: #fff; }
+    .btn-stop:hover { background: #b91c1c; }
+    .btn-download { background: #3b82f6; color: #fff; }
+    .btn-download:hover { background: #2563eb; }
+    .btn-copy { background: #8b5cf6; color: #fff; }
+    .btn-copy:hover { background: #7c3aed; }
+    .btn-save { background: #16a34a; color: #fff; }
+    .btn-save:hover { background: #15803d; }
+    .log { max-height: 300px; overflow-y: auto; font-family: monospace; font-size: .75rem; line-height: 1.6; padding: 12px; background: #1a1a1a; color: #a3e635; border-radius: 8px; margin-top: 16px; }
+    .log .err { color: #f87171; }
+    .log .ok { color: #4ade80; }
+    .log .skip { color: #94a3b8; }
+    .toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: #1a1a1a; color: #fff; padding: 10px 20px; border-radius: 8px; font-size: .85rem; display: none; z-index: 100; }
+    @media (max-width: 600px) { .stats { grid-template-columns: repeat(2, 1fr); } }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Gerador de Mapa de Imagens</h1>
+    <p class="subtitle">Consulta o Wikidata para encontrar fotos dos jogadores e estadios do album FIFA 2026.</p>
+
+    <div class="card">
+      <div class="stats">
+        <div class="stat"><span class="stat-val total" id="sTotal">0</span><span class="stat-label">Processados</span></div>
+        <div class="stat"><span class="stat-val found" id="sFound">0</span><span class="stat-label">Encontrados</span></div>
+        <div class="stat"><span class="stat-val miss" id="sMiss">0</span><span class="stat-label">Sem imagem</span></div>
+        <div class="stat"><span class="stat-val skip" id="sSkip">0</span><span class="stat-label">Ignorados</span></div>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+      <div class="status" id="status">Pronto para iniciar.</div>
+      <div class="btn-row">
+        <button class="btn-start" id="btnStart">Iniciar</button>
+        <button class="btn-stop" id="btnStop" disabled>Parar</button>
+        <button class="btn-save" id="btnSave">Salvar no navegador</button>
+        <button class="btn-download" id="btnDownload">Baixar JSON</button>
+        <button class="btn-copy" id="btnCopy">Copiar JSON</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="log" id="log"></div>
+    </div>
+  </div>
+  <div class="toast" id="toast"></div>
+
+<script>
+const DELAY = 700;
+const UA_CONTACT = 'StickerAlbumBot/1.0 (https://deckerpietsch.com.br)';
+
+let stickers = [];
+let imageMap = {};
+let running = false;
+let stopRequested = false;
+let processed = 0, found = 0, missed = 0, skipped = 0;
+
+// Load stickers data
+async function loadStickers() {
+  try {
+    const res = await fetch('../data/stickers.json');
+    stickers = await res.json();
+    log(`Carregados ${stickers.length} stickers.`, 'ok');
+  } catch {
+    log('Erro ao carregar stickers.json. Verifique se o arquivo existe.', 'err');
+  }
+}
+
+// Load existing map
+async function loadExistingMap() {
+  try {
+    const res = await fetch('../data/image-map.json');
+    if (res.ok) {
+      imageMap = await res.json();
+      log(`Mapa existente carregado: ${Object.keys(imageMap).length} entradas.`, 'ok');
+    }
+  } catch {}
+  // Also check localStorage
+  try {
+    const stored = localStorage.getItem('imageMap');
+    if (stored) {
+      const parsed = JSON.parse(stored);
+      const keys = Object.keys(parsed);
+      if (keys.length > Object.keys(imageMap).length) {
+        imageMap = parsed;
+        log(`Mapa do localStorage carregado: ${keys.length} entradas.`, 'ok');
+      }
+    }
+  } catch {}
+}
+
+function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+function log(msg, cls = '') {
+  const el = document.getElementById('log');
+  const line = document.createElement('div');
+  if (cls) line.className = cls;
+  line.textContent = msg;
+  el.appendChild(line);
+  el.scrollTop = el.scrollHeight;
+}
+
+function updateUI() {
+  document.getElementById('sTotal').textContent = processed;
+  document.getElementById('sFound').textContent = found;
+  document.getElementById('sMiss').textContent = missed;
+  document.getElementById('sSkip').textContent = skipped;
+  const total = stickers.filter(s => s.type === 'jogador' || s.type === 'stadium').length;
+  const pct = total > 0 ? (processed / total * 100) : 0;
+  document.getElementById('progressFill').style.width = `${pct}%`;
+}
+
+function showToast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.style.display = 'block';
+  setTimeout(() => { el.style.display = 'none'; }, 3000);
+}
+
+// Wikidata API
+async function wdSearch(query, lang = 'en') {
+  const url = new URL('https://www.wikidata.org/w/api.php');
+  url.searchParams.set('action', 'wbsearchentities');
+  url.searchParams.set('search', query);
+  url.searchParams.set('language', lang);
+  url.searchParams.set('type', 'item');
+  url.searchParams.set('format', 'json');
+  url.searchParams.set('origin', '*');
+  url.searchParams.set('limit', '5');
+  const res = await fetch(url);
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  return (await res.json()).search || [];
+}
+
+async function wdGetEntity(id) {
+  const url = new URL('https://www.wikidata.org/w/api.php');
+  url.searchParams.set('action', 'wbgetentities');
+  url.searchParams.set('ids', id);
+  url.searchParams.set('props', 'claims');
+  url.searchParams.set('format', 'json');
+  url.searchParams.set('origin', '*');
+  const res = await fetch(url);
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  const data = await res.json();
+  return data.entities?.[id] || null;
+}
+
+function getP18(entity) {
+  const claims = entity?.claims?.P18;
+  if (!claims || !claims.length) return null;
+  const val = claims[0].mainsnak?.datavalue?.value;
+  return typeof val === 'string' ? val : null;
+}
+
+function isFootballer(entity) {
+  const p106 = entity?.claims?.P106 || [];
+  return p106.some(c => c.mainsnak?.datavalue?.value?.id === 'Q937857');
+}
+
+function nameVariants(name) {
+  const variants = [name];
+  if (name.includes('.')) variants.push(name.replace(/\./g, ''));
+  const parts = name.split(/\s+/);
+  if (parts.length >= 2 && parts[0].length <= 2) variants.push(parts.slice(1).join(' '));
+  return [...new Set(variants)];
+}
+
+async function findPlayer(name) {
+  const variants = nameVariants(name);
+  for (const v of variants) {
+    for (const lang of ['en', 'pt']) {
+      if (stopRequested) return null;
+      await sleep(DELAY);
+      try {
+        const results = await wdSearch(v, lang);
+        for (const r of results) {
+          await sleep(DELAY);
+          const entity = await wdGetEntity(r.id);
+          if (!entity || !isFootballer(entity)) continue;
+          const img = getP18(entity);
+          if (img) return img;
+        }
+      } catch (e) {
+        log(`  Erro: ${e.message}`, 'err');
+      }
+    }
+  }
+  return null;
+}
+
+async function findStadium(name) {
+  for (const lang of ['en', 'pt', 'es']) {
+    if (stopRequested) return null;
+    await sleep(DELAY);
+    try {
+      const results = await wdSearch(name, lang);
+      for (const r of results) {
+        await sleep(DELAY);
+        const entity = await wdGetEntity(r.id);
+        if (!entity) continue;
+        const img = getP18(entity);
+        if (img) return img;
+      }
+    } catch (e) {
+      log(`  Erro: ${e.message}`, 'err');
+    }
+  }
+  return null;
+}
+
+async function run() {
+  running = true;
+  stopRequested = false;
+  document.getElementById('btnStart').disabled = true;
+  document.getElementById('btnStop').disabled = false;
+
+  const processable = stickers.filter(s => s.type === 'jogador' || s.type === 'stadium');
+  const seenStadiums = {};
+
+  for (const s of processable) {
+    if (stopRequested) break;
+
+    // Skip if already mapped
+    if (imageMap[s.num]) {
+      skipped++;
+      processed++;
+      updateUI();
+      continue;
+    }
+
+    // Deduplicate stadiums
+    if (s.type === 'stadium' && seenStadiums[s.name]) {
+      imageMap[s.num] = seenStadiums[s.name];
+      found++;
+      processed++;
+      updateUI();
+      continue;
+    }
+
+    document.getElementById('status').textContent = `Buscando: ${s.name} (${s.team || s.teamCode}) — #${s.num}`;
+
+    let img = null;
+    try {
+      if (s.type === 'jogador') {
+        img = await findPlayer(s.name);
+      } else if (s.type === 'stadium') {
+        img = await findStadium(s.name);
+      }
+    } catch (e) {
+      log(`#${s.num} ${s.name}: ERRO ${e.message}`, 'err');
+    }
+
+    if (img) {
+      imageMap[s.num] = img;
+      if (s.type === 'stadium') seenStadiums[s.name] = img;
+      found++;
+      log(`#${s.num} ${s.name} -> ${img}`, 'ok');
+    } else {
+      missed++;
+      log(`#${s.num} ${s.name} -> nao encontrado`, 'err');
+    }
+
+    processed++;
+    updateUI();
+
+    // Auto-save to localStorage every 20 entries
+    if (processed % 20 === 0) {
+      localStorage.setItem('imageMap', JSON.stringify(imageMap));
+    }
+  }
+
+  // Final save
+  localStorage.setItem('imageMap', JSON.stringify(imageMap));
+
+  running = false;
+  document.getElementById('btnStart').disabled = false;
+  document.getElementById('btnStop').disabled = true;
+  document.getElementById('status').textContent = stopRequested
+    ? `Parado. ${found} imagens encontradas.`
+    : `Concluido! ${found} imagens encontradas de ${processable.length} figurinhas.`;
+  showToast('Mapeamento salvo no navegador!');
+}
+
+// Buttons
+document.getElementById('btnStart').addEventListener('click', run);
+
+document.getElementById('btnStop').addEventListener('click', () => {
+  stopRequested = true;
+  document.getElementById('status').textContent = 'Parando...';
+});
+
+document.getElementById('btnSave').addEventListener('click', () => {
+  localStorage.setItem('imageMap', JSON.stringify(imageMap));
+  showToast(`Salvo! ${Object.keys(imageMap).length} entradas no navegador.`);
+});
+
+document.getElementById('btnDownload').addEventListener('click', () => {
+  const blob = new Blob([JSON.stringify(imageMap, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'image-map.json';
+  a.click();
+  URL.revokeObjectURL(url);
+});
+
+document.getElementById('btnCopy').addEventListener('click', () => {
+  navigator.clipboard.writeText(JSON.stringify(imageMap, null, 2))
+    .then(() => showToast('JSON copiado!'))
+    .catch(() => showToast('Erro ao copiar.'));
+});
+
+// Init
+(async () => {
+  await loadStickers();
+  await loadExistingMap();
+  updateUI();
+})();
+</script>
+</body>
+</html>

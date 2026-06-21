@@ -341,6 +341,91 @@ function updateStats() {
 }
 
 /* ============================================================
+   CELEBRATIONS (canvas-confetti)
+   ============================================================ */
+const celebratedSections = new Set();
+
+function isSectionComplete(sectionKey) {
+  if (sectionKey === 'FWC') return INTRO_STICKERS.every(s => isCollected(s.num));
+  const team = TEAMS.find(t => t.code === sectionKey);
+  return team ? team.stickers.every(s => isCollected(s.num)) : false;
+}
+
+function isGroupComplete(group) {
+  return TEAMS.filter(t => t.group === group).every(t => t.stickers.every(s => isCollected(s.num)));
+}
+
+function isAlbumComplete() {
+  return ALL_STICKERS.every(s => isCollected(s.num));
+}
+
+function celebrateSection(name) {
+  if (typeof confetti !== 'function') return;
+  confetti({ particleCount: 80, spread: 60, origin: { y: 0.7 }, colors: ['#00b894', '#0984e3', '#fdcb6e', '#e17055', '#6c5ce7'] });
+  showToast(`🎉 ${name} completo!`);
+}
+
+function celebrateGroup(name) {
+  if (typeof confetti !== 'function') return;
+  confetti({ particleCount: 100, angle: 60, spread: 70, origin: { x: 0, y: 0.6 } });
+  confetti({ particleCount: 100, angle: 120, spread: 70, origin: { x: 1, y: 0.6 } });
+  showToast(`🎆 ${name} completo!`);
+}
+
+function celebrateAlbum() {
+  if (typeof confetti !== 'function') return;
+  const end = Date.now() + 5000;
+  const interval = setInterval(() => {
+    if (Date.now() > end) { clearInterval(interval); return; }
+    confetti({
+      particleCount: 30, startVelocity: 30, spread: 360, ticks: 60,
+      origin: { x: Math.random(), y: Math.random() * 0.4 },
+      colors: ['#ff0', '#f00', '#0f0', '#00f', '#ff6600', '#ff00ff'],
+    });
+  }, 200);
+  showToast(`🏆 ÁLBUM COMPLETO! Parabéns!`);
+}
+
+function initCelebratedSections() {
+  celebratedSections.clear();
+  if (isSectionComplete('FWC')) celebratedSections.add('section:FWC');
+  TEAMS.forEach(t => { if (isSectionComplete(t.code)) celebratedSections.add('section:' + t.code); });
+  'ABCDEFGHIJKL'.split('').forEach(g => { if (isGroupComplete(g)) celebratedSections.add('group:' + g); });
+  if (isAlbumComplete()) celebratedSections.add('album');
+}
+
+function checkCompletions(num) {
+  const sticker = STICKER_MAP[num];
+  if (!sticker || !isCollected(num)) return;
+
+  if (!celebratedSections.has('album') && isAlbumComplete()) {
+    celebratedSections.add('album');
+    celebrateAlbum();
+    return;
+  }
+
+  if (sticker.team !== 'FWC') {
+    const team = TEAMS.find(t => t.code === sticker.team);
+    if (team) {
+      const groupKey = 'group:' + team.group;
+      if (!celebratedSections.has(groupKey) && isGroupComplete(team.group)) {
+        celebratedSections.add(groupKey);
+        TEAMS.filter(t => t.group === team.group).forEach(t => celebratedSections.add('section:' + t.code));
+        celebrateGroup(`Grupo ${team.group}`);
+        return;
+      }
+    }
+  }
+
+  const sectionKey = 'section:' + sticker.team;
+  if (!celebratedSections.has(sectionKey) && isSectionComplete(sticker.team)) {
+    celebratedSections.add(sectionKey);
+    const name = sticker.team === 'FWC' ? 'FIFA World Cup' : (TEAMS.find(t => t.code === sticker.team)?.name || sticker.team);
+    celebrateSection(name);
+  }
+}
+
+/* ============================================================
    FLAG HELPERS
    ============================================================ */
 function flagEmojiToClass(emoji) {
@@ -588,6 +673,7 @@ function handleStickerClick(e) {
     toggleCollected(num);
     updateStickerEl(stickerEl, num);
     updateStats();
+    checkCompletions(num);
   }
 }
 
@@ -604,6 +690,7 @@ function handleStickerContext(e) {
     toggleCollected(num);
     updateStickerEl(stickerEl, num);
     updateStats();
+    checkCompletions(num);
   }
   openModal(num, stickerEl);
 }
@@ -810,6 +897,7 @@ async function openAlbum(code, pin) {
     url.searchParams.set('c', code);
     history.replaceState({}, '', url);
 
+    initCelebratedSections();
     renderAlbumBar();
     renderAlbum();
     updateStats();

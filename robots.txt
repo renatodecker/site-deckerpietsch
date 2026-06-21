@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://deckerpietsch.com.br/sitemap.xml
+Sitemap: https://decker.app.br/sitemap.xml

@@ -26,7 +26,7 @@ const IMAGE_DIR = path.join(ROOT, 'album/images/stickers');
 const THUMB_WIDTH = 400;
 const DELAY_MS = 600;
 
-const UA = 'StickerAlbumBot/1.0 (https://deckerpietsch.com.br/album; renatodecker@yahoo.com.br)';
+const UA = 'StickerAlbumBot/1.0 (https://decker.app.br/album; renatodecker@yahoo.com.br)';
 
 const doDownload = process.argv.includes('--download');
 const resume = process.argv.includes('--resume');

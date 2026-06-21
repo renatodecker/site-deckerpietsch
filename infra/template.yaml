@@ -73,6 +73,7 @@ Resources:
       ProtocolType: HTTP
       CorsConfiguration:
         AllowOrigins:
+          - "https://decker.app.br"
           - "https://deckerpietsch.com.br"
           - "http://localhost:3000"
         AllowMethods:

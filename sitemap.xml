@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://deckerpietsch.com.br/</loc>
+    <loc>https://decker.app.br/</loc>
     <lastmod>2026-05-30</lastmod>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://deckerpietsch.com.br/copa</loc>
+    <loc>https://decker.app.br/copa</loc>
     <lastmod>2026-06-13</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://deckerpietsch.com.br/album</loc>
+    <loc>https://decker.app.br/album</loc>
     <lastmod>2026-06-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>

@@ -29,7 +29,7 @@
     gtag('config', 'G-SKL0JMRVYW');
   </script>
 </head>
-<body>
+<body data-view="landing">
 
   <header class="header" id="header">
     <div class="container header__inner">
@@ -58,15 +58,37 @@
     </div>
   </section>
 
-  <!-- ALBUM SELECTOR -->
-  <section class="album-selector">
+  <!-- LANDING PAGE -->
+  <section class="landing" id="landing">
     <div class="container">
-      <div class="album-selector__row">
-        <label class="album-selector__label">Álbum:</label>
-        <select class="album-selector__select" id="albumSelect"></select>
-        <button class="album-selector__btn album-selector__btn--new" id="albumNew" title="Novo álbum">+</button>
-        <button class="album-selector__btn album-selector__btn--rename" id="albumRename" title="Renomear">&#9998;</button>
-        <button class="album-selector__btn album-selector__btn--delete" id="albumDelete" title="Excluir">&times;</button>
+      <div class="landing__grid">
+        <div class="landing__section">
+          <h2 class="landing__title">Meus Álbuns</h2>
+          <div id="recentAlbums" class="recent-albums"></div>
+        </div>
+        <div class="landing__section">
+          <h2 class="landing__title">Acessar álbum</h2>
+          <div class="landing__code-group">
+            <input type="text" class="landing__code-input" id="codeInput" placeholder="CÓDIGO" maxlength="6" autocapitalize="characters" spellcheck="false" />
+            <button class="landing__code-btn" id="codeSubmit">Entrar</button>
+          </div>
+          <div class="landing__divider"><span>ou</span></div>
+          <button class="landing__create-btn" id="createNew">+ Criar novo álbum</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ALBUM BAR -->
+  <section class="album-bar" id="albumBar">
+    <div class="container">
+      <div class="album-bar__row">
+        <button class="album-bar__btn" id="albumBack" title="Voltar">&#8592; Álbuns</button>
+        <span class="album-bar__name" id="albumName"></span>
+        <span class="album-bar__code" id="albumCode"></span>
+        <span class="album-bar__mode" id="albumMode"></span>
+        <button class="album-bar__btn album-bar__btn--pin" id="albumEnterPin" title="Inserir PIN" hidden>&#128273; PIN</button>
+        <button class="album-bar__btn album-bar__btn--share" id="albumShare" title="Compartilhar">&#128228; Compartilhar</button>
       </div>
     </div>
   </section>
@@ -133,6 +155,7 @@
     </div>
   </section>
 
+  <!-- STICKER MODAL -->
   <div class="modal-overlay" id="modalOverlay" hidden>
     <div class="modal" id="stickerModal">
       <button class="modal__close" id="modalClose">&times;</button>
@@ -162,6 +185,82 @@
       </div>
     </div>
   </div>
+
+  <!-- PIN MODAL -->
+  <div class="modal-overlay" id="pinOverlay" hidden>
+    <div class="modal">
+      <button class="modal__close" id="pinClose">&times;</button>
+      <div class="modal__header" style="border:none;margin-bottom:0">
+        <span class="modal__header-name">Inserir PIN de Edição</span>
+        <span class="modal__header-team">Digite o PIN de 4 dígitos para editar este álbum</span>
+      </div>
+      <div class="modal__body">
+        <div class="modal__field">
+          <input type="text" class="pin-input" id="pinInput" maxlength="4" inputmode="numeric" pattern="[0-9]*" placeholder="0000" autocomplete="off" />
+        </div>
+        <div class="modal__field">
+          <button class="landing__create-btn" id="pinSubmit" style="width:100%">Confirmar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SHARE MODAL -->
+  <div class="modal-overlay" id="shareOverlay" hidden>
+    <div class="modal">
+      <button class="modal__close" id="shareClose">&times;</button>
+      <div class="modal__header" style="border:none;margin-bottom:0">
+        <span class="modal__header-name">Compartilhar Álbum</span>
+      </div>
+      <div class="modal__body">
+        <div class="modal__field">
+          <label class="modal__label">Link de acesso:</label>
+          <div class="share-link-group">
+            <input type="text" class="share-link-input" id="shareLink" readonly />
+            <button class="share-link-btn" id="shareCopy">Copiar</button>
+          </div>
+        </div>
+        <div class="modal__field" id="sharePinField">
+          <label class="modal__label">PIN de edição:</label>
+          <div class="share-pin-group">
+            <span class="share-pin-value" id="sharePinValue">****</span>
+            <button class="share-link-btn" id="sharePinReveal">Mostrar</button>
+          </div>
+          <p class="share-pin-note">Compartilhe o PIN apenas com quem pode editar o álbum.</p>
+        </div>
+        <div class="modal__field">
+          <button class="share-whatsapp-btn" id="shareWhatsApp">Compartilhar no WhatsApp</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CREATED MODAL -->
+  <div class="modal-overlay" id="createdOverlay" hidden>
+    <div class="modal">
+      <div class="modal__header" style="border:none;margin-bottom:0">
+        <span class="modal__header-name">Álbum Criado!</span>
+        <span class="modal__header-team" id="createdName"></span>
+      </div>
+      <div class="modal__body">
+        <div class="created-info">
+          <div class="created-info__item">
+            <span class="created-info__label">Código de acesso</span>
+            <span class="created-info__value" id="createdCode"></span>
+          </div>
+          <div class="created-info__item">
+            <span class="created-info__label">PIN de edição</span>
+            <span class="created-info__value created-info__value--pin" id="createdPin"></span>
+          </div>
+        </div>
+        <p class="created-warning">Anote o PIN! Ele é necessário para editar o álbum.</p>
+        <button class="landing__create-btn" id="createdOk" style="width:100%;margin-top:16px">OK, entendi</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast" hidden></div>
 
   <footer class="footer">
     <div class="container">

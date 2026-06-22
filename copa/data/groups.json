@@ -331,6 +331,19 @@
   ],
   "G": [
     {
+      "team": "Egito",
+      "flag": "🇪🇬",
+      "pj": 2,
+      "v": 1,
+      "e": 1,
+      "d": 0,
+      "gp": 4,
+      "gc": 2,
+      "sg": 2,
+      "pts": 4,
+      "fairPlay": 0
+    },
+    {
       "team": "Irã",
       "flag": "🇮🇷",
       "pj": 2,
@@ -360,26 +373,13 @@
       "team": "Nova Zelândia",
       "short": "N. Zelândia",
       "flag": "🇳🇿",
-      "pj": 1,
+      "pj": 2,
       "v": 0,
       "e": 1,
-      "d": 0,
-      "gp": 2,
-      "gc": 2,
-      "sg": 0,
-      "pts": 1,
-      "fairPlay": 0
-    },
-    {
-      "team": "Egito",
-      "flag": "🇪🇬",
-      "pj": 1,
-      "v": 0,
-      "e": 1,
-      "d": 0,
-      "gp": 1,
-      "gc": 1,
-      "sg": 0,
+      "d": 1,
+      "gp": 3,
+      "gc": 5,
+      "sg": -2,
       "pts": 1,
       "fairPlay": 0
     }

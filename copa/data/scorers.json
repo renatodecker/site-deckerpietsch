@@ -3,7 +3,7 @@
     {
       "name": "Lionel Messi",
       "country": "🇦🇷 Argentina",
-      "goals": 4,
+      "goals": 5,
       "matches": 2
     },
     {
@@ -15,6 +15,12 @@
     {
       "name": "Deniz Undav",
       "country": "🇩🇪 Alemanha",
+      "goals": 3,
+      "matches": 2
+    },
+    {
+      "name": "Kylian Mbappé",
+      "country": "🇫🇷 França",
       "goals": 3,
       "matches": 2
     },
@@ -51,12 +57,6 @@
     {
       "name": "Folarin Balogun",
       "country": "🇺🇸 Estados Unidos",
-      "goals": 2,
-      "matches": 1
-    },
-    {
-      "name": "Kai Havertz",
-      "country": "🇩🇪 Alemanha",
       "goals": 2,
       "matches": 1
     }

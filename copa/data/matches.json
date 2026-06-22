@@ -2253,9 +2253,26 @@
       "home": "França",
       "away": "Iraque",
       "venue": "Filadélfia",
-      "status": "scheduled",
-      "time": "17h",
-      "espnId": "760457"
+      "status": "live",
+      "espnId": "760457",
+      "homeScore": 1,
+      "awayScore": 0,
+      "scorers": [
+        {
+          "player": "Kylian Mbappé",
+          "team": "França"
+        }
+      ],
+      "events": [
+        {
+          "type": "goal",
+          "player": "Kylian Mbappé",
+          "team": "França",
+          "minute": "14'",
+          "period": null,
+          "detail": ""
+        }
+      ]
     },
     {
       "id": 52,
@@ -2417,11 +2434,15 @@
       "home": "Argentina",
       "away": "Áustria",
       "venue": "Arlington",
-      "status": "live",
+      "status": "finished",
       "espnId": "760456",
-      "homeScore": 1,
+      "homeScore": 2,
       "awayScore": 0,
       "scorers": [
+        {
+          "player": "Lionel Messi",
+          "team": "Argentina"
+        },
         {
           "player": "Lionel Messi",
           "team": "Argentina"
@@ -2435,8 +2456,17 @@
           "minute": "38'",
           "period": null,
           "detail": ""
+        },
+        {
+          "type": "goal",
+          "player": "Lionel Messi",
+          "team": "Argentina",
+          "minute": "90'+5'",
+          "period": null,
+          "detail": ""
         }
-      ]
+      ],
+      "detailsFetched": true
     },
     {
       "id": 58,

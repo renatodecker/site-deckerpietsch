@@ -401,14 +401,27 @@
     {
       "team": "Uruguai",
       "flag": "🇺🇾",
-      "pj": 1,
+      "pj": 2,
       "v": 0,
-      "e": 1,
+      "e": 2,
       "d": 0,
-      "gp": 1,
-      "gc": 1,
+      "gp": 3,
+      "gc": 3,
       "sg": 0,
-      "pts": 1,
+      "pts": 2,
+      "fairPlay": 0
+    },
+    {
+      "team": "Cabo Verde",
+      "flag": "🇨🇻",
+      "pj": 2,
+      "v": 0,
+      "e": 2,
+      "d": 0,
+      "gp": 2,
+      "gc": 2,
+      "sg": 0,
+      "pts": 2,
       "fairPlay": 0
     },
     {
@@ -422,19 +435,6 @@
       "gp": 1,
       "gc": 5,
       "sg": -4,
-      "pts": 1,
-      "fairPlay": 0
-    },
-    {
-      "team": "Cabo Verde",
-      "flag": "🇨🇻",
-      "pj": 1,
-      "v": 0,
-      "e": 1,
-      "d": 0,
-      "gp": 0,
-      "gc": 0,
-      "sg": 0,
       "pts": 1,
       "fairPlay": 0
     }

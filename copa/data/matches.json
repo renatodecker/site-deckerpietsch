@@ -1803,9 +1803,26 @@
       "home": "Nova Zelândia",
       "away": "Egito",
       "venue": "Vancouver",
-      "status": "scheduled",
-      "time": "21h ET",
-      "espnId": "760452"
+      "status": "live",
+      "espnId": "760452",
+      "homeScore": 1,
+      "awayScore": 0,
+      "scorers": [
+        {
+          "player": "Finn Surman",
+          "team": "Nova Zelândia"
+        }
+      ],
+      "events": [
+        {
+          "type": "goal",
+          "player": "Finn Surman",
+          "team": "Nova Zelândia",
+          "minute": "15'",
+          "period": null,
+          "detail": ""
+        }
+      ]
     },
     {
       "id": 41,
@@ -1976,10 +1993,10 @@
       "home": "Uruguai",
       "away": "Cabo Verde",
       "venue": "Miami",
-      "status": "live",
+      "status": "finished",
       "espnId": "760450",
       "homeScore": 2,
-      "awayScore": 1,
+      "awayScore": 2,
       "scorers": [
         {
           "player": "Kevin Pina",
@@ -1990,8 +2007,12 @@
           "team": "Uruguai"
         },
         {
-          "player": "Agustín Cano",
+          "player": "Agustín Canobbio",
           "team": "Uruguai"
+        },
+        {
+          "player": "Hélio Varela",
+          "team": "Cabo Verde"
         }
       ],
       "events": [
@@ -2013,13 +2034,22 @@
         },
         {
           "type": "goal",
-          "player": "Agustín Cano",
+          "player": "Agustín Canobbio",
           "team": "Uruguai",
           "minute": "45'+6'",
           "period": null,
           "detail": ""
+        },
+        {
+          "type": "goal",
+          "player": "Hélio Varela",
+          "team": "Cabo Verde",
+          "minute": "61'",
+          "period": null,
+          "detail": ""
         }
-      ]
+      ],
+      "detailsFetched": true
     },
     {
       "id": 47,
@@ -2547,7 +2577,8 @@
       "away": "Uzbequistão",
       "venue": "Houston",
       "status": "scheduled",
-      "time": "13h ET"
+      "time": "13h ET",
+      "espnId": "760461"
     },
     {
       "id": 64,
@@ -2557,7 +2588,8 @@
       "away": "RD Congo",
       "venue": "Guadalajara",
       "status": "scheduled",
-      "time": "22h ET"
+      "time": "22h ET",
+      "espnId": "760459"
     },
     {
       "id": 65,
@@ -2729,7 +2761,8 @@
       "away": "Gana",
       "venue": "Foxborough",
       "status": "scheduled",
-      "time": "16h"
+      "time": "16h",
+      "espnId": "760458"
     },
     {
       "id": 70,
@@ -2739,7 +2772,8 @@
       "away": "Croácia",
       "venue": "Toronto",
       "status": "scheduled",
-      "time": "19h"
+      "time": "19h",
+      "espnId": "760460"
     },
     {
       "id": 71,

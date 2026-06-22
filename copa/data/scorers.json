@@ -1,6 +1,12 @@
 {
   "scorers": [
     {
+      "name": "Lionel Messi",
+      "country": "🇦🇷 Argentina",
+      "goals": 4,
+      "matches": 2
+    },
+    {
       "name": "Jonathan David",
       "country": "🇨🇦 Canadá",
       "goals": 3,
@@ -11,12 +17,6 @@
       "country": "🇩🇪 Alemanha",
       "goals": 3,
       "matches": 2
-    },
-    {
-      "name": "Lionel Messi",
-      "country": "🇦🇷 Argentina",
-      "goals": 3,
-      "matches": 1
     },
     {
       "name": "Cyle Larin",

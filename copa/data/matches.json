@@ -2417,9 +2417,26 @@
       "home": "Argentina",
       "away": "Áustria",
       "venue": "Arlington",
-      "status": "scheduled",
-      "time": "13h ET",
-      "espnId": "760456"
+      "status": "live",
+      "espnId": "760456",
+      "homeScore": 1,
+      "awayScore": 0,
+      "scorers": [
+        {
+          "player": "Lionel Messi",
+          "team": "Argentina"
+        }
+      ],
+      "events": [
+        {
+          "type": "goal",
+          "player": "Lionel Messi",
+          "team": "Argentina",
+          "minute": "38'",
+          "period": null,
+          "detail": ""
+        }
+      ]
     },
     {
       "id": 58,

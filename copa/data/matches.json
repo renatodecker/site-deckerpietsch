@@ -241,7 +241,8 @@
       "away": "México",
       "venue": "Cidade do México",
       "status": "scheduled",
-      "time": "19h"
+      "time": "19h",
+      "espnId": "760467"
     },
     {
       "id": 6,
@@ -251,7 +252,8 @@
       "away": "Coreia do Sul",
       "venue": "Monterrey",
       "status": "scheduled",
-      "time": "19h"
+      "time": "19h",
+      "espnId": "760466"
     },
     {
       "id": 7,
@@ -557,7 +559,8 @@
       "away": "Canadá",
       "venue": "Vancouver",
       "status": "scheduled",
-      "time": "15h ET"
+      "time": "15h ET",
+      "espnId": "760463"
     },
     {
       "id": 12,
@@ -567,7 +570,8 @@
       "away": "Catar",
       "venue": "Seattle",
       "status": "scheduled",
-      "time": "15h ET"
+      "time": "15h ET",
+      "espnId": "760462"
     },
     {
       "id": 13,
@@ -781,7 +785,8 @@
       "away": "Brasil",
       "venue": "Miami",
       "status": "scheduled",
-      "time": "18h"
+      "time": "18h",
+      "espnId": "760465"
     },
     {
       "id": 18,
@@ -791,7 +796,8 @@
       "away": "Haiti",
       "venue": "Atlanta",
       "status": "scheduled",
-      "time": "18h"
+      "time": "18h",
+      "espnId": "760464"
     },
     {
       "id": 19,
@@ -2253,13 +2259,21 @@
       "home": "França",
       "away": "Iraque",
       "venue": "Filadélfia",
-      "status": "live",
+      "status": "finished",
       "espnId": "760457",
-      "homeScore": 1,
+      "homeScore": 3,
       "awayScore": 0,
       "scorers": [
         {
           "player": "Kylian Mbappé",
+          "team": "França"
+        },
+        {
+          "player": "Kylian Mbappé",
+          "team": "França"
+        },
+        {
+          "player": "Ousmane Dembélé",
           "team": "França"
         }
       ],
@@ -2271,8 +2285,25 @@
           "minute": "14'",
           "period": null,
           "detail": ""
+        },
+        {
+          "type": "goal",
+          "player": "Kylian Mbappé",
+          "team": "França",
+          "minute": "54'",
+          "period": null,
+          "detail": ""
+        },
+        {
+          "type": "goal",
+          "player": "Ousmane Dembélé",
+          "team": "França",
+          "minute": "66'",
+          "period": null,
+          "detail": ""
         }
-      ]
+      ],
+      "detailsFetched": true
     },
     {
       "id": 52,
@@ -2281,9 +2312,62 @@
       "home": "Noruega",
       "away": "Senegal",
       "venue": "East Rutherford",
-      "status": "scheduled",
-      "time": "20h",
-      "espnId": "760454"
+      "status": "live",
+      "espnId": "760454",
+      "homeScore": 3,
+      "awayScore": 1,
+      "scorers": [
+        {
+          "player": "Marcus Holmgren Pedersen",
+          "team": "Noruega"
+        },
+        {
+          "player": "Erling Haaland",
+          "team": "Noruega"
+        },
+        {
+          "player": "Ismaïla Sarr",
+          "team": "Senegal"
+        },
+        {
+          "player": "Erling Haaland",
+          "team": "Noruega"
+        }
+      ],
+      "events": [
+        {
+          "type": "goal",
+          "player": "Marcus Holmgren Pedersen",
+          "team": "Noruega",
+          "minute": "43'",
+          "period": null,
+          "detail": ""
+        },
+        {
+          "type": "goal",
+          "player": "Erling Haaland",
+          "team": "Noruega",
+          "minute": "48'",
+          "period": null,
+          "detail": ""
+        },
+        {
+          "type": "goal",
+          "player": "Ismaïla Sarr",
+          "team": "Senegal",
+          "minute": "53'",
+          "period": null,
+          "detail": ""
+        },
+        {
+          "type": "goal",
+          "player": "Erling Haaland",
+          "team": "Noruega",
+          "minute": "58'",
+          "period": null,
+          "detail": ""
+        }
+      ]
     },
     {
       "id": 53,

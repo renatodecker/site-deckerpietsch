@@ -7,6 +7,18 @@
       "matches": 2
     },
     {
+      "name": "Kylian Mbappé",
+      "country": "🇫🇷 França",
+      "goals": 4,
+      "matches": 2
+    },
+    {
+      "name": "Erling Haaland",
+      "country": "🇳🇴 Noruega",
+      "goals": 4,
+      "matches": 2
+    },
+    {
       "name": "Jonathan David",
       "country": "🇨🇦 Canadá",
       "goals": 3,
@@ -15,12 +27,6 @@
     {
       "name": "Deniz Undav",
       "country": "🇩🇪 Alemanha",
-      "goals": 3,
-      "matches": 2
-    },
-    {
-      "name": "Kylian Mbappé",
-      "country": "🇫🇷 França",
       "goals": 3,
       "matches": 2
     },
@@ -51,12 +57,6 @@
     {
       "name": "Matheus Cunha",
       "country": "🇧🇷 Brasil",
-      "goals": 2,
-      "matches": 1
-    },
-    {
-      "name": "Folarin Balogun",
-      "country": "🇺🇸 Estados Unidos",
       "goals": 2,
       "matches": 1
     }

@@ -441,6 +441,19 @@
   ],
   "I": [
     {
+      "team": "França",
+      "flag": "🇫🇷",
+      "pj": 2,
+      "v": 2,
+      "e": 0,
+      "d": 0,
+      "gp": 6,
+      "gc": 1,
+      "sg": 5,
+      "pts": 6,
+      "fairPlay": 0
+    },
+    {
       "team": "Noruega",
       "flag": "🇳🇴",
       "pj": 1,
@@ -450,19 +463,6 @@
       "gp": 4,
       "gc": 1,
       "sg": 3,
-      "pts": 3,
-      "fairPlay": 0
-    },
-    {
-      "team": "França",
-      "flag": "🇫🇷",
-      "pj": 1,
-      "v": 1,
-      "e": 0,
-      "d": 0,
-      "gp": 3,
-      "gc": 1,
-      "sg": 2,
       "pts": 3,
       "fairPlay": 0
     },
@@ -482,13 +482,13 @@
     {
       "team": "Iraque",
       "flag": "🇮🇶",
-      "pj": 1,
+      "pj": 2,
       "v": 0,
       "e": 0,
-      "d": 1,
+      "d": 2,
       "gp": 1,
-      "gc": 4,
-      "sg": -3,
+      "gc": 7,
+      "sg": -6,
       "pts": 0,
       "fairPlay": 0
     }

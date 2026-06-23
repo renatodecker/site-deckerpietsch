@@ -3059,9 +3059,11 @@
       "home": "Panamá",
       "away": "Croácia",
       "venue": "Toronto",
-      "status": "scheduled",
-      "time": "19h",
-      "espnId": "760460"
+      "status": "live",
+      "espnId": "760460",
+      "homeScore": 0,
+      "awayScore": 0,
+      "scorers": []
     },
     {
       "id": 71,

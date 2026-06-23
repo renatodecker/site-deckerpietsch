@@ -605,27 +605,27 @@
     {
       "team": "Inglaterra",
       "flag": "🏴󠁧󠁢󠁥󠁮󠁧󠁿",
-      "pj": 1,
+      "pj": 2,
       "v": 1,
-      "e": 0,
+      "e": 1,
       "d": 0,
       "gp": 4,
       "gc": 2,
       "sg": 2,
-      "pts": 3,
+      "pts": 4,
       "fairPlay": 0
     },
     {
       "team": "Gana",
       "flag": "🇬🇭",
-      "pj": 1,
+      "pj": 2,
       "v": 1,
-      "e": 0,
+      "e": 1,
       "d": 0,
       "gp": 1,
       "gc": 0,
       "sg": 1,
-      "pts": 3,
+      "pts": 4,
       "fairPlay": 0
     },
     {

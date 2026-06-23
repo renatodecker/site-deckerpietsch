@@ -3045,11 +3045,12 @@
       "home": "Inglaterra",
       "away": "Gana",
       "venue": "Foxborough",
-      "status": "live",
+      "status": "finished",
       "espnId": "760458",
       "homeScore": 0,
       "awayScore": 0,
-      "scorers": []
+      "scorers": [],
+      "detailsFetched": true
     },
     {
       "id": 70,

@@ -2799,9 +2799,9 @@
       "home": "Portugal",
       "away": "Uzbequistão",
       "venue": "Houston",
-      "status": "live",
+      "status": "finished",
       "espnId": "760461",
-      "homeScore": 3,
+      "homeScore": 5,
       "awayScore": 0,
       "scorers": [
         {
@@ -2814,6 +2814,10 @@
         },
         {
           "player": "Cristiano Ronaldo",
+          "team": "Portugal"
+        },
+        {
+          "player": "Rafael Leão",
           "team": "Portugal"
         }
       ],
@@ -2841,8 +2845,25 @@
           "minute": "39'",
           "period": null,
           "detail": ""
+        },
+        {
+          "type": "goal",
+          "player": "Abduvohid Nematov",
+          "team": "Portugal",
+          "minute": "60'",
+          "period": null,
+          "detail": "gol contra"
+        },
+        {
+          "type": "goal",
+          "player": "Rafael Leão",
+          "team": "Portugal",
+          "minute": "87'",
+          "period": null,
+          "detail": ""
         }
-      ]
+      ],
+      "detailsFetched": true
     },
     {
       "id": 64,
@@ -3024,9 +3045,11 @@
       "home": "Inglaterra",
       "away": "Gana",
       "venue": "Foxborough",
-      "status": "scheduled",
-      "time": "16h",
-      "espnId": "760458"
+      "status": "live",
+      "espnId": "760458",
+      "homeScore": 0,
+      "awayScore": 0,
+      "scorers": []
     },
     {
       "id": 70,

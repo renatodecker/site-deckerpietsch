@@ -549,6 +549,19 @@
   ],
   "K": [
     {
+      "team": "Portugal",
+      "flag": "🇵🇹",
+      "pj": 2,
+      "v": 1,
+      "e": 1,
+      "d": 0,
+      "gp": 6,
+      "gc": 1,
+      "sg": 5,
+      "pts": 4,
+      "fairPlay": 0
+    },
+    {
       "team": "Colômbia",
       "flag": "🇨🇴",
       "pj": 1,
@@ -559,19 +572,6 @@
       "gc": 1,
       "sg": 2,
       "pts": 3,
-      "fairPlay": 0
-    },
-    {
-      "team": "Portugal",
-      "flag": "🇵🇹",
-      "pj": 1,
-      "v": 0,
-      "e": 1,
-      "d": 0,
-      "gp": 1,
-      "gc": 1,
-      "sg": 0,
-      "pts": 1,
       "fairPlay": 0
     },
     {
@@ -590,13 +590,13 @@
     {
       "team": "Uzbequistão",
       "flag": "🇺🇿",
-      "pj": 1,
+      "pj": 2,
       "v": 0,
       "e": 0,
-      "d": 1,
+      "d": 2,
       "gp": 1,
-      "gc": 3,
-      "sg": -2,
+      "gc": 8,
+      "sg": -7,
       "pts": 0,
       "fairPlay": 0
     }

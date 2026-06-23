@@ -2799,9 +2799,50 @@
       "home": "Portugal",
       "away": "Uzbequistão",
       "venue": "Houston",
-      "status": "scheduled",
-      "time": "13h ET",
-      "espnId": "760461"
+      "status": "live",
+      "espnId": "760461",
+      "homeScore": 3,
+      "awayScore": 0,
+      "scorers": [
+        {
+          "player": "Cristiano Ronaldo",
+          "team": "Portugal"
+        },
+        {
+          "player": "Nuno Mendes",
+          "team": "Portugal"
+        },
+        {
+          "player": "Cristiano Ronaldo",
+          "team": "Portugal"
+        }
+      ],
+      "events": [
+        {
+          "type": "goal",
+          "player": "Cristiano Ronaldo",
+          "team": "Portugal",
+          "minute": "6'",
+          "period": null,
+          "detail": ""
+        },
+        {
+          "type": "goal",
+          "player": "Nuno Mendes",
+          "team": "Portugal",
+          "minute": "17'",
+          "period": null,
+          "detail": ""
+        },
+        {
+          "type": "goal",
+          "player": "Cristiano Ronaldo",
+          "team": "Portugal",
+          "minute": "39'",
+          "period": null,
+          "detail": ""
+        }
+      ]
     },
     {
       "id": 64,

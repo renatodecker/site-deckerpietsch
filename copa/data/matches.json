@@ -2312,10 +2312,10 @@
       "home": "Noruega",
       "away": "Senegal",
       "venue": "East Rutherford",
-      "status": "live",
+      "status": "finished",
       "espnId": "760454",
       "homeScore": 3,
-      "awayScore": 1,
+      "awayScore": 2,
       "scorers": [
         {
           "player": "Marcus Holmgren Pedersen",
@@ -2332,6 +2332,10 @@
         {
           "player": "Erling Haaland",
           "team": "Noruega"
+        },
+        {
+          "player": "Ismaïla Sarr",
+          "team": "Senegal"
         }
       ],
       "events": [
@@ -2366,8 +2370,17 @@
           "minute": "58'",
           "period": null,
           "detail": ""
+        },
+        {
+          "type": "goal",
+          "player": "Ismaïla Sarr",
+          "team": "Senegal",
+          "minute": "90'+3'",
+          "period": null,
+          "detail": ""
         }
-      ]
+      ],
+      "detailsFetched": true
     },
     {
       "id": 53,
@@ -2559,9 +2572,51 @@
       "home": "Jordânia",
       "away": "Argélia",
       "venue": "Santa Clara",
-      "status": "scheduled",
-      "time": "23h ET",
-      "espnId": "760455"
+      "status": "finished",
+      "espnId": "760455",
+      "homeScore": 1,
+      "awayScore": 2,
+      "scorers": [
+        {
+          "player": "Nizar Al-Rashdan",
+          "team": "Jordânia"
+        },
+        {
+          "player": "Nadhir Benbouali",
+          "team": "Argélia"
+        },
+        {
+          "player": "Amine Gouiri",
+          "team": "Argélia"
+        }
+      ],
+      "events": [
+        {
+          "type": "goal",
+          "player": "Nizar Al-Rashdan",
+          "team": "Jordânia",
+          "minute": "36'",
+          "period": null,
+          "detail": ""
+        },
+        {
+          "type": "goal",
+          "player": "Nadhir Benbouali",
+          "team": "Argélia",
+          "minute": "69'",
+          "period": null,
+          "detail": ""
+        },
+        {
+          "type": "goal",
+          "player": "Amine Gouiri",
+          "team": "Argélia",
+          "minute": "82'",
+          "period": null,
+          "detail": ""
+        }
+      ],
+      "detailsFetched": true
     },
     {
       "id": 59,

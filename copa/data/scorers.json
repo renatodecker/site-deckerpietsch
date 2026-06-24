@@ -19,6 +19,12 @@
       "matches": 2
     },
     {
+      "name": "Johan Manzambi",
+      "country": "🇨🇭 Suíça",
+      "goals": 3,
+      "matches": 2
+    },
+    {
       "name": "Jonathan David",
       "country": "🇨🇦 Canadá",
       "goals": 3,
@@ -37,28 +43,22 @@
       "matches": 2
     },
     {
-      "name": "Johan Manzambi",
+      "name": "Rubén Vargas",
       "country": "🇨🇭 Suíça",
       "goals": 2,
-      "matches": 1
+      "matches": 2
+    },
+    {
+      "name": "Ermin Mahmic",
+      "country": "🇧🇦 Bósnia e Herzegovina",
+      "goals": 2,
+      "matches": 2
     },
     {
       "name": "Ismael Saibari",
       "country": "🇲🇦 Marrocos",
       "goals": 2,
       "matches": 2
-    },
-    {
-      "name": "Vinícius Júnior",
-      "country": "🇧🇷 Brasil",
-      "goals": 2,
-      "matches": 2
-    },
-    {
-      "name": "Matheus Cunha",
-      "country": "🇧🇷 Brasil",
-      "goals": 2,
-      "matches": 1
     }
   ]
 }

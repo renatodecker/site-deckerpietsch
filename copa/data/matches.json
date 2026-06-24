@@ -558,11 +558,51 @@
       "home": "Suíça",
       "away": "Canadá",
       "venue": "Vancouver",
-      "status": "live",
+      "status": "finished",
       "espnId": "760463",
-      "homeScore": 0,
-      "awayScore": 0,
-      "scorers": []
+      "homeScore": 2,
+      "awayScore": 1,
+      "scorers": [
+        {
+          "player": "Rubén Vargas",
+          "team": "Suíça"
+        },
+        {
+          "player": "Johan Manzambi",
+          "team": "Suíça"
+        },
+        {
+          "player": "Promise David",
+          "team": "Canadá"
+        }
+      ],
+      "events": [
+        {
+          "type": "goal",
+          "player": "Rubén Vargas",
+          "team": "Suíça",
+          "minute": "46'",
+          "period": null,
+          "detail": ""
+        },
+        {
+          "type": "goal",
+          "player": "Johan Manzambi",
+          "team": "Suíça",
+          "minute": "57'",
+          "period": null,
+          "detail": ""
+        },
+        {
+          "type": "goal",
+          "player": "Promise David",
+          "team": "Canadá",
+          "minute": "76'",
+          "period": null,
+          "detail": ""
+        }
+      ],
+      "detailsFetched": true
     },
     {
       "id": 12,
@@ -571,9 +611,9 @@
       "home": "Bósnia e Herzegovina",
       "away": "Catar",
       "venue": "Seattle",
-      "status": "live",
+      "status": "finished",
       "espnId": "760462",
-      "homeScore": 2,
+      "homeScore": 3,
       "awayScore": 1,
       "scorers": [
         {
@@ -583,6 +623,10 @@
         {
           "player": "Hassan Al-Haydos",
           "team": "Catar"
+        },
+        {
+          "player": "Ermin Mahmic",
+          "team": "Bósnia e Herzegovina"
         }
       ],
       "events": [
@@ -596,7 +640,7 @@
         },
         {
           "type": "goal",
-          "player": "Sultan Al-Brake",
+          "player": "Mahmoud Abunada",
           "team": "Bósnia e Herzegovina",
           "minute": "34'",
           "period": null,
@@ -609,8 +653,17 @@
           "minute": "42'",
           "period": null,
           "detail": ""
+        },
+        {
+          "type": "goal",
+          "player": "Ermin Mahmic",
+          "team": "Bósnia e Herzegovina",
+          "minute": "80'",
+          "period": null,
+          "detail": ""
         }
-      ]
+      ],
+      "detailsFetched": true
     },
     {
       "id": 13,

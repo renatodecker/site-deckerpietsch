@@ -558,9 +558,11 @@
       "home": "Suíça",
       "away": "Canadá",
       "venue": "Vancouver",
-      "status": "scheduled",
-      "time": "15h ET",
-      "espnId": "760463"
+      "status": "live",
+      "espnId": "760463",
+      "homeScore": 0,
+      "awayScore": 0,
+      "scorers": []
     },
     {
       "id": 12,
@@ -569,9 +571,46 @@
       "home": "Bósnia e Herzegovina",
       "away": "Catar",
       "venue": "Seattle",
-      "status": "scheduled",
-      "time": "15h ET",
-      "espnId": "760462"
+      "status": "live",
+      "espnId": "760462",
+      "homeScore": 2,
+      "awayScore": 1,
+      "scorers": [
+        {
+          "player": "Kerim Alajbegovic",
+          "team": "Bósnia e Herzegovina"
+        },
+        {
+          "player": "Hassan Al-Haydos",
+          "team": "Catar"
+        }
+      ],
+      "events": [
+        {
+          "type": "goal",
+          "player": "Kerim Alajbegovic",
+          "team": "Bósnia e Herzegovina",
+          "minute": "29'",
+          "period": null,
+          "detail": ""
+        },
+        {
+          "type": "goal",
+          "player": "Sultan Al-Brake",
+          "team": "Bósnia e Herzegovina",
+          "minute": "34'",
+          "period": null,
+          "detail": "gol contra"
+        },
+        {
+          "type": "goal",
+          "player": "Hassan Al-Haydos",
+          "team": "Catar",
+          "minute": "42'",
+          "period": null,
+          "detail": ""
+        }
+      ]
     },
     {
       "id": 13,

@@ -2878,7 +2878,7 @@
       "home": "Colômbia",
       "away": "RD Congo",
       "venue": "Guadalajara",
-      "status": "live",
+      "status": "finished",
       "espnId": "760459",
       "homeScore": 1,
       "awayScore": 0,
@@ -2897,7 +2897,8 @@
           "period": null,
           "detail": ""
         }
-      ]
+      ],
+      "detailsFetched": true
     },
     {
       "id": 65,

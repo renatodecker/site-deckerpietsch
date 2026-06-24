@@ -1055,7 +1055,8 @@
       "away": "Estados Unidos",
       "venue": "Inglewood",
       "status": "scheduled",
-      "time": "22h ET"
+      "time": "22h ET",
+      "espnId": "760470"
     },
     {
       "id": 24,
@@ -1065,7 +1066,8 @@
       "away": "Austrália",
       "venue": "Santa Clara",
       "status": "scheduled",
-      "time": "22h ET"
+      "time": "22h ET",
+      "espnId": "760469"
     },
     {
       "id": 25,
@@ -1292,7 +1294,8 @@
       "away": "Costa do Marfim",
       "venue": "Filadélfia",
       "status": "scheduled",
-      "time": "16h ET"
+      "time": "16h ET",
+      "espnId": "760473"
     },
     {
       "id": 30,
@@ -1302,7 +1305,8 @@
       "away": "Alemanha",
       "venue": "East Rutherford",
       "status": "scheduled",
-      "time": "16h ET"
+      "time": "16h ET",
+      "espnId": "760468"
     },
     {
       "id": 31,
@@ -1628,7 +1632,8 @@
       "away": "Suécia",
       "venue": "Arlington",
       "status": "scheduled",
-      "time": "19h"
+      "time": "19h",
+      "espnId": "760471"
     },
     {
       "id": 36,
@@ -1638,7 +1643,8 @@
       "away": "Países Baixos",
       "venue": "Kansas City",
       "status": "scheduled",
-      "time": "19h"
+      "time": "19h",
+      "espnId": "760472"
     },
     {
       "id": 37,
@@ -2872,9 +2878,26 @@
       "home": "Colômbia",
       "away": "RD Congo",
       "venue": "Guadalajara",
-      "status": "scheduled",
-      "time": "22h ET",
-      "espnId": "760459"
+      "status": "live",
+      "espnId": "760459",
+      "homeScore": 1,
+      "awayScore": 0,
+      "scorers": [
+        {
+          "player": "Daniel Muñoz",
+          "team": "Colômbia"
+        }
+      ],
+      "events": [
+        {
+          "type": "goal",
+          "player": "Daniel Muñoz",
+          "team": "Colômbia",
+          "minute": "76'",
+          "period": null,
+          "detail": ""
+        }
+      ]
     },
     {
       "id": 65,
@@ -3059,11 +3082,27 @@
       "home": "Panamá",
       "away": "Croácia",
       "venue": "Toronto",
-      "status": "live",
+      "status": "finished",
       "espnId": "760460",
       "homeScore": 0,
-      "awayScore": 0,
-      "scorers": []
+      "awayScore": 1,
+      "scorers": [
+        {
+          "player": "Ante Budimir",
+          "team": "Croácia"
+        }
+      ],
+      "events": [
+        {
+          "type": "goal",
+          "player": "Ante Budimir",
+          "team": "Croácia",
+          "minute": "54'",
+          "period": null,
+          "detail": ""
+        }
+      ],
+      "detailsFetched": true
     },
     {
       "id": 71,

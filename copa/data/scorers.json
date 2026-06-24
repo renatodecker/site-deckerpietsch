@@ -7,6 +7,12 @@
       "matches": 2
     },
     {
+      "name": "Vinícius Júnior",
+      "country": "🇧🇷 Brasil",
+      "goals": 4,
+      "matches": 3
+    },
+    {
       "name": "Kylian Mbappé",
       "country": "🇫🇷 França",
       "goals": 4,
@@ -31,6 +37,12 @@
       "matches": 1
     },
     {
+      "name": "Ismael Saibari",
+      "country": "🇲🇦 Marrocos",
+      "goals": 3,
+      "matches": 3
+    },
+    {
       "name": "Deniz Undav",
       "country": "🇩🇪 Alemanha",
       "goals": 3,
@@ -45,18 +57,6 @@
     {
       "name": "Rubén Vargas",
       "country": "🇨🇭 Suíça",
-      "goals": 2,
-      "matches": 2
-    },
-    {
-      "name": "Ermin Mahmic",
-      "country": "🇧🇦 Bósnia e Herzegovina",
-      "goals": 2,
-      "matches": 2
-    },
-    {
-      "name": "Ismael Saibari",
-      "country": "🇲🇦 Marrocos",
       "goals": 2,
       "matches": 2
     }

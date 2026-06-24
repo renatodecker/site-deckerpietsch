@@ -876,9 +876,38 @@
       "home": "Escócia",
       "away": "Brasil",
       "venue": "Miami",
-      "status": "scheduled",
-      "time": "18h",
-      "espnId": "760465"
+      "status": "live",
+      "espnId": "760465",
+      "homeScore": 0,
+      "awayScore": 2,
+      "scorers": [
+        {
+          "player": "Vinícius Júnior",
+          "team": "Brasil"
+        },
+        {
+          "player": "Vinícius Júnior",
+          "team": "Brasil"
+        }
+      ],
+      "events": [
+        {
+          "type": "goal",
+          "player": "Vinícius Júnior",
+          "team": "Brasil",
+          "minute": "7'",
+          "period": null,
+          "detail": ""
+        },
+        {
+          "type": "goal",
+          "player": "Vinícius Júnior",
+          "team": "Brasil",
+          "minute": "45'+3'",
+          "period": null,
+          "detail": ""
+        }
+      ]
     },
     {
       "id": 18,
@@ -887,9 +916,58 @@
       "home": "Marrocos",
       "away": "Haiti",
       "venue": "Atlanta",
-      "status": "scheduled",
-      "time": "18h",
-      "espnId": "760464"
+      "status": "live",
+      "espnId": "760464",
+      "homeScore": 2,
+      "awayScore": 2,
+      "scorers": [
+        {
+          "player": "Achraf Hakimi",
+          "team": "Marrocos"
+        },
+        {
+          "player": "Wilson Isidor",
+          "team": "Haiti"
+        },
+        {
+          "player": "Ismael Saibari",
+          "team": "Marrocos"
+        }
+      ],
+      "events": [
+        {
+          "type": "goal",
+          "player": "Yassine Bounou",
+          "team": "Haiti",
+          "minute": "10'",
+          "period": null,
+          "detail": "gol contra"
+        },
+        {
+          "type": "goal",
+          "player": "Achraf Hakimi",
+          "team": "Marrocos",
+          "minute": "39'",
+          "period": null,
+          "detail": ""
+        },
+        {
+          "type": "goal",
+          "player": "Wilson Isidor",
+          "team": "Haiti",
+          "minute": "43'",
+          "period": null,
+          "detail": ""
+        },
+        {
+          "type": "goal",
+          "player": "Ismael Saibari",
+          "team": "Marrocos",
+          "minute": "45'+1'",
+          "period": null,
+          "detail": ""
+        }
+      ]
     },
     {
       "id": 19,

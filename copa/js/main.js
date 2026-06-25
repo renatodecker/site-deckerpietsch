@@ -1,6 +1,6 @@
 import { sortGroupStandings, sortThirdPlaced } from './standings.js';
 import { fetchLiveUpdate } from './espn.js';
-import { getBracketColumns } from './bracket.js';
+import { getThirdSlots, assignThirdSlots, getBracketColumns } from './bracket.js';
 
 /* ============================================================
    HEADER / NAV (igual ao site principal)
@@ -306,6 +306,15 @@ function getThirdPlacedTeams(sortedGroups) {
   return sortThirdPlaced(thirds);
 }
 
+function buildThirdAssignment(sortedGroups, matches) {
+  if (!sortedGroups || !matches || !matches.knockout || !matches.knockout.r32) return {};
+  const ranked = getThirdPlacedTeams(sortedGroups);
+  const qualified = ranked.slice(0, 8);
+  if (qualified.length < 8) return {};
+  const thirdSlots = getThirdSlots(matches.knockout.r32);
+  return assignThirdSlots(qualified, thirdSlots);
+}
+
 function renderThirdPlaced(sortedGroups) {
   const wrap = document.getElementById('thirdPlacedWrap');
   if (!sortedGroups || Object.keys(sortedGroups).length === 0) {
@@ -381,7 +390,7 @@ function getMatchOutcome(match, wantLoser) {
 
 // Resolve a slot code ("1A", "2C", "3:A,B,C,D,F", "W73", "L101") into a
 // display label. `resolved: true` means a real team name is known.
-function resolveSlot(source, groups, knockoutFlat) {
+function resolveSlot(source, groups, knockoutFlat, thirdAssignment, matchId) {
   if (!source) return null;
 
   let m = source.match(/^([12])([A-L])$/);
@@ -393,6 +402,8 @@ function resolveSlot(source, groups, knockoutFlat) {
 
   m = source.match(/^3:(.+)$/);
   if (m) {
+    const team = thirdAssignment && thirdAssignment[matchId];
+    if (team) return { team, label: `3º`, resolved: true };
     return { team: null, label: `Melhor 3º (${m[1].split(',').join('/')})`, resolved: false };
   }
 
@@ -484,11 +495,11 @@ function teamFlagHTML(name) {
 
 // Returns { html, tbd } for a match's home/away side, resolving
 // homeSource/awaySource against current standings when the team isn't set yet.
-function resolveTeamDisplay(match, side, groups, knockoutFlat) {
+function resolveTeamDisplay(match, side, groups, knockoutFlat, thirdAssignment) {
   const team = match[side];
   if (team) return { html: `<span data-squad-team="${team}">${teamFlagHTML(team)}${team}</span>`, tbd: false };
 
-  const slot = resolveSlot(match[`${side}Source`], groups, knockoutFlat);
+  const slot = resolveSlot(match[`${side}Source`], groups, knockoutFlat, thirdAssignment, match.id);
   if (!slot) return { html: 'A definir', tbd: true };
   if (slot.resolved) return { html: `<span data-squad-team="${slot.team}">${teamFlagHTML(slot.team)}${slot.team}</span> <span class="slot-tag">(${slot.label})</span>`, tbd: false };
   return { html: slot.label, tbd: true };
@@ -529,7 +540,7 @@ function buildVenueIndex(stadiums) {
   return index;
 }
 
-function matchCardHTML(match, groups, knockoutFlat, venueIndex) {
+function matchCardHTML(match, groups, knockoutFlat, venueIndex, thirdAssignment) {
   const isFinished = match.status === 'finished';
   const isLive = match.status === 'live';
 
@@ -571,8 +582,8 @@ function matchCardHTML(match, groups, knockoutFlat, venueIndex) {
         : `<span class="match-card__venue match-card__venue--plain">${match.venue}</span>`)
     : '';
 
-  const home = resolveTeamDisplay(match, 'home', groups, knockoutFlat);
-  const away = resolveTeamDisplay(match, 'away', groups, knockoutFlat);
+  const home = resolveTeamDisplay(match, 'home', groups, knockoutFlat, thirdAssignment);
+  const away = resolveTeamDisplay(match, 'away', groups, knockoutFlat, thirdAssignment);
 
   return `
     <div class="match-card">
@@ -602,6 +613,7 @@ function renderMatches(matches, groups, stadiums) {
   const knockout = matches.knockout || {};
   const knockoutFlat = flattenKnockout(knockout);
   const venueIndex = buildVenueIndex(stadiums);
+  const thirdAssignment = buildThirdAssignment(groups, matches);
 
   // Build group filter tabs
   const groupLetters = [...new Set(groupStage.map(m => m.group))].sort();
@@ -637,7 +649,7 @@ function renderMatches(matches, groups, stadiums) {
 
     Object.keys(byDate).sort().forEach(date => {
       html += `<div class="match-day">${formatDayLabel(date)}</div>`;
-      byDate[date].forEach(m => { html += matchCardHTML(m, groups, knockoutFlat, venueIndex); });
+      byDate[date].forEach(m => { html += matchCardHTML(m, groups, knockoutFlat, venueIndex, thirdAssignment); });
     });
 
     // Knockout
@@ -647,7 +659,7 @@ function renderMatches(matches, groups, stadiums) {
 
     koKeysToShow.forEach(k => {
       html += `<div class="match-day">${KNOCKOUT_LABELS[k]}</div>`;
-      (knockout[k] || []).forEach(m => { html += matchCardHTML({ ...m, stage: KNOCKOUT_LABELS[k] }, groups, knockoutFlat, venueIndex); });
+      (knockout[k] || []).forEach(m => { html += matchCardHTML({ ...m, stage: KNOCKOUT_LABELS[k] }, groups, knockoutFlat, venueIndex, thirdAssignment); });
     });
 
     listWrap.innerHTML = html || '<div class="empty-state">Nenhum jogo para este filtro.</div>';
@@ -678,9 +690,9 @@ function renderMatches(matches, groups, stadiums) {
 /* ============================================================
    CHAVEAMENTO (BRACKET)
    ============================================================ */
-function bracketMatchHTML(match, groups, knockoutFlat, venueIndex) {
-  const home = resolveTeamDisplay(match, 'home', groups, knockoutFlat);
-  const away = resolveTeamDisplay(match, 'away', groups, knockoutFlat);
+function bracketMatchHTML(match, groups, knockoutFlat, venueIndex, thirdAssignment) {
+  const home = resolveTeamDisplay(match, 'home', groups, knockoutFlat, thirdAssignment);
+  const away = resolveTeamDisplay(match, 'away', groups, knockoutFlat, thirdAssignment);
   const homeCls = home.tbd ? 'bracket-match__team--tbd' : '';
   const awayCls = away.tbd ? 'bracket-match__team--tbd' : '';
   const homeScore = match.homeScore ?? '';
@@ -731,6 +743,7 @@ function renderBracket(matches, groups, stadiums) {
   const knockoutFlat = flattenKnockout(knockout);
   const venueIndex = buildVenueIndex(stadiums);
   const columns = getBracketColumns(knockout);
+  const thirdAssignment = buildThirdAssignment(groups, matches);
 
   wrap.innerHTML = columns.map(col => {
     if (col.side === 'center') {
@@ -738,17 +751,17 @@ function renderBracket(matches, groups, stadiums) {
       return `
         <div class="bracket__round bracket__round--center">
           <div class="bracket__round-title">${KNOCKOUT_LABELS.final}</div>
-          ${bracketMatchHTML(final, groups, knockoutFlat, venueIndex)}
+          ${bracketMatchHTML(final, groups, knockoutFlat, venueIndex, thirdAssignment)}
           ${third ? `
             <div class="bracket__round-title bracket__round-title--third">${KNOCKOUT_LABELS.third}</div>
-            ${bracketMatchHTML(third, groups, knockoutFlat, venueIndex)}
+            ${bracketMatchHTML(third, groups, knockoutFlat, venueIndex, thirdAssignment)}
           ` : ''}
         </div>
       `;
     }
     const matchesHTML = col.matches.length >= 2
-      ? pairMatchesHTML(col.matches, col.side, (m) => bracketMatchHTML(m, groups, knockoutFlat, venueIndex))
-      : col.matches.map(m => bracketMatchHTML(m, groups, knockoutFlat, venueIndex)).join('');
+      ? pairMatchesHTML(col.matches, col.side, (m) => bracketMatchHTML(m, groups, knockoutFlat, venueIndex, thirdAssignment))
+      : col.matches.map(m => bracketMatchHTML(m, groups, knockoutFlat, venueIndex, thirdAssignment)).join('');
 
     return `
       <div class="bracket__round bracket__round--${col.side}">
@@ -1400,9 +1413,9 @@ function getAllMatches(matches) {
   return all;
 }
 
-function miniMatchHTML(m, groups, knockoutFlat) {
-  const home = resolveTeamDisplay(m, 'home', groups, knockoutFlat);
-  const away = resolveTeamDisplay(m, 'away', groups, knockoutFlat);
+function miniMatchHTML(m, groups, knockoutFlat, thirdAssignment) {
+  const home = resolveTeamDisplay(m, 'home', groups, knockoutFlat, thirdAssignment);
+  const away = resolveTeamDisplay(m, 'away', groups, knockoutFlat, thirdAssignment);
   const isFinished = m.status === 'finished';
   const isLive = m.status === 'live';
   const score = (isFinished || isLive) ? `${m.homeScore} - ${m.awayScore}` : 'vs';
@@ -1424,6 +1437,7 @@ function renderRecentUpcoming(matches, groups) {
 
   const all = getAllMatches(matches);
   const knockoutFlat = flattenKnockout(matches.knockout);
+  const thirdAssignment = buildThirdAssignment(groups, matches);
 
   const recent = all
     .filter(m => m.status === 'finished')
@@ -1440,7 +1454,7 @@ function renderRecentUpcoming(matches, groups) {
       <div class="format-card__icon">${icon}</div>
       <h3 class="format-card__title">${title}</h3>
       <div class="mini-matches">
-        ${list.length ? list.map(m => miniMatchHTML(m, groups, knockoutFlat)).join('') : '<p class="format-card__desc">Nenhum jogo encontrado.</p>'}
+        ${list.length ? list.map(m => miniMatchHTML(m, groups, knockoutFlat, thirdAssignment)).join('') : '<p class="format-card__desc">Nenhum jogo encontrado.</p>'}
       </div>
     </div>
   `;

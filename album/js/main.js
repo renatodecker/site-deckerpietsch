@@ -6,7 +6,7 @@
 const API_BASE = 'https://genctdyga3.execute-api.sa-east-1.amazonaws.com';
 const POS_LABELS = { GOL: 'Goleiro', ZAG: 'Zagueiro', MEI: 'Meia', ATA: 'Atacante' };
 const POS_ORDER = ['GOL','GOL','ZAG','ZAG','ZAG','ZAG','ZAG','ZAG','MEI','MEI','MEI','MEI','MEI','ATA','ATA','ATA','ATA','ATA'];
-const SPECIAL_ICONS = { silver: '🥈', gold: '🥇', legend: '⭐', parallel: '🔷' };
+const SPECIAL_ICONS = { silver: '🥈', gold: '🥇', 'legend-bronze': '🥉', 'legend-silver': '⭐', 'legend-gold': '🏆', parallel: '🔷' };
 
 let imageMap = {};
 async function loadImageMap() {
@@ -94,8 +94,8 @@ function getStoredPin(code) {
 /* ============================================================
    COMPACT ENCODING (same as before)
    ============================================================ */
-const SPECIAL_TO_CODE = { gold: 'g', silver: 's', legend: 'l', parallel: 'p' };
-const CODE_TO_SPECIAL = { g: 'gold', s: 'silver', l: 'legend', p: 'parallel' };
+const SPECIAL_TO_CODE = { gold: 'g', silver: 's', 'legend-bronze': 'b', 'legend-silver': 'l', 'legend-gold': 'o', parallel: 'p' };
+const CODE_TO_SPECIAL = { g: 'gold', s: 'silver', b: 'legend-bronze', l: 'legend-silver', o: 'legend-gold', p: 'parallel' };
 
 function encodeAlbumData(st) {
   const collected = [], specials = [], dupes = [], pasted = [];
@@ -370,6 +370,19 @@ function removeSticker(num) {
   saveState();
 }
 
+function pasteAllCollected(stickerNums) {
+  if (readOnly) return;
+  let changed = false;
+  for (const num of stickerNums) {
+    if (state[num] && !state[num].p) {
+      state[num].p = true;
+      changed = true;
+    }
+  }
+  if (changed) saveState();
+  return changed;
+}
+
 function clearAllState() {
   if (readOnly) return;
   state = {};
@@ -583,6 +596,7 @@ function renderIntroSection() {
           <div class="sticker-grid">
             ${INTRO_STICKERS.map(s => renderSticker({ ...s, team: 'FWC', teamName: 'FIFA World Cup', color: '#8a6d00' })).join('')}
           </div>
+          <button class="btn-paste-all" data-paste-section="FWC">✓ Colar todas que tenho</button>
         </div>
       </div>
     </div>`;
@@ -602,6 +616,7 @@ function renderTeamCard(team) {
       </button>
       <div class="team-card__body">
         <div class="sticker-grid">${team.stickers.map(s => renderSticker(s)).join('')}</div>
+        <button class="btn-paste-all" data-paste-section="${team.code}">✓ Colar todas que tenho</button>
       </div>
     </div>`;
 }
@@ -705,7 +720,7 @@ function updateStickerEl(el, num) {
 
   el.classList.toggle('collected', collected);
   el.classList.toggle('pasted', pasted);
-  el.classList.remove('special-silver', 'special-gold', 'special-legend', 'special-parallel');
+  el.classList.remove('special-silver', 'special-gold', 'special-legend-bronze', 'special-legend-silver', 'special-legend-gold', 'special-parallel');
   if (special) el.classList.add(`special-${special}`);
   el.dataset.collected = collected ? '1' : '0';
   el.dataset.dupes = dupCount;
@@ -951,6 +966,31 @@ function initActions() {
       if (h) h.setAttribute('aria-expanded', allExpanded);
     });
     expandBtn.textContent = allExpanded ? 'Recolher tudo' : 'Expandir tudo';
+  });
+
+  document.getElementById('albumContainer').addEventListener('click', e => {
+    const btn = e.target.closest('.btn-paste-all');
+    if (!btn) return;
+    if (readOnly) { showToast('Modo somente leitura.'); return; }
+    const section = btn.dataset.pasteSection;
+    let nums;
+    if (section === 'FWC') {
+      nums = INTRO_STICKERS.map(s => s.num);
+    } else {
+      const team = TEAMS.find(t => t.code === section);
+      if (!team) return;
+      nums = team.stickers.map(s => s.num);
+    }
+    if (pasteAllCollected(nums)) {
+      nums.forEach(num => {
+        const el = document.querySelector(`.sticker[data-num="${num}"]`);
+        if (el) updateStickerEl(el, num);
+      });
+      updateStats();
+      showToast('Figurinhas coladas com sucesso!');
+    } else {
+      showToast('Nenhuma figurinha para colar.');
+    }
   });
 
   document.getElementById('clearAll').addEventListener('click', () => {

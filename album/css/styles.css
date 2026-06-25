@@ -538,6 +538,15 @@ body[data-view="loading"] .dupes-section { display: none !important; }
   background: var(--green-500); transition: width .3s ease;
 }
 
+.btn-paste-all {
+  display: block; width: 100%; margin-top: 12px;
+  padding: 8px 16px; border-radius: var(--radius-sm);
+  border: 1px solid var(--green-500); background: var(--white);
+  color: var(--green-500); font-size: .8rem; font-weight: 600;
+  transition: all var(--transition);
+}
+.btn-paste-all:hover { background: var(--green-500); color: var(--white); }
+
 .team-card__body { display: none; padding: 4px 16px 20px; }
 .team-card.open .team-card__body { display: block; }
 
@@ -657,14 +666,36 @@ body[data-view="loading"] .dupes-section { display: none !important; }
   pointer-events: none;
   animation: shimmer 3s infinite;
 }
-.sticker.special-legend {
-  border-color: var(--purple-500);
-  background: linear-gradient(145deg, #f3e8ff, #ede0ff);
+.sticker.special-legend-bronze {
+  border-color: #b87333;
+  background: linear-gradient(145deg, #fdf0e6, #f5dcc4);
 }
-.sticker.special-legend::after {
+.sticker.special-legend-bronze::after {
   content: ''; position: absolute; inset: 0;
   border-radius: 4px;
-  background: linear-gradient(135deg, transparent 30%, rgba(139,92,246,.2) 50%, transparent 70%);
+  background: linear-gradient(135deg, transparent 30%, rgba(184,115,51,.25) 50%, transparent 70%);
+  pointer-events: none;
+  animation: shimmer 3s infinite;
+}
+.sticker.special-legend-silver {
+  border-color: #8898a8;
+  background: linear-gradient(145deg, #f0f2f5, #dde3ea);
+}
+.sticker.special-legend-silver::after {
+  content: ''; position: absolute; inset: 0;
+  border-radius: 4px;
+  background: linear-gradient(135deg, transparent 30%, rgba(136,152,168,.35) 50%, transparent 70%);
+  pointer-events: none;
+  animation: shimmer 3s infinite;
+}
+.sticker.special-legend-gold {
+  border-color: var(--gold-500);
+  background: linear-gradient(145deg, #fff9e0, #ffefb0);
+}
+.sticker.special-legend-gold::after {
+  content: ''; position: absolute; inset: 0;
+  border-radius: 4px;
+  background: linear-gradient(135deg, transparent 30%, rgba(255,215,0,.4) 50%, transparent 70%);
   pointer-events: none;
   animation: shimmer 3s infinite;
 }
@@ -679,7 +710,9 @@ body[data-view="loading"] .dupes-section { display: none !important; }
 }
 .sticker.special-silver::after,
 .sticker.special-gold::after,
-.sticker.special-legend::after {
+.sticker.special-legend-bronze::after,
+.sticker.special-legend-silver::after,
+.sticker.special-legend-gold::after {
   background-size: 200% 100%;
 }
 
@@ -845,7 +878,9 @@ body[data-view="loading"] .dupes-section { display: none !important; }
 .special-btn.active { border-color: var(--navy-700); background: var(--navy-50); color: var(--navy-800); }
 .special-btn--silver.active { border-color: #8898a8; background: #e8ecf0; }
 .special-btn--gold.active { border-color: var(--gold-500); background: var(--gold-50); }
-.special-btn--legend.active { border-color: var(--purple-500); background: #f3e8ff; }
+.special-btn--legend-bronze.active { border-color: #b87333; background: #fdf0e6; }
+.special-btn--legend-silver.active { border-color: #8898a8; background: #f0f2f5; }
+.special-btn--legend-gold.active { border-color: var(--gold-500); background: #fff9e0; }
 .special-btn--parallel.active { border-color: #06b6d4; background: #ecfeff; }
 
 .pasted-toggle {

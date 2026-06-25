@@ -596,7 +596,7 @@ function renderIntroSection() {
           <div class="sticker-grid">
             ${INTRO_STICKERS.map(s => renderSticker({ ...s, team: 'FWC', teamName: 'FIFA World Cup', color: '#8a6d00' })).join('')}
           </div>
-          <button class="btn-paste-all" data-paste-section="FWC">✓ Colar todas que tenho</button>
+          ${readOnly ? '' : '<button class="btn-paste-all" data-paste-section="FWC">✓ Colar todas que tenho</button>'}
         </div>
       </div>
     </div>`;
@@ -616,7 +616,7 @@ function renderTeamCard(team) {
       </button>
       <div class="team-card__body">
         <div class="sticker-grid">${team.stickers.map(s => renderSticker(s)).join('')}</div>
-        <button class="btn-paste-all" data-paste-section="${team.code}">✓ Colar todas que tenho</button>
+        ${readOnly ? '' : `<button class="btn-paste-all" data-paste-section="${team.code}">✓ Colar todas que tenho</button>`}
       </div>
     </div>`;
 }

@@ -644,28 +644,7 @@ body[data-view="loading"] .dupes-section { display: none !important; }
 .sticker.collected .sticker__number { color: var(--gray-600); }
 
 /* Special types */
-.sticker.special-silver {
-  border-color: #8898a8;
-  background: linear-gradient(145deg, #e8ecf0, #d4dbe3);
-}
-.sticker.special-silver::after {
-  content: ''; position: absolute; inset: 0;
-  border-radius: 4px;
-  background: linear-gradient(135deg, transparent 30%, rgba(255,255,255,.6) 50%, transparent 70%);
-  pointer-events: none;
-  animation: shimmer 3s infinite;
-}
-.sticker.special-gold {
-  border-color: var(--gold-500);
-  background: linear-gradient(145deg, var(--gold-50), var(--gold-200));
-}
-.sticker.special-gold::after {
-  content: ''; position: absolute; inset: 0;
-  border-radius: 4px;
-  background: linear-gradient(135deg, transparent 30%, rgba(255,215,0,.4) 50%, transparent 70%);
-  pointer-events: none;
-  animation: shimmer 3s infinite;
-}
+/* Legacy silver/gold mapped to legend variants */
 .sticker.special-legend-bronze {
   border-color: #b87333;
   background: linear-gradient(145deg, #fdf0e6, #f5dcc4);
@@ -708,8 +687,6 @@ body[data-view="loading"] .dupes-section { display: none !important; }
   0% { background-position: -200% 0; }
   100% { background-position: 200% 0; }
 }
-.sticker.special-silver::after,
-.sticker.special-gold::after,
 .sticker.special-legend-bronze::after,
 .sticker.special-legend-silver::after,
 .sticker.special-legend-gold::after {
@@ -876,8 +853,6 @@ body[data-view="loading"] .dupes-section { display: none !important; }
 }
 .special-btn:hover { border-color: var(--gray-500); }
 .special-btn.active { border-color: var(--navy-700); background: var(--navy-50); color: var(--navy-800); }
-.special-btn--silver.active { border-color: #8898a8; background: #e8ecf0; }
-.special-btn--gold.active { border-color: var(--gold-500); background: var(--gold-50); }
 .special-btn--legend-bronze.active { border-color: #b87333; background: #fdf0e6; }
 .special-btn--legend-silver.active { border-color: #8898a8; background: #f0f2f5; }
 .special-btn--legend-gold.active { border-color: var(--gold-500); background: #fff9e0; }

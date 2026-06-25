@@ -6,7 +6,7 @@
 const API_BASE = 'https://genctdyga3.execute-api.sa-east-1.amazonaws.com';
 const POS_LABELS = { GOL: 'Goleiro', ZAG: 'Zagueiro', MEI: 'Meia', ATA: 'Atacante' };
 const POS_ORDER = ['GOL','GOL','ZAG','ZAG','ZAG','ZAG','ZAG','ZAG','MEI','MEI','MEI','MEI','MEI','ATA','ATA','ATA','ATA','ATA'];
-const SPECIAL_ICONS = { silver: '🥈', gold: '🥇', 'legend-bronze': '🥉', 'legend-silver': '⭐', 'legend-gold': '🏆', parallel: '🔷' };
+const SPECIAL_ICONS = { 'legend-bronze': '🥉', 'legend-silver': '⭐', 'legend-gold': '🏆', parallel: '🔷' };
 
 let imageMap = {};
 async function loadImageMap() {
@@ -94,8 +94,8 @@ function getStoredPin(code) {
 /* ============================================================
    COMPACT ENCODING (same as before)
    ============================================================ */
-const SPECIAL_TO_CODE = { gold: 'g', silver: 's', 'legend-bronze': 'b', 'legend-silver': 'l', 'legend-gold': 'o', parallel: 'p' };
-const CODE_TO_SPECIAL = { g: 'gold', s: 'silver', b: 'legend-bronze', l: 'legend-silver', o: 'legend-gold', p: 'parallel' };
+const SPECIAL_TO_CODE = { 'legend-bronze': 'b', 'legend-silver': 'l', 'legend-gold': 'o', parallel: 'p' };
+const CODE_TO_SPECIAL = { b: 'legend-bronze', l: 'legend-silver', o: 'legend-gold', p: 'parallel', g: 'legend-gold', s: 'legend-silver' };
 
 function encodeAlbumData(st) {
   const collected = [], specials = [], dupes = [], pasted = [];
@@ -720,7 +720,7 @@ function updateStickerEl(el, num) {
 
   el.classList.toggle('collected', collected);
   el.classList.toggle('pasted', pasted);
-  el.classList.remove('special-silver', 'special-gold', 'special-legend-bronze', 'special-legend-silver', 'special-legend-gold', 'special-parallel');
+  el.classList.remove('special-legend-bronze', 'special-legend-silver', 'special-legend-gold', 'special-parallel');
   if (special) el.classList.add(`special-${special}`);
   el.dataset.collected = collected ? '1' : '0';
   el.dataset.dupes = dupCount;

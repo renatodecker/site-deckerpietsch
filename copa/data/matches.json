@@ -1561,9 +1561,26 @@
       "home": "Curaçao",
       "away": "Costa do Marfim",
       "venue": "Filadélfia",
-      "status": "scheduled",
-      "time": "16h ET",
-      "espnId": "760473"
+      "status": "live",
+      "espnId": "760473",
+      "homeScore": 0,
+      "awayScore": 1,
+      "scorers": [
+        {
+          "player": "Nicolas Pépé",
+          "team": "Costa do Marfim"
+        }
+      ],
+      "events": [
+        {
+          "type": "goal",
+          "player": "Nicolas Pépé",
+          "team": "Costa do Marfim",
+          "minute": "7'",
+          "period": null,
+          "detail": ""
+        }
+      ]
     },
     {
       "id": 30,
@@ -1572,9 +1589,38 @@
       "home": "Equador",
       "away": "Alemanha",
       "venue": "East Rutherford",
-      "status": "scheduled",
-      "time": "16h ET",
-      "espnId": "760468"
+      "status": "live",
+      "espnId": "760468",
+      "homeScore": 1,
+      "awayScore": 1,
+      "scorers": [
+        {
+          "player": "Leroy Sané",
+          "team": "Alemanha"
+        },
+        {
+          "player": "Nilson Angulo",
+          "team": "Equador"
+        }
+      ],
+      "events": [
+        {
+          "type": "goal",
+          "player": "Leroy Sané",
+          "team": "Alemanha",
+          "minute": "2'",
+          "period": null,
+          "detail": ""
+        },
+        {
+          "type": "goal",
+          "player": "Nilson Angulo",
+          "team": "Equador",
+          "minute": "9'",
+          "period": null,
+          "detail": ""
+        }
+      ]
     },
     {
       "id": 31,

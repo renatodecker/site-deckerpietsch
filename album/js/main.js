@@ -5,7 +5,7 @@
 
 const API_BASE = 'https://genctdyga3.execute-api.sa-east-1.amazonaws.com';
 const POS_LABELS = { GOL: 'Goleiro', ZAG: 'Zagueiro', MEI: 'Meia', ATA: 'Atacante' };
-const POS_ORDER = ['GOL','GOL','ZAG','ZAG','ZAG','ZAG','ZAG','MEI','MEI','MEI','MEI','MEI','ATA','ATA','ATA','ATA'];
+const POS_ORDER = ['GOL','GOL','ZAG','ZAG','ZAG','ZAG','ZAG','ZAG','MEI','MEI','MEI','MEI','MEI','ATA','ATA','ATA','ATA','ATA'];
 const SPECIAL_ICONS = { silver: '🥈', gold: '🥇', legend: '⭐', parallel: '🔷' };
 
 let imageMap = {};
@@ -109,6 +109,48 @@ function encodeAlbumData(st) {
   return `${collected.join(',')}|${specials.join(',')}|${dupes.join(',')}|${pasted.join(',')}`;
 }
 
+const OLD_MIGRATION = (() => {
+  const map = {};
+  for (let i = 1; i <= 20; i++) {
+    map[String(i)] = i === 1 ? '00' : `FWC${i - 1}`;
+  }
+  const oldTeams = [
+    ['MEX',37],['KOR',55],['CZE',73],['RSA',91],
+    ['CAN',109],['BIH',127],['QAT',145],['SUI',163],
+    ['BRA',181],['MAR',199],['HAI',217],['SCO',235],
+    ['USA',253],['PAR',271],['AUS',289],['TUR',307],
+    ['GER',325],['CUW',343],['CIV',361],['ECU',379],
+    ['NED',397],['JPN',415],['SWE',433],['TUN',451],
+    ['BEL',469],['EGY',487],['IRN',505],['NZL',523],
+    ['ESP',541],['CPV',559],['KSA',577],['URU',595],
+    ['FRA',613],['SEN',631],['IRQ',649],['NOR',667],
+    ['ARG',685],['ALG',703],['AUT',721],['JOR',739],
+    ['POR',757],['COD',775],['UZB',793],['COL',811],
+    ['ENG',829],['CRO',847],['GHA',865],['PAN',883],
+  ];
+  oldTeams.forEach(([code, start]) => {
+    for (let i = 0; i < 18; i++) {
+      map[String(start + i)] = `${code}${i + 1}`;
+    }
+  });
+  return map;
+})();
+
+function migrateAlbumData(st) {
+  const migrated = {};
+  let didMigrate = false;
+  for (const key in st) {
+    const newKey = OLD_MIGRATION[key];
+    if (newKey && STICKER_MAP[newKey]) {
+      migrated[newKey] = st[key];
+      didMigrate = true;
+    } else if (STICKER_MAP[key]) {
+      migrated[key] = st[key];
+    }
+  }
+  return didMigrate ? migrated : st;
+}
+
 function decodeAlbumData(raw) {
   if (!raw) return {};
   const parts = raw.split('|');
@@ -182,105 +224,92 @@ async function flushSave(keepalive = false) {
    STICKER DATA
    ============================================================ */
 const INTRO_STICKERS = [
-  { num: 1, label: 'Logo FIFA', type: 'logo' },
-  { num: 2, label: 'Troféu', type: 'logo' },
-  { num: 3, label: 'Mascote 1', type: 'mascot' },
-  { num: 4, label: 'Mascote 2', type: 'mascot' },
-  { num: 5, label: 'Bola Oficial', type: 'logo' },
-  { num: 6, label: 'Pôster Oficial', type: 'logo' },
-  { num: 7, label: 'MetLife Stadium', type: 'stadium' },
-  { num: 8, label: 'MetLife Stadium', type: 'stadium' },
-  { num: 9, label: 'SoFi Stadium', type: 'stadium' },
-  { num: 10, label: 'SoFi Stadium', type: 'stadium' },
-  { num: 11, label: 'AT&T Stadium', type: 'stadium' },
-  { num: 12, label: 'AT&T Stadium', type: 'stadium' },
-  { num: 13, label: 'Hard Rock Stadium', type: 'stadium' },
-  { num: 14, label: 'Hard Rock Stadium', type: 'stadium' },
-  { num: 15, label: 'NRG Stadium', type: 'stadium' },
-  { num: 16, label: 'NRG Stadium', type: 'stadium' },
-  { num: 17, label: 'Lumen Field', type: 'stadium' },
-  { num: 18, label: 'Lumen Field', type: 'stadium' },
-  { num: 19, label: 'Lincoln Financial Field', type: 'stadium' },
-  { num: 20, label: 'Lincoln Financial Field', type: 'stadium' },
-  { num: 21, label: "Levi's Stadium", type: 'stadium' },
-  { num: 22, label: "Levi's Stadium", type: 'stadium' },
-  { num: 23, label: 'Mercedes-Benz Stadium', type: 'stadium' },
-  { num: 24, label: 'Mercedes-Benz Stadium', type: 'stadium' },
-  { num: 25, label: 'Arrowhead Stadium', type: 'stadium' },
-  { num: 26, label: 'Arrowhead Stadium', type: 'stadium' },
-  { num: 27, label: 'Estadio Azteca', type: 'stadium' },
-  { num: 28, label: 'Estadio Azteca', type: 'stadium' },
-  { num: 29, label: 'Estadio BBVA', type: 'stadium' },
-  { num: 30, label: 'Estadio BBVA', type: 'stadium' },
-  { num: 31, label: 'Estadio Akron', type: 'stadium' },
-  { num: 32, label: 'Estadio Akron', type: 'stadium' },
-  { num: 33, label: 'BMO Field', type: 'stadium' },
-  { num: 34, label: 'BMO Field', type: 'stadium' },
-  { num: 35, label: 'BC Place', type: 'stadium' },
-  { num: 36, label: 'BC Place', type: 'stadium' },
+  { num: '00', label: 'Logo Panini', type: 'logo', localNum: 0 },
+  { num: 'FWC1', label: 'Emblema Oficial', type: 'logo', localNum: 1 },
+  { num: 'FWC2', label: 'Emblema Oficial', type: 'logo', localNum: 2 },
+  { num: 'FWC3', label: 'Mascotes Oficiais', type: 'mascot', localNum: 3 },
+  { num: 'FWC4', label: 'Slogan Oficial', type: 'logo', localNum: 4 },
+  { num: 'FWC5', label: 'Bola Oficial', type: 'logo', localNum: 5 },
+  { num: 'FWC6', label: 'Canadá - Países e Cidades-sede', type: 'logo', localNum: 6 },
+  { num: 'FWC7', label: 'México - Países e Cidades-sede', type: 'logo', localNum: 7 },
+  { num: 'FWC8', label: 'EUA - Países e Cidades-sede', type: 'logo', localNum: 8 },
+  { num: 'FWC9', label: 'Itália 1934', type: 'logo', localNum: 9 },
+  { num: 'FWC10', label: 'Uruguai 1950', type: 'logo', localNum: 10 },
+  { num: 'FWC11', label: 'Alemanha Ocidental 1954', type: 'logo', localNum: 11 },
+  { num: 'FWC12', label: 'Brasil 1962', type: 'logo', localNum: 12 },
+  { num: 'FWC13', label: 'Alemanha Ocidental 1974', type: 'logo', localNum: 13 },
+  { num: 'FWC14', label: 'Argentina 1986', type: 'logo', localNum: 14 },
+  { num: 'FWC15', label: 'Brasil 1994', type: 'logo', localNum: 15 },
+  { num: 'FWC16', label: 'Brasil 2002', type: 'logo', localNum: 16 },
+  { num: 'FWC17', label: 'Itália 2006', type: 'logo', localNum: 17 },
+  { num: 'FWC18', label: 'Alemanha 2014', type: 'logo', localNum: 18 },
+  { num: 'FWC19', label: 'Argentina 2022', type: 'logo', localNum: 19 },
 ];
 
 const TEAMS_RAW = [
-  ['MEX','México','🇲🇽','A',37,['G. Ochoa','L. Malagón','J. Sánchez','C. Montes','J. Vásquez','J. Gallardo','K. Álvarez','E. Álvarez','L. Chávez','O. Pineda','C. Rodríguez','D. Lainez','H. Lozano','S. Giménez','R. Jiménez','J. Quiñones'],'#0B5C36'],
-  ['KOR','Coreia do Sul','🇰🇷','A',55,['Kim Seung-gyu','Jo Hyeon-woo','Kim Min-jae','Kim Young-gwon','Cho Yu-min','Lee Ki-je','Kim Jin-su','Son Heung-min','Hwang In-beom','Lee Jae-sung','Lee Kang-in','Jung Woo-young','Hwang Hee-chan','Cho Gue-sung','Oh Hyeon-gyu','Jang Yun-ho'],'#001F4D'],
-  ['CZE','Tchéquia','🇨🇿','A',73,['J. Staněk','T. Vaclík','V. Coufal','R. Hranáč','T. Holeš','D. Zima','L. Krejčí','T. Souček','A. Král','L. Provod','M. Sadílek','A. Hložek','P. Schick','M. Chytil','J. Kuchta','T. Chorý'],'#11457E'],
-  ['RSA','África do Sul','🇿🇦','A',91,['R. Williams','V. Mothwa','M. Mvala','R. Dortley','G. Kekana','A. Modiba','S. Xulu','T. Mokoena','T. Zwane','M. Saleng','L. Le Roux','B. Aubaas','P. Tau','E. Makgopa','I. Rayners','L. Mothiba'],'#007A4D'],
-  ['CAN','Canadá','🇨🇦','B',109,['M. Crépeau','D. St. Clair','A. Davies','A. Johnston','K. Miller','D. Cornelius','S. Adekugbe','S. Eustáquio','I. Koné','J. Osorio','T. Buchanan','M.A. Kaye','J. David','C. Larin','L. Millar','J. Shaffelburg'],'#D52B1E'],
-  ['BIH','Bósnia-Herz.','🇧🇦','B',127,['N. Vasilj','I. Šehić','S. Kolašinac','E. Bičakčić','D. Hadžikadunić','A. Hadžiahmetović','S. Lončar','M. Pjanić','A. Gigović','A. Gojak','H. Hajradinović','B. Tahirović','E. Džeko','E. Demirović','L. Menalo','S. Prevljak'],'#002B7F'],
-  ['QAT','Catar','🇶🇦','B',145,['S. Al-Sheeb','M. Barsham','P. Miguel','B. Al-Rawi','T. Salman','B. Khoukhi','H. Ahmed','H. Al-Haydos','K. Boudiaf','A. Hatem','A. Madibo','A. Afif','A. Ali','M. Muntari','A. Alaaeldin','Y. Abdurisag'],'#8A1538'],
-  ['SUI','Suíça','🇨🇭','B',163,['Y. Sommer','G. Kobel','M. Akanji','F. Schär','N. Elvedi','R. Rodríguez','S. Widmer','G. Xhaka','D. Zakaria','R. Freuler','X. Shaqiri','D. Sow','B. Embolo','N. Okafor','R. Vargas','Z. Amdouni'],'#B22222'],
-  ['BRA','Brasil','🇧🇷','C',181,['Alisson','Ederson','Marquinhos','Militão','Bremer','Danilo','Wendell','Casemiro','Bruno Guimarães','L. Paquetá','Raphinha','Rodrygo','Vinícius Jr.','Endrick','Savinho','Estêvão'],'#0B4A2C'],
-  ['MAR','Marrocos','🇲🇦','C',199,['Y. Bounou','M. Mohamedi','A. Hakimi','N. Mazraoui','N. Aguerd','R. Saïss','A. Masina','S. Amrabat','A. Ounahi','B. El Khannouss','H. Ziyech','A. Sabiri','Y. En-Nesyri','B. Díaz','A. El Kaabi','I. Akhomach'],'#C1272D'],
-  ['HAI','Haiti','🇭🇹','C',217,['J. Duverger','A. Pierre','C. Arcus','R. Adé','C. Théodat','M. Cantave','F. Pierrot','D. Etienne Jr.','M. Guilavogui','R. Rodelin','S. Jérôme','K. Francillon','F. Milord','B. Désiré','D. Jean-Baptiste','C. Hérold'],'#00209F'],
-  ['SCO','Escócia','🏴󠁧󠁢󠁳󠁣󠁴󠁿','C',235,['A. Gunn','Z. Clark','A. Robertson','K. Tierney','S. McKenna','J. Hendry','G. Hanley','S. McTominay','J. McGinn','B. Gilmour','C. McGregor','R. Christie','C. Adams','L. Dykes','L. Shankland','K. Nisbet'],'#0065BF'],
-  ['USA','Estados Unidos','🇺🇸','D',253,['M. Turner','E. Horvath','S. Dest','T. Robinson','C. Richards','T. Ream','A. Robinson','W. McKennie','T. Adams','Y. Musah','G. Reyna','B. Aaronson','C. Pulisic','T. Weah','F. Balogun','R. Pepi'],'#0A3161'],
-  ['PAR','Paraguai','🇵🇾','D',271,['R. Fernández','A. Silva','G. Gómez','F. Balbuena','O. Alderete','J. Alonso','R. Rojas','M. Villasanti','A. Cubas','D. Gómez','H. Velázquez','R. Sánchez','A. Enciso','J. Arce','I. Romero','A. Sanabria'],'#0038A8'],
-  ['AUS','Austrália','🇦🇺','D',289,['M. Ryan','J. Langerak','A. Souttar','K. Rowles','N. Atkinson','A. Behich','J. King','J. Irvine','A. Hrustic','C. Goodwin','R. McGree','K. Baccus','M. Duke','M. Leckie','J. Maclaren','C. Kuol'],'#00843D'],
-  ['TUR','Turquia','🇹🇷','D',307,['A. Bayındır','U. Çakır','M. Demiral','F. Kadıoğlu','S. Özkacar','K. Ayhan','Z. Çelik','H. Çalhanoğlu','A. Güler','Y. Yazıcı','K. Aktürkoğlu','S. Kökçü','B. Yılmaz','E. Ünder','K. Kılıç','Y. Akgün'],'#C8102E'],
-  ['GER','Alemanha','🇩🇪','E',325,['M. ter Stegen','O. Baumann','A. Rüdiger','J. Tah','D. Raum','N. Schlotterbeck','B. Henrichs','J. Kimmich','T. Kroos','İ. Gündoğan','F. Wirtz','J. Musiala','L. Sané','K. Havertz','N. Füllkrug','T. Werner'],'#1A1A1A'],
-  ['CUW','Curaçao','🇨🇼','E',343,['E. Room','Z. Breinburg','J. Bacuna','C. Martina','G. Donk','D. van den Bergh','R. Arendsz','L. Bacuna','K. Pietersz','S. Vijverberg','R. Hooi','G. Nepomuceno','Juninho Bacuna','R. Leerdam','E. Hooi','K. Brandao'],'#002B7F'],
-  ['CIV','Costa do Marfim','🇨🇮','E',361,['Y. Fofana','B. Sangaré','S. Aurier','W. Boly','E. Bailly','O. Diomandé','G. Konan','F. Kessié','I. Sangaré','J. Faivre','S. Haller','N. Pépé','W. Zaha','M. Bamba','K. Boli','C. Kouamé'],'#E25303'],
-  ['ECU','Equador','🇪🇨','E',379,['H. Galíndez','A. Domínguez','P. Hincapié','F. Torres','R. Arboleda','A. Pacho','D. Palacios','M. Caicedo','J. Franco','A. Sarmiento','G. Plata','K. Rodríguez','E. Valencia','M. Estrada','J. Corozo','L. Campana'],'#034EA2'],
-  ['NED','Países Baixos','🇳🇱','F',397,['B. Verbruggen','M. Bijlow','V. van Dijk','N. Aké','D. Dumfries','J. Timber','L. de Ligt','F. de Jong','R. Gravenberch','X. Simons','T. Reijnders','D. Klaassen','C. Gakpo','M. Depay','D. Malen','J. Weghorst'],'#FF6600'],
-  ['JPN','Japão','🇯🇵','F',415,['S. Suzuki','D. Ōsako','T. Tomiyasu','K. Itakura','Y. Nagatomo','H. Sakai','M. Yoshida','W. Endo','H. Dōan','T. Kubo','K. Mitoma','D. Kamada','J. Ito','A. Ueda','K. Furuhashi','D. Maeda'],'#0033A0'],
-  ['SWE','Suécia','🇸🇪','F',433,['R. Olsen','P. Dahlberg','V. Lindelöf','A. Danielson','L. Augustinsson','E. Krafth','C. Starfelt','D. Kulusevski','E. Forsberg','A. Ekdal','J. Svanberg','M. Sema','A. Isak','V. Gyökeres','J. Larsson','A. Elanga'],'#006AA7'],
-  ['TUN','Tunísia','🇹🇳','F',451,['A. Dahmen','B. Hassen','M. Talbi','Y. Meriah','D. Bronn','A. Abdi','W. Kechrida','E. Skhiri','A. Laidouni','H. Mejbri','N. Sliti','Y. Msakni','S. Jaziri','I. Jebali','W. Khazri','A. Khenissi'],'#CE1126'],
-  ['BEL','Bélgica','🇧🇪','G',469,['T. Courtois','K. Casteels','J. Vertonghen','T. Alderweireld','A. Theate','T. Meunier','Z. Debast','K. De Bruyne','Y. Tielemans','A. Onana','O. Denda','L. Trossard','R. Lukaku','J. Doku','L. Openda','C. De Ketelaere'],'#000000'],
-  ['EGY','Egito','🇪🇬','G',487,['M. El-Shenawy','E. El-Hadary','A. Hegazi','M. Abdel-Moneim','O. Kamal','A. Fatouh','Y. Hamdi','M. Elneny','A. Trezeguet','H. Ashour','M. Ibrahim','E. Ashour','M. Salah','M. Hassan','M. Sherif','O. Marmoush'],'#CE1126'],
-  ['IRN','Irã','🇮🇷','G',505,['A. Beiranvand','P. Niazmand','S. Hosseini','M. Pouraliganji','E. Hajsafi','S. Moharrami','R. Rezaeian','A. Jahanbakhsh','S. Azmoun','S. Ezatolahi','A. Noorollahi','M. Torabi','M. Taremi','K. Ansarifard','S. Ghoddos','A. Gholizadeh'],'#CC1B1B'],
-  ['NZL','Nova Zelândia','🇳🇿','G',523,['S. Sail','O. Bray','T. Smith','M. Boxall','N. De Vries','L. Cacace','D. Payne','J. Bell','M. Stamenic','S. Thomas','C. Wood','A. Waine','B. Old','M. Garbett','E. Just','C. Cacace'],'#000000'],
-  ['ESP','Espanha','🇪🇸','H',541,['U. Simón','D. Raya','D. Carvajal','R. Le Normand','A. Laporte','M. Cucurella','J. Nacho','Rodri','Pedri','D. Olmo','F. López','Gavi','L. Yamal','A. Morata','N. Williams','F. Torres'],'#AA151B'],
-  ['CPV','Cabo Verde','🇨🇻','H',559,['V. Osório','M. Rosa','S. Lopes','K. Brito','R. Fortes','L. Nando','C. Gracelino','J. Garry','N. Borges','K. Rodrigues','W. Furtado','P. Mendes','R. Brito','G. Rodrigues','L. Lopes','D. Tavares'],'#003893'],
-  ['KSA','Arábia Saudita','🇸🇦','H',577,['M. Al-Owais','M. Al-Rubaie','Y. Al-Shahrani','A. Al-Amri','S. Al-Dawsari','H. Al-Burayk','A. Al-Bulayhi','S. Al-Dawsari','M. Kanno','A. Al-Malki','A. Al-Abed','F. Al-Muwallad','S. Al-Shehri','F. Al-Buraikan','A. Al-Ghannam','H. Hamdallah'],'#006C35'],
-  ['URU','Uruguai','🇺🇾','H',595,['S. Rochet','F. Muslera','J.M. Giménez','R. Araújo','S. Coates','M. Viña','N. Nández','F. Valverde','R. Bentancur','M. Vecino','N. De la Cruz','G. De Arrascaeta','D. Núñez','L. Suárez','F. Pellistri','M. Araújo'],'#0038A8'],
-  ['FRA','França','🇫🇷','I',613,['M. Maignan','B. Samba','D. Upamecano','W. Saliba','T. Hernández','J. Koundé','I. Konaté','A. Tchouaméni','E. Camavinga','A. Rabiot','A. Griezmann','O. Dembélé','K. Mbappé','M. Thuram','R. Kolo Muani','B. Barcola'],'#0055A4'],
-  ['SEN','Senegal','🇸🇳','I',631,['É. Mendy','S. Dieng','K. Koulibaly','A. Diallo','Y. Sabaly','P. Sarr','F. Diagne','I. Gueye','N. Mendy','P. Gueye','C. Kouyaté','K. Diatta','S. Mané','I. Sarr','B. Dia','N. Jackson'],'#00853F'],
-  ['IRQ','Iraque','🇮🇶','I',649,['J. Noor Sabri','F. Hameed','A. Fadhel','R. Yaser','A. Hadi','I. Bayesh','S. Abbas','I. Bayat','A. Al-Lami','M. Dawood','A. Tahseen','H. Abdulzahra','A. Mhawi','M. Ali','Y. Al-Amiri','A. Attwan'],'#CE1126'],
-  ['NOR','Noruega','🇳🇴','I',667,['Ø. Nyland','M. Dyngeland','K. Ajer','L. Ostigard','B. Meling','S. Strandberg','J. Ryerson','M. Ødegaard','S. Berge','F. Aursnes','A. Moi Elyounoussi','M. Thorsby','E. Haaland','A. Sørloth','J. Strand Larsen','O. Nyland'],'#BA0C2F'],
-  ['ARG','Argentina','🇦🇷','J',685,['E. Martínez','F. Armani','N. Otamendi','C. Romero','L. Martínez Quarta','N. Molina','M. Acuña','R. De Paul','L. Paredes','E. Fernández','A. Mac Allister','G. Lo Celso','L. Messi','L. Martínez','J. Álvarez','Á. Di María'],'#6CACE4'],
-  ['ALG','Argélia','🇩🇿','J',703,['R. M\'Bolhi','A. Mandrea','A. Mandi','D. Benlamri','R. Bensebaini','Y. Atal','H. Belkebla','S. Bennacer','I. Bennacer','R. Mahrez','S. Feghouli','Y. Belaïli','I. Slimani','A. Bounedjah','M. Boulaya','S. Benrahma'],'#006233'],
-  ['AUT','Áustria','🇦🇹','J',721,['P. Pentz','H. Lindner','D. Alaba','K. Danso','P. Lienhart','S. Posch','M. Wöber','K. Laimer','M. Sabitzer','F. Grillitsch','C. Baumgartner','X. Schlager','M. Arnautović','M. Gregoritsch','J. Seiwald','P. Wimmer'],'#ED2939'],
-  ['JOR','Jordânia','🇯🇴','J',739,['Y. Al-Shafi','W. Garaibeh','A. Al-Bakhit','S. Al-Naimat','A. Hammad','F. Al-Tamari','N. Abu Zuraik','M. Abu Zuraik','Y. Al-Rawashdeh','B. Al-Saify','O. Al-Dardour','H. Al-Dmeiri','A. Al-Ersan','M. Al-Taamari','J. Haidar','S. Al-Naimat'],'#CE1126'],
-  ['POR','Portugal','🇵🇹','K',757,['D. Costa','R. Silva','Pepe','R. Dias','N. Mendes','J. Cancelo','D. Dalot','B. Fernandes','B. Silva','V. Vitinha','J. Palhinha','J. Neves','Cristiano Ronaldo','R. Leão','G. Ramos','P. Neto'],'#006600'],
-  ['COD','RD Congo','🇨🇩','K',775,['J. Kiassumbua','L. Mokonzi','C. Luyindama','A. Mbemba','N. Mukoko','A. Masuaku','I. Wissa','G. Kakuta','S. Bakambu','Y. Bolasie','C. Akolo','N. Mbemba','C. Bakambu','D. Mbokani','J. Malango','B. Dibu'],'#0033A0'],
-  ['UZB','Uzbequistão','🇺🇿','K',793,['E. Nematov','B. Abdullaev','R. Khamdamov','A. Tuhtasinov','H. Alikulov','I. Ganiev','D. Nazarov','J. Khasanov','E. Shomurodov','O. Azizbek','A. Fayzullaev','D. Khashimov','I. Jaloliddinov','A. Sergeev','E. Zoteev','S. Rashidov'],'#0099B5'],
-  ['COL','Colômbia','🇨🇴','K',811,['D. Ospina','C. Vargas','Y. Mina','D. Sánchez','J. Mojica','D. Muñoz','S. Arias','J. Cuadrado','J. Arias','J. Rodríguez','J. Lerma','L. Díaz','R. Falcao','D. Borré','L. Sinisterra','J. Durán'],'#003893'],
-  ['ENG','Inglaterra','🏴󠁧󠁢󠁥󠁮󠁧󠁿','L',829,['J. Pickford','A. Ramsdale','J. Stones','H. Maguire','M. Guéhi','K. Walker','T. Alexander-Arnold','J. Bellingham','D. Rice','C. Gallagher','P. Foden','B. Saka','H. Kane','O. Watkins','A. Gordon','C. Palmer'],'#1A1A1A'],
-  ['CRO','Croácia','🇭🇷','L',847,['D. Livaković','I. Grbić','D. Lovren','J. Gvardiol','J. Šutalo','B. Sosa','J. Stanišić','L. Modrić','M. Brozović','M. Kovačić','L. Sučić','M. Pašalić','I. Perišić','A. Kramarić','B. Petković','M. Livaja'],'#C8102E'],
-  ['GHA','Gana','🇬🇭','L',865,['R. Ati-Zigi','L. Ofori','D. Amartey','A. Djiku','T. Lamptey','A. Rahman Baba','G. Mensah','T. Partey','M. Kudus','I. Sulemana','A. Salis','E. Kyereh','I. Williams','A. Ayew','J. Ayew','A. Bukari'],'#006B3F'],
-  ['PAN','Panamá','🇵🇦','L',883,['L. Mejía','O. Mosquera','F. Escobar','H. Cummings','E. Davis','M. Murillo','A. Godoy','A. Carrasquilla','É. Bárcenas','C. Martínez','A. Cooper','J. Rodríguez','G. Torres','J. Fajardo','R. Blackburn','I. Díaz'],'#072357'],
+  ['MEX','México','🇲🇽','A',['Luis Malagon','Johan Vasquez','Jorge Sanchez','Cesar Montes','Jesus Gallardo','Israel Reyes','Diego Lainez','Carlos Rodriguez','Edson Alvarez','Orbelin Pineda','Marcel Ruiz','Erick Sanchez','Hirving Lozano','Santiago Gimenez','Raul Jimenez','Alexis Vega','Roberto Alvarado','Cesar Huerta'],'#0B5C36'],
+  ['RSA','África do Sul','🇿🇦','A',['Ronwen Williams','Sipho Chaine','Aubrey Modiba','Samukele Kabini','Mbekezeli Mbokazi','Khulumani Ndamane','Siyabonga Ngezana','Khuliso Mudau','Nkosinathi Sibisi','Teboho Mokoena','Thalente Mbatha','Bathasi Aubaas','Yaya Sithole','Sipho Mbule','Lyle Foster','Iqraam Rayners','Mohau Nkota','Oswin Appollis'],'#007A4D'],
+  ['KOR','Coreia do Sul','🇰🇷','A',['Hyeon-woo Jo','Seung-Gyu Kim','Min-jae Kim','Yu-min Cho','Young-woo Seol','Han-beom Lee','Tae-seok Lee','Myung-jae Lee','Jae-sung Lee','In-beom Hwang','Kang-in Lee','Seung-ho Paik','Jens Castrop','Dongg-yeong Lee','Gue-sung Cho','Heung-min Son','Hee-chan Hwang','Hyeon-Gyu Oh'],'#001F4D'],
+  ['CZE','Tchéquia','🇨🇿','A',['Matej Kovar','Jindrich Stanek','Ladislav Krejci','Vladimir Coufal','Jaroslav Zeleny','Tomas Holes','David Zima','Michal Sadilek','Lukas Provod','Lukas Cerv','Tomas Soucek','Pavel Sulc','Matej Vydra','Vasil Kusej','Tomas Chory','Vaclav Cerny','Adam Hlozek','Patrik Schick'],'#11457E'],
+  ['CAN','Canadá','🇨🇦','B',['Dayne St. Clair','Alphonso Davies','Alistair Johnston','Samuel Adekugbe','Riche Larvea','Derek Cornelius','Moise Bombito','Kamal Miller','Stephen Eustaquio','Ismael Kone','Jonathan Osorio','Jacob Shaffelburg','Mathieu Choiniere','Niko Sigur','Tajon Buchanan','Liam Millar','Cyle Larin','Jonathan David'],'#D52B1E'],
+  ['BIH','Bósnia-Herz.','🇧🇦','B',['Nikola Vasilj','Amer Dedic','Sead Kolasinac','Tarik Muharemovic','Nihad Mujakic','Nikola Katic','Amir Hadziahmetovic','Benjamin Tahirovic','Armin Gigovic','Ivan Sunjic','Ivan Basic','Dzenis Burnic','Esmir Bajraktarevic','Amar Memic','Ermedin Demirovic','Edin Dzeko','Samed Bazdar','Haris Tabakovic'],'#002B7F'],
+  ['QAT','Catar','🇶🇦','B',['Meshaal Barsham','Sultan Albrake','Lucas Mendes','Homam Ahmed','Boualem Khoukhi','Pedro Miguel','Tarek Salman','Mohamed Al-Mannai','Karim Boudiaf','Assim Madibo','Ahmed Fatehi','Mohammed Waad','Abdulaziz Hatem','Hassan Al-Haydos','Edmilson Junior','Akram Hassan Afif','Ahmed Al Ganehi','Almoez Ali'],'#8A1538'],
+  ['SUI','Suíça','🇨🇭','B',['Gregor Kobel','Yvon Mvogo','Manuel Akanji','Ricardo Rodriguez','Nico Elvedi','Aurele Amenda','Silvan Widmer','Granit Xhaka','Denis Zakaria','Remo Freuler','Fabian Rieder','Ardon Jashari','Johan Manzambi','Michel Aebischer','Breel Embolo','Ruben Vargas','Dan Ndoye','Zeki Amdouni'],'#B22222'],
+  ['BRA','Brasil','🇧🇷','C',['Alisson','Bento','Marquinhos','Eder Militao','Gabriel Magalhaes','Danilo','Wesley','Lucas Paqueta','Casemiro','Bruno Guimaraes','Luiz Henrique','Vinicius Junior','Rodrygo','Joao Pedro','Matheus Cunha','Gabriel Martinelli','Raphinha','Estevao'],'#0B4A2C'],
+  ['MAR','Marrocos','🇲🇦','C',['Yassine Bounou','Munir El Kajoui','Achraf Hakimi','Noussair Mazraoui','Nayef Aguerd','Roman Saiss','Jawad El Yamio','Adam Masina','Sofyan Amrabat','Azzedine Ounahi','Eliesse Ben Seghir','Bilal El Khannouss','Ismael Saibari','Youssef En-Nesyri','Abde Ezzalzouli','Soufiane Rahimi','Brahim Diaz','Ayoub El Kaabi'],'#C1272D'],
+  ['HAI','Haiti','🇭🇹','C',['Johny Placide','Carlens Arcus','Martin Experience','Jean-Kevin Duverne','Ricardo Ade','Duke Lacroix','Garven Metusala','Hannes Delcroix','Leverton Pierre','Danley Jean Jacques','Jean-Ricner Bellegarde','Christopher Attys','Derrick Etienne Jr','Josue Casimir','Ruben Providence','Duckens Nazon','Louicius Deedson','Frantzdy Pierrot'],'#00209F'],
+  ['SCO','Escócia','🏴󠁧󠁢󠁳󠁣󠁴󠁿','C',['Angus Gunn','Jack Hendry','Kieran Tierney','Aaron Hickey','Andrew Robertson','Scott McKenna','John Souttar','Anthony Ralston','Grant Hanley','Scott McTominay','Billy Gilmour','Lewis Ferguson','Ryan Christie','Kenny McLean','John McGinn','Lyndon Dykes','Che Adams','Ben Gannon-Doak'],'#0065BF'],
+  ['USA','Estados Unidos','🇺🇸','D',['Matt Freese','Chris Richards','Tim Ream','Mark McKenzie','Alex Freeman','Antonee Robinson','Tyler Adams','Tanner Tessmann','Weston McKennie','Christian Roldan','Timothy Weah','Diego Luna','Malik Tillman','Christian Pulisic','Brenden Aaronson','Ricardo Pepi','Haji Wright','Folarin Balogun'],'#0A3161'],
+  ['PAR','Paraguai','🇵🇾','D',['Roberto Fernandez','Orlando Gill','Gustavo Gomez','Fabian Balbuena','Juan Jose Caceres','Omar Alderete','Junior Alonso','Mathias Villasanti','Diego Gomez','Damian Bobadilla','Andres Cubas','Matias Galarza Fonda','Julio Enciso','Alejandro Romero Gamarra','Miguel Almiron','Ramon Sosa','Angel Romero','Antonio Sanabria'],'#0038A8'],
+  ['AUS','Austrália','🇦🇺','D',['Mathew Ryan','Joe Gauci','Harry Souttar','Alessandro Circati','Jordan Bos','Aziz Behich','Cameron Burgess','Lewis Miller','Milos Degenek','Jackson Irvine','Riley McGree','Aiden O\'Neill','Connor Metcalfe','Patrick Yazbek','Craig Goodwin','Kusini Vengi','Nestory Irankunda','Mohamed Toure'],'#00843D'],
+  ['TUR','Turquia','🇹🇷','D',['Ugurcan Cakir','Mert Muldur','Zeki Celik','Abdulkerim Bardakci','Caglar Soyuncu','Merih Demiral','Ferdi Kadioglu','Kaan Ayhan','Ismail Yuksek','Hakan Calhanoglu','Orkun Kokcu','Arda Guler','Irfan Can Kahveci','Yunus Akgun','Can Uzun','Baris Alper Yilmaz','Kerem Akturkoglu','Kenan Yildiz'],'#C8102E'],
+  ['GER','Alemanha','🇩🇪','E',['Marc-Andre ter Stegen','Jonathan Tah','David Raum','Nico Schlotterbeck','Antonio Rudiger','Waldemar Anton','Ridle Baku','Maximilian Mittelstadt','Joshua Kimmich','Florian Wirtz','Felix Nmecha','Leon Goretzka','Jamal Musiala','Serge Gnabry','Kai Havertz','Leroy Sane','Karim Adeyemi','Nick Woltemade'],'#1A1A1A'],
+  ['CIV','Costa do Marfim','🇨🇮','E',['Yahia Fofana','Ghislain Konan','Wilfried Singo','Odilon Kossounou','Evan Ndicka','Willy Boly','Emmanuel Agbadou','Ousmane Diomande','Franck Kessie','Seko Fofana','Ibrahim Sangare','Jean-Philippe Gbamin','Amad Diallo','Sebastien Haller','Simon Adingra','Yan Diomande','Evann Guessand','Oumar Diakite'],'#E25303'],
+  ['ECU','Equador','🇪🇨','E',['Hernan Galindez','Gonzalo Valle','Piero Hincapie','Pervis Estupinian','Willian Pacho','Angelo Preciado','Joel Ordonez','Moises Caicedo','Alan Franco','Kendry Paez','Pedro Vite','John Veboah','Leonardo Campana','Gonzalo Plata','Nilson Angulo','Alan Minda','Kevin Rodriguez','Enner Valencia'],'#034EA2'],
+  ['CUW','Curaçao','🇨🇼','E',['Eloy Room','Armando Obispo','Sherel Floranus','Jurien Gaari','Joshua Brenet','Roshon Van Eijma','Shurandy Sambo','Livano Comenencia','Godfried Roemeratoe','Juninho Bacuna','Leandro Bacuna','Tahith Chong','Kenji Gorre','Jearl Margaritha','Jurgen Locadia','Jeremy Antonisse','Gervane Kastaneer','Sontje Hansen'],'#002B7F'],
+  ['NED','Países Baixos','🇳🇱','F',['Bart Verbruggen','Virgil van Dijk','Micky van de Ven','Jurrien Timber','Denzel Dumfries','Nathan Ake','Jeremie Frimpong','Jan Paul van Hecke','Tijjani Reijnders','Ryan Gravenberch','Teun Koopmeiners','Frenkie de Jong','Xavi Simons','Justin Kluivert','Memphis Depay','Donyell Malen','Wout Weghorst','Cody Gakpo'],'#FF6600'],
+  ['JPN','Japão','🇯🇵','F',['Zion Suzuki','Henry Heroki Mochizuki','Ayumu Seko','Junnosuke Suzuki','Shogo Taniguchi','Tsuyoshi Watanabe','Kaishu Sano','Yuki Soma','Ao Tanaka','Daichi Kamada','Takefusa Kubo','Ritsu Doan','Keito Nakamura','Takumi Minamino','Shuto Machino','Junya Ito','Koki Ogawa','Ayase Ueda'],'#0033A0'],
+  ['SWE','Suécia','🇸🇪','F',['Victor Johansson','Isak Hien','Gabriel Gudmundsson','Emil Holm','Victor Nilsson Lindelof','Gustaf Lagerbielke','Lucas Bergvall','Hugo Larsson','Jesper Karlstrom','Yasin Ayari','Mattias Svanberg','Daniel Svensson','Ken Sema','Roony Bardghji','Dejan Kulusevski','Anthony Elanga','Alexander Isak','Viktor Gyokeres'],'#006AA7'],
+  ['TUN','Tunísia','🇹🇳','F',['Bechir Ben Said','Aymen Dahmen','Yan Valery','Montassar Talbi','Yassine Meriah','Ali Abdi','Dylan Bronn','Ellyes Skhiri','Aissa Laidouni','Ferjani Sassi','Mohamed Ali Ben Romdhane','Hannibal Mejbri','Elias Achouri','Elias Saad','Hazem Mastouri','Ismael Gharbi','Sayfallah Ltaief','Naim Sliti'],'#CE1126'],
+  ['BEL','Bélgica','🇧🇪','G',['Thibaut Courtois','Arthur Theate','Timothy Castagne','Zeno Debast','Brandon Mechele','Maxim De Cuyper','Thomas Meunier','Youri Tielemans','Amadou Onana','Nicolas Raskin','Alexis Saelemaekers','Hans Vanaken','Kevin De Bruyne','Jeremy Doku','Charles De Ketelaere','Leandro Trossard','Lois Openda','Romelu Lukaku'],'#000000'],
+  ['EGY','Egito','🇪🇬','G',['Mohamed El Shenawy','Mohamed Hany','Mohamed Hamdy','Yasser Ibrahim','Khaled Sobhi','Ramy Rabia','Hossam Abdelmaguid','Ahmed Fatouh','Marwan Attia','Zizo','Hamdy Fathy','Mohamed Lasheen','Emam Ashour','Osama Faisal','Mohamed Salah','Mostafa Mohamed','Trezeguet','Omar Marmoush'],'#CE1126'],
+  ['IRN','Irã','🇮🇷','G',['Alireza Beiranvand','Morteza Pouraliganji','Ehsan Hajsafi','Milad Mohammadi','Shojae Khalilzadeh','Ramin Rezaeian','Hossein Kanaani','Sadegh Moharrami','Saleh Hardani','Saeed Ezatolahi','Saman Ghoddos','Omid Noorafkan','Roozbeh Cheshmi','Mohammad Mohebi','Sardar Azmoun','Mehdi Taremi','Alireza Jahanbakhsh','Ali Gholizadeh'],'#CC1B1B'],
+  ['NZL','Nova Zelândia','🇳🇿','G',['Max Crocombe Payne','Alex Paulsen','Michael Boxall','Liberato Cacace','Tim Payne','Tyler Bindon','Francis de Vries','Finn Surman','Joe Bell','Sarpreet Singh','Ryan Thomas','Matthew Garbett','Marko Stamenic','Ben Old','Chris Wood','Elijah Just','Callum McCowatt','Kosta Barbarouses'],'#000000'],
+  ['ESP','Espanha','🇪🇸','H',['Unai Simon','Robin Le Normand','Aymeric Laporte','Dean Huijsen','Pedro Porro','Dani Carvajal','Marc Cucurella','Martin Zubimendi','Rodri','Pedri','Fabian Ruiz','Mikel Merino','Lamine Yamal','Dani Olmo','Nico Williams','Ferran Torres','Alvaro Morata','Mikel Oyarzabal'],'#AA151B'],
+  ['URU','Uruguai','🇺🇾','H',['Sergio Rochet','Santiago Mele','Ronald Araujo','Jose Maria Gimenez','Sebastian Caceres','Mathias Olivera','Guillermo Varela','Nahitan Nandez','Federico Valverde','Giorgian De Arrascaeta','Rodrigo Bentancur','Manuel Ugarte','Nicolas de la Cruz','Maxi Araujo','Darwin Nunez','Federico Vinas','Rodrigo Aguirre','Facundo Pellistri'],'#0038A8'],
+  ['CPV','Cabo Verde','🇨🇻','H',['Vozinha','Logan Costa','Pico','Diney','Steven Moreira','Wagner Pina','Joao Paulo','Yannick Semedo','Kevin Pina','Patrick Andrade','Jamiro Monteiro','Deroy Duarte','Garry Rodrigues','Jovane Cabral','Ryan Mendes','Dailon Livramento','Willy Semedo','Bebe'],'#003893'],
+  ['KSA','Arábia Saudita','🇸🇦','H',['Nawaf Alaqidi','Abdulrahman Al-Sanbi','Saud Abdulhamid','Nawaf Bouwashl','Jihad Thakri','Moteb Al-Harbi','Hassan Altambakti','Musab Aljuwayr','Ziyad Aljohani','Abdullah Alkhaibari','Nasser Aldawsari','Saleh Abu Alshamat','Marwan Alsahafi','Salem Aldawsari','Abdulrahman Al-Aboud','Feras Akbrikan','Saleh Alshehri','Abdullah Al-Hamdan'],'#006C35'],
+  ['FRA','França','🇫🇷','I',['Mike Maignan','Theo Hernandez','William Saliba','Jules Kounde','Ibrahima Konate','Dayot Upamecano','Lucas Digne','Aurelien Tchouameni','Eduardo Camavinga','Manu Kone','Adrien Rabiot','Michael Olise','Ousmane Dembele','Bradley Barcola','Desire Doue','Kingsley Coman','Hugo Ekitike','Kylian Mbappe'],'#0055A4'],
+  ['NOR','Noruega','🇳🇴','I',['Orjan Nyland','Julian Ryerson','Leo Ostigard','Kristoffer Vassbakk Ajer','Marcus Holmgren Pedersen','David Moller Wolfe','Torbjorn Heggem','Morten Thorsby','Martin Odegaard','Sander Berge','Andreas Schjelderup','Patrick Berg','Erling Haaland','Alexander Sorloth','Aron Donnum','Jorgen Strand Larsen','Antonio Nusa','Oscar Bobb'],'#BA0C2F'],
+  ['SEN','Senegal','🇸🇳','I',['Edouard Mendy','Yehvann Diouf','Moussa Niakhate','Abdoulaye Seck','Ismail Jakobs','El Hadji Malick Diouf','Kalidou Koulibaly','Idrissa Gana Gueye','Pape Matar Sarr','Pape Gueye','Habib Diarra','Lamine Camara','Sadio Mane','Ismaila Sarr','Boulaye Dia','Iliman Ndiaye','Nicolas Jackson','Krepin Diatta'],'#00853F'],
+  ['IRQ','Iraque','🇮🇶','I',['Jalal Hassan','Rebin Sulaka','Hussein Ali','Akam Hashem','Merchas Doski','Zaid Tahseen','Manaf Younis','Zidane Iqbal','Amir Al-Ammari','Ibrahim Bavesh','Ali Jasim','Youssef Amyn','Aimar Sher','Marko Farji','Osama Rashid','Ali Al-Hamadi','Aymen Hussein','Mohanad Ali'],'#CE1126'],
+  ['ARG','Argentina','🇦🇷','J',['Emiliano Martinez','Nahuel Molina','Cristian Romero','Nicolas Otamendi','Nicolas Tagliafico','Leonardo Balerdi','Enzo Fernandez','Alexis Mac Allister','Rodrigo De Paul','Exequiel Palacios','Leandro Paredes','Nico Paz','Franco Mastantuono','Nico Gonzalez','Lionel Messi','Lautaro Martinez','Julian Alvarez','Giuliano Simeone'],'#6CACE4'],
+  ['AUT','Áustria','🇦🇹','J',['Alexander Schlager','Patrick Pentz','David Alaba','Kevin Danso','Philipp Lienhart','Stefan Posch','Phillipp Mwene','Alexander Prass','Xaver Schlager','Marcel Sabitzer','Konrad Laimer','Florian Grillitsch','Nicolas Seiwald','Romano Schmid','Patrick Wimmer','Christoph Baumgartner','Michael Gregoritsch','Marko Arnautovic'],'#ED2939'],
+  ['ALG','Argélia','🇩🇿','J',['Alexis Guendouz','Ramy Bensebaini','Youcef Atal','Rayan Ait-Nouri','Mohamed Amine Tougai','Aissa Mandi','Ismael Bennacer','Houssem Aquar','Hicham Boudaoui','Ramiz Zerrouki','Nabil Bentalab','Fares Chaibi','Riyad Mahrez','Said Benrahma','Anis Hadj Moussa','Amine Gouiri','Baghdad Bounedjah','Mohammed Amoura'],'#006233'],
+  ['JOR','Jordânia','🇯🇴','J',['Yazeed Abulaila','Ihsan Haddad','Mohammad Abu Hashish','Yazan Al-Arab','Abdallah Nasib','Saleem Obaid','Mohammad Abualnadi','Ibrahim Saadeh','Nizar Al-Rashdan','Noor Al-Rawabdeh','Mohannad Abu Taha','Amer Jamous','Musa Al-Taamari','Yazan Al-Naimat','Mahmoud Al-Mardi','Ali Olwan','Mohammad Abu Zrayq','Ibrahim Sabra'],'#CE1126'],
+  ['COL','Colômbia','🇨🇴','K',['Camilo Vargas','David Ospina','Davinson Sanchez','Yerry Mina','Daniel Munoz','Johan Mojica','Jhon Lucumi','Santiago Arias','Jefferson Lerma','Kevin Castano','Richard Rios','James Rodriguez','Juan Fernando Quintero','Jorge Carrascal','Jon Arias','Jhon Cordova','Luis Suarez','Luis Diaz'],'#003893'],
+  ['POR','Portugal','🇵🇹','K',['Diogo Costa','Jose Sa','Ruben Dias','Joao Cancelo','Diogo Dalot','Nuno Mendes','Goncalo Inacio','Bernardo Silva','Bruno Fernandes','Ruben Neves','Vitinha','Joao Neves','Cristiano Ronaldo','Francisco Trincao','Joao Felix','Goncalo Ramos','Pedro Neto','Rafael Leao'],'#006600'],
+  ['COD','RD Congo','🇨🇩','K',['Lionel Mpasi','Aaron Wan-Bissaka','Axel Tuanzebe','Arthur Masuaku','Chancel Mbemba','Joris Kayembe','Charles Pickel','Ngal\'ayel Mukau','Edo Kayembe','Samuel Moutoussamy','Noah Sadiki','Theo Bongonda','Meschak Elia','Yoane Wissa','Brian Cipenga','Fiston Mayele','Cedric Bakambu','Nathanael Mbuku'],'#0033A0'],
+  ['UZB','Uzbequistão','🇺🇿','K',['Utkir Yusupov','Farrukh Savfiev','Sherzod Nasrullaev','Umar Eshmurodov','Husniddin Aliqulov','Rustamjon Ashurmatov','Khojiakbar Alijonov','Abdukodir Khusanov','Odiljon Hamrobekov','Otabek Shukurov','Jamshid Iskanderov','Azizbek Turgunboev','Khojimat Erkinov','Eldor Shomurodov','Oston Urunov','Jaloliddin Masharipov','Igor Sergeev','Abbosbek Fayzullaev'],'#0099B5'],
+  ['ENG','Inglaterra','🏴󠁧󠁢󠁥󠁮󠁧󠁿','L',['Jordan Pickford','John Stones','Marc Guehi','Ezri Konsa','Trent Alexander-Arnold','Reece James','Dan Burn','Jordan Henderson','Declan Rice','Jude Bellingham','Cole Palmer','Morgan Rogers','Anthony Gordon','Phil Foden','Bukayo Saka','Harry Kane','Marcus Rashford','Ollie Watkins'],'#1A1A1A'],
+  ['GHA','Gana','🇬🇭','L',['Lawrence Ati Zigi','Tariq Lamptey','Mohammed Salisu','Alidu Seidu','Alexander Djiku','Gideon Mensah','Caleb Yirenkyi','Abdul Issahaku Fatawu','Thomas Partey','Salis Abdul Samed','Kamaldeen Sulemana','Mohammed Kudus','Inaki Williams','Jordan Ayew','Andrew Ayew','Joseph Paintsil','Osman Bukari','Antoine Semenyo'],'#006B3F'],
+  ['CRO','Croácia','🇭🇷','L',['Dominik Livakovic','Duje Caleta-Car','Josko Gvardiol','Josip Stanisic','Luka Vuskovic','Josip Sutalo','Kristijan Jakic','Luka Modric','Mateo Kovacic','Martin Baturina','Lovro Majer','Mario Pasalic','Petar Sucic','Ivan Perisic','Marco Pasalic','Ante Budimir','Andrej Kramaric','Franjo Ivanovic'],'#C8102E'],
+  ['PAN','Panamá','🇵🇦','L',['Orlando Mosquera','Luis Mejia','Fidel Escobar','Andres Andrade','Michael Amir Murillo','Eric Davis','Jose Cordoba','Cesar Blackman','Cristian Martinez','Anibal Godoy','Adalberto Carrasquilla','Edgar Barcenas','Carlos Harvey','Ismael Diaz','Jose Fajardo','Cecilio Waterman','Jose Luiz Rodriguez','Alberto Quintero'],'#072357'],
 ];
 
 function buildTeams() {
-  return TEAMS_RAW.map(([code, name, flag, group, start, players, color]) => {
-    const stickers = [
-      { num: start, label: 'Emblema', type: 'badge', team: code, teamName: name, localNum: 1, color },
-      { num: start + 1, label: 'Foto da Equipe', type: 'team', team: code, teamName: name, localNum: 2, color },
-    ];
-    players.forEach((pName, i) => {
+  return TEAMS_RAW.map(([code, name, flag, group, players, color]) => {
+    const stickers = [];
+    stickers.push({ num: `${code}1`, label: 'Escudo', type: 'badge', team: code, teamName: name, localNum: 1, color });
+    for (let i = 0; i < 11; i++) {
       const pos = POS_ORDER[i];
-      stickers.push({ num: start + 2 + i, label: pName, type: pos.toLowerCase(), pos, team: code, teamName: name, localNum: i + 3, color });
-    });
+      stickers.push({ num: `${code}${i + 2}`, label: players[i], type: pos.toLowerCase(), pos, team: code, teamName: name, localNum: i + 2, color });
+    }
+    stickers.push({ num: `${code}13`, label: 'Foto do Time', type: 'team', team: code, teamName: name, localNum: 13, color });
+    for (let i = 11; i < 18; i++) {
+      const pos = POS_ORDER[i];
+      stickers.push({ num: `${code}${i + 3}`, label: players[i], type: pos.toLowerCase(), pos, team: code, teamName: name, localNum: i + 3, color });
+    }
     return { code, name, flag, group, color, stickers };
   });
 }
@@ -288,7 +317,7 @@ function buildTeams() {
 const TEAMS = buildTeams();
 
 function getAllStickers() {
-  const all = INTRO_STICKERS.map(s => ({ ...s, team: 'FWC', teamName: 'FIFA World Cup', localNum: s.num, color: '#8a6d00' }));
+  const all = INTRO_STICKERS.map(s => ({ ...s, team: 'FWC', teamName: 'FIFA World Cup', color: '#8a6d00' }));
   TEAMS.forEach(t => all.push(...t.stickers));
   return all;
 }
@@ -552,7 +581,7 @@ function renderIntroSection() {
       <div class="team-card open">
         <div class="team-card__body" style="display:block">
           <div class="sticker-grid">
-            ${INTRO_STICKERS.map(s => renderSticker({ ...s, team: 'FWC', teamName: 'FIFA World Cup', localNum: s.num, color: '#8a6d00' })).join('')}
+            ${INTRO_STICKERS.map(s => renderSticker({ ...s, team: 'FWC', teamName: 'FIFA World Cup', color: '#8a6d00' })).join('')}
           </div>
         </div>
       </div>
@@ -645,11 +674,11 @@ function updateDupesList() {
   for (const numStr in state) {
     const s = state[numStr];
     if (s?.d && s.d > 0) {
-      const sticker = STICKER_MAP[parseInt(numStr)];
+      const sticker = STICKER_MAP[numStr];
       if (sticker) items.push({ num: sticker.num, label: sticker.label, team: sticker.teamName, localNum: sticker.localNum, teamCode: sticker.team, dupes: s.d });
     }
   }
-  items.sort((a, b) => a.num - b.num);
+  items.sort((a, b) => String(a.num).localeCompare(String(b.num)));
   if (items.length === 0) {
     container.innerHTML = '';
     noDupes.hidden = false;
@@ -709,7 +738,7 @@ function updateStickerEl(el, num) {
 function handleStickerClick(e) {
   const stickerEl = e.target.closest('.sticker');
   if (!stickerEl) return;
-  const num = parseInt(stickerEl.dataset.num);
+  const num = stickerEl.dataset.num;
   if (readOnly) {
     if (isCollected(num)) openModal(num, stickerEl);
     else showToast('Modo somente leitura. Insira o PIN para editar.');
@@ -733,7 +762,7 @@ function handleStickerContext(e) {
     showToast('Modo somente leitura. Insira o PIN para editar.');
     return;
   }
-  const num = parseInt(stickerEl.dataset.num);
+  const num = stickerEl.dataset.num;
   if (!isCollected(num)) {
     toggleCollected(num);
     updateStickerEl(stickerEl, num);
@@ -928,7 +957,7 @@ function initActions() {
     if (readOnly) { showToast('Modo somente leitura.'); return; }
     if (!confirm('Tem certeza que deseja limpar todas as figurinhas deste álbum? Esta ação não pode ser desfeita.')) return;
     clearAllState();
-    document.querySelectorAll('.sticker').forEach(el => updateStickerEl(el, parseInt(el.dataset.num)));
+    document.querySelectorAll('.sticker').forEach(el => updateStickerEl(el, el.dataset.num));
     updateStats();
   });
 }
@@ -946,7 +975,7 @@ async function openAlbum(code, pin) {
     const res = await api.get(code);
     currentCode = code;
     currentName = res.name;
-    state = decodeAlbumData(res.data);
+    state = migrateAlbumData(decodeAlbumData(res.data));
 
     if (pin) {
       currentPin = pin;

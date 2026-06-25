@@ -240,9 +240,11 @@
       "home": "Tchéquia",
       "away": "México",
       "venue": "Cidade do México",
-      "status": "scheduled",
-      "time": "19h",
-      "espnId": "760467"
+      "status": "live",
+      "espnId": "760467",
+      "homeScore": 0,
+      "awayScore": 0,
+      "scorers": []
     },
     {
       "id": 6,
@@ -251,9 +253,11 @@
       "home": "África do Sul",
       "away": "Coreia do Sul",
       "venue": "Monterrey",
-      "status": "scheduled",
-      "time": "19h",
-      "espnId": "760466"
+      "status": "live",
+      "espnId": "760466",
+      "homeScore": 0,
+      "awayScore": 0,
+      "scorers": []
     },
     {
       "id": 7,
@@ -876,10 +880,10 @@
       "home": "Escócia",
       "away": "Brasil",
       "venue": "Miami",
-      "status": "live",
+      "status": "finished",
       "espnId": "760465",
       "homeScore": 0,
-      "awayScore": 2,
+      "awayScore": 3,
       "scorers": [
         {
           "player": "Vinícius Júnior",
@@ -887,6 +891,10 @@
         },
         {
           "player": "Vinícius Júnior",
+          "team": "Brasil"
+        },
+        {
+          "player": "Matheus Cunha",
           "team": "Brasil"
         }
       ],
@@ -906,8 +914,17 @@
           "minute": "45'+3'",
           "period": null,
           "detail": ""
+        },
+        {
+          "type": "goal",
+          "player": "Matheus Cunha",
+          "team": "Brasil",
+          "minute": "60'",
+          "period": null,
+          "detail": ""
         }
-      ]
+      ],
+      "detailsFetched": true
     },
     {
       "id": 18,
@@ -916,9 +933,9 @@
       "home": "Marrocos",
       "away": "Haiti",
       "venue": "Atlanta",
-      "status": "live",
+      "status": "finished",
       "espnId": "760464",
-      "homeScore": 2,
+      "homeScore": 4,
       "awayScore": 2,
       "scorers": [
         {
@@ -931,6 +948,14 @@
         },
         {
           "player": "Ismael Saibari",
+          "team": "Marrocos"
+        },
+        {
+          "player": "Soufiane Rahimi",
+          "team": "Marrocos"
+        },
+        {
+          "player": "Gessime Yassine",
           "team": "Marrocos"
         }
       ],
@@ -966,8 +991,25 @@
           "minute": "45'+1'",
           "period": null,
           "detail": ""
+        },
+        {
+          "type": "goal",
+          "player": "Soufiane Rahimi",
+          "team": "Marrocos",
+          "minute": "78'",
+          "period": null,
+          "detail": ""
+        },
+        {
+          "type": "goal",
+          "player": "Gessime Yassine",
+          "team": "Marrocos",
+          "minute": "89'",
+          "period": null,
+          "detail": ""
         }
-      ]
+      ],
+      "detailsFetched": true
     },
     {
       "id": 19,
@@ -2051,7 +2093,8 @@
       "away": "Irã",
       "venue": "Seattle",
       "status": "scheduled",
-      "time": "23h ET"
+      "time": "23h ET",
+      "espnId": "760476"
     },
     {
       "id": 42,
@@ -2061,7 +2104,8 @@
       "away": "Bélgica",
       "venue": "Vancouver",
       "status": "scheduled",
-      "time": "23h ET"
+      "time": "23h ET",
+      "espnId": "760477"
     },
     {
       "id": 43,
@@ -2278,7 +2322,8 @@
       "away": "Arábia Saudita",
       "venue": "Houston",
       "status": "scheduled",
-      "time": "20h"
+      "time": "20h",
+      "espnId": "760478"
     },
     {
       "id": 48,
@@ -2288,7 +2333,8 @@
       "away": "Espanha",
       "venue": "Guadalajara",
       "status": "scheduled",
-      "time": "20h"
+      "time": "20h",
+      "espnId": "760479"
     },
     {
       "id": 49,
@@ -2566,7 +2612,8 @@
       "away": "França",
       "venue": "Foxborough",
       "status": "scheduled",
-      "time": "15h"
+      "time": "15h",
+      "espnId": "760475"
     },
     {
       "id": 54,
@@ -2576,7 +2623,8 @@
       "away": "Iraque",
       "venue": "Toronto",
       "status": "scheduled",
-      "time": "15h"
+      "time": "15h",
+      "espnId": "760474"
     },
     {
       "id": 55,

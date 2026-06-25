@@ -43,6 +43,12 @@
       "matches": 3
     },
     {
+      "name": "Matheus Cunha",
+      "country": "🇧🇷 Brasil",
+      "goals": 3,
+      "matches": 2
+    },
+    {
       "name": "Deniz Undav",
       "country": "🇩🇪 Alemanha",
       "goals": 3,
@@ -51,12 +57,6 @@
     {
       "name": "Cyle Larin",
       "country": "🇨🇦 Canadá",
-      "goals": 2,
-      "matches": 2
-    },
-    {
-      "name": "Rubén Vargas",
-      "country": "🇨🇭 Suíça",
       "goals": 2,
       "matches": 2
     }

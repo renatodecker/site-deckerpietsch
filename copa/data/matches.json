@@ -1561,11 +1561,15 @@
       "home": "Curaçao",
       "away": "Costa do Marfim",
       "venue": "Filadélfia",
-      "status": "live",
+      "status": "finished",
       "espnId": "760473",
       "homeScore": 0,
-      "awayScore": 1,
+      "awayScore": 2,
       "scorers": [
+        {
+          "player": "Nicolas Pépé",
+          "team": "Costa do Marfim"
+        },
         {
           "player": "Nicolas Pépé",
           "team": "Costa do Marfim"
@@ -1579,8 +1583,17 @@
           "minute": "7'",
           "period": null,
           "detail": ""
+        },
+        {
+          "type": "goal",
+          "player": "Nicolas Pépé",
+          "team": "Costa do Marfim",
+          "minute": "64'",
+          "period": null,
+          "detail": ""
         }
-      ]
+      ],
+      "detailsFetched": true
     },
     {
       "id": 30,
@@ -1589,9 +1602,9 @@
       "home": "Equador",
       "away": "Alemanha",
       "venue": "East Rutherford",
-      "status": "live",
+      "status": "finished",
       "espnId": "760468",
-      "homeScore": 1,
+      "homeScore": 2,
       "awayScore": 1,
       "scorers": [
         {
@@ -1600,6 +1613,10 @@
         },
         {
           "player": "Nilson Angulo",
+          "team": "Equador"
+        },
+        {
+          "player": "Gonzalo Plata",
           "team": "Equador"
         }
       ],
@@ -1619,8 +1636,17 @@
           "minute": "9'",
           "period": null,
           "detail": ""
+        },
+        {
+          "type": "goal",
+          "player": "Gonzalo Plata",
+          "team": "Equador",
+          "minute": "77'",
+          "period": null,
+          "detail": ""
         }
-      ]
+      ],
+      "detailsFetched": true
     },
     {
       "id": 31,

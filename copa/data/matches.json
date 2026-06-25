@@ -240,11 +240,51 @@
       "home": "Tchéquia",
       "away": "México",
       "venue": "Cidade do México",
-      "status": "live",
+      "status": "finished",
       "espnId": "760467",
       "homeScore": 0,
-      "awayScore": 0,
-      "scorers": []
+      "awayScore": 3,
+      "scorers": [
+        {
+          "player": "Mateo Chávez",
+          "team": "México"
+        },
+        {
+          "player": "Julián Quiñones",
+          "team": "México"
+        },
+        {
+          "player": "Álvaro Fidalgo",
+          "team": "México"
+        }
+      ],
+      "events": [
+        {
+          "type": "goal",
+          "player": "Mateo Chávez",
+          "team": "México",
+          "minute": "55'",
+          "period": null,
+          "detail": ""
+        },
+        {
+          "type": "goal",
+          "player": "Julián Quiñones",
+          "team": "México",
+          "minute": "61'",
+          "period": null,
+          "detail": ""
+        },
+        {
+          "type": "goal",
+          "player": "Álvaro Fidalgo",
+          "team": "México",
+          "minute": "90'+4'",
+          "period": null,
+          "detail": ""
+        }
+      ],
+      "detailsFetched": true
     },
     {
       "id": 6,
@@ -253,11 +293,27 @@
       "home": "África do Sul",
       "away": "Coreia do Sul",
       "venue": "Monterrey",
-      "status": "live",
+      "status": "finished",
       "espnId": "760466",
-      "homeScore": 0,
+      "homeScore": 1,
       "awayScore": 0,
-      "scorers": []
+      "scorers": [
+        {
+          "player": "Thapelo Maseko",
+          "team": "África do Sul"
+        }
+      ],
+      "events": [
+        {
+          "type": "goal",
+          "player": "Thapelo Maseko",
+          "team": "África do Sul",
+          "minute": "63'",
+          "period": null,
+          "detail": ""
+        }
+      ],
+      "detailsFetched": true
     },
     {
       "id": 7,

@@ -25,6 +25,12 @@
       "matches": 2
     },
     {
+      "name": "Ousmane Dembélé",
+      "country": "🇫🇷 França",
+      "goals": 4,
+      "matches": 2
+    },
+    {
       "name": "Johan Manzambi",
       "country": "🇨🇭 Suíça",
       "goals": 3,
@@ -51,12 +57,6 @@
     {
       "name": "Deniz Undav",
       "country": "🇩🇪 Alemanha",
-      "goals": 3,
-      "matches": 2
-    },
-    {
-      "name": "Brian Brobbey",
-      "country": "🇳🇱 Países Baixos",
       "goals": 3,
       "matches": 2
     }

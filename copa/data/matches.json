@@ -2888,9 +2888,62 @@
       "home": "Noruega",
       "away": "França",
       "venue": "Foxborough",
-      "status": "scheduled",
-      "time": "15h",
-      "espnId": "760475"
+      "status": "live",
+      "espnId": "760475",
+      "homeScore": 1,
+      "awayScore": 3,
+      "scorers": [
+        {
+          "player": "Ousmane Dembélé",
+          "team": "França"
+        },
+        {
+          "player": "Ousmane Dembélé",
+          "team": "França"
+        },
+        {
+          "player": "Thelo Aasgaard",
+          "team": "Noruega"
+        },
+        {
+          "player": "Ousmane Dembélé",
+          "team": "França"
+        }
+      ],
+      "events": [
+        {
+          "type": "goal",
+          "player": "Ousmane Dembélé",
+          "team": "França",
+          "minute": "7'",
+          "period": null,
+          "detail": ""
+        },
+        {
+          "type": "goal",
+          "player": "Ousmane Dembélé",
+          "team": "França",
+          "minute": "20'",
+          "period": null,
+          "detail": ""
+        },
+        {
+          "type": "goal",
+          "player": "Thelo Aasgaard",
+          "team": "Noruega",
+          "minute": "21'",
+          "period": null,
+          "detail": ""
+        },
+        {
+          "type": "goal",
+          "player": "Ousmane Dembélé",
+          "team": "França",
+          "minute": "32'",
+          "period": null,
+          "detail": ""
+        }
+      ]
     },
     {
       "id": 54,
@@ -2899,9 +2952,86 @@
       "home": "Senegal",
       "away": "Iraque",
       "venue": "Toronto",
-      "status": "scheduled",
-      "time": "15h",
-      "espnId": "760474"
+      "status": "live",
+      "espnId": "760474",
+      "homeScore": 5,
+      "awayScore": 0,
+      "cards": {
+        "home": 0,
+        "away": -4
+      },
+      "scorers": [
+        {
+          "player": "Habib Diarra",
+          "team": "Senegal"
+        },
+        {
+          "player": "Ismaïla Sarr",
+          "team": "Senegal"
+        },
+        {
+          "player": "Pape Gueye",
+          "team": "Senegal"
+        },
+        {
+          "player": "Pape Gueye",
+          "team": "Senegal"
+        },
+        {
+          "player": "Iliman Ndiaye",
+          "team": "Senegal"
+        }
+      ],
+      "events": [
+        {
+          "type": "goal",
+          "player": "Habib Diarra",
+          "team": "Senegal",
+          "minute": "4'",
+          "period": null,
+          "detail": ""
+        },
+        {
+          "type": "red",
+          "player": "Rebin Sulaka",
+          "team": "Iraque",
+          "minute": "13'",
+          "period": null,
+          "detail": ""
+        },
+        {
+          "type": "goal",
+          "player": "Ismaïla Sarr",
+          "team": "Senegal",
+          "minute": "56'",
+          "period": null,
+          "detail": ""
+        },
+        {
+          "type": "goal",
+          "player": "Pape Gueye",
+          "team": "Senegal",
+          "minute": "59'",
+          "period": null,
+          "detail": ""
+        },
+        {
+          "type": "goal",
+          "player": "Pape Gueye",
+          "team": "Senegal",
+          "minute": "71'",
+          "period": null,
+          "detail": ""
+        },
+        {
+          "type": "goal",
+          "player": "Iliman Ndiaye",
+          "team": "Senegal",
+          "minute": "82'",
+          "period": null,
+          "detail": ""
+        }
+      ]
     },
     {
       "id": 55,

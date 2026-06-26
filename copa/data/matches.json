@@ -2888,10 +2888,10 @@
       "home": "Noruega",
       "away": "França",
       "venue": "Foxborough",
-      "status": "live",
+      "status": "finished",
       "espnId": "760475",
       "homeScore": 1,
-      "awayScore": 3,
+      "awayScore": 4,
       "scorers": [
         {
           "player": "Ousmane Dembélé",
@@ -2907,6 +2907,10 @@
         },
         {
           "player": "Ousmane Dembélé",
+          "team": "França"
+        },
+        {
+          "player": "Désiré Doué",
           "team": "França"
         }
       ],
@@ -2942,8 +2946,17 @@
           "minute": "32'",
           "period": null,
           "detail": ""
+        },
+        {
+          "type": "goal",
+          "player": "Désiré Doué",
+          "team": "França",
+          "minute": "90'+4'",
+          "period": null,
+          "detail": ""
         }
-      ]
+      ],
+      "detailsFetched": true
     },
     {
       "id": 54,
@@ -2952,7 +2965,7 @@
       "home": "Senegal",
       "away": "Iraque",
       "venue": "Toronto",
-      "status": "live",
+      "status": "finished",
       "espnId": "760474",
       "homeScore": 5,
       "awayScore": 0,
@@ -3031,7 +3044,8 @@
           "period": null,
           "detail": ""
         }
-      ]
+      ],
+      "detailsFetched": true
     },
     {
       "id": 55,

@@ -1322,9 +1322,75 @@
       "home": "Turquia",
       "away": "Estados Unidos",
       "venue": "Inglewood",
-      "status": "scheduled",
-      "time": "22h ET",
-      "espnId": "760470"
+      "status": "finished",
+      "espnId": "760470",
+      "homeScore": 3,
+      "awayScore": 2,
+      "scorers": [
+        {
+          "player": "Auston Trusty",
+          "team": "Estados Unidos"
+        },
+        {
+          "player": "Arda Güler",
+          "team": "Turquia"
+        },
+        {
+          "player": "Baris Alper Yilmaz",
+          "team": "Turquia"
+        },
+        {
+          "player": "Sebastian Berhalter",
+          "team": "Estados Unidos"
+        },
+        {
+          "player": "Kaan Ayhan",
+          "team": "Turquia"
+        }
+      ],
+      "events": [
+        {
+          "type": "goal",
+          "player": "Auston Trusty",
+          "team": "Estados Unidos",
+          "minute": "3'",
+          "period": null,
+          "detail": ""
+        },
+        {
+          "type": "goal",
+          "player": "Arda Güler",
+          "team": "Turquia",
+          "minute": "10'",
+          "period": null,
+          "detail": ""
+        },
+        {
+          "type": "goal",
+          "player": "Baris Alper Yilmaz",
+          "team": "Turquia",
+          "minute": "31'",
+          "period": null,
+          "detail": ""
+        },
+        {
+          "type": "goal",
+          "player": "Sebastian Berhalter",
+          "team": "Estados Unidos",
+          "minute": "49'",
+          "period": null,
+          "detail": ""
+        },
+        {
+          "type": "goal",
+          "player": "Kaan Ayhan",
+          "team": "Turquia",
+          "minute": "90'+8'",
+          "period": null,
+          "detail": ""
+        }
+      ],
+      "detailsFetched": true
     },
     {
       "id": 24,
@@ -1333,9 +1399,12 @@
       "home": "Paraguai",
       "away": "Austrália",
       "venue": "Santa Clara",
-      "status": "scheduled",
-      "time": "22h ET",
-      "espnId": "760469"
+      "status": "finished",
+      "espnId": "760469",
+      "homeScore": 0,
+      "awayScore": 0,
+      "scorers": [],
+      "detailsFetched": true
     },
     {
       "id": 25,
@@ -1971,11 +2040,39 @@
       "home": "Japão",
       "away": "Suécia",
       "venue": "Arlington",
-      "status": "live",
+      "status": "finished",
       "espnId": "760471",
-      "homeScore": 0,
-      "awayScore": 0,
-      "scorers": []
+      "homeScore": 1,
+      "awayScore": 1,
+      "scorers": [
+        {
+          "player": "Daizen Maeda",
+          "team": "Japão"
+        },
+        {
+          "player": "Anthony Elanga",
+          "team": "Suécia"
+        }
+      ],
+      "events": [
+        {
+          "type": "goal",
+          "player": "Daizen Maeda",
+          "team": "Japão",
+          "minute": "56'",
+          "period": null,
+          "detail": ""
+        },
+        {
+          "type": "goal",
+          "player": "Anthony Elanga",
+          "team": "Suécia",
+          "minute": "62'",
+          "period": null,
+          "detail": ""
+        }
+      ],
+      "detailsFetched": true
     },
     {
       "id": 36,
@@ -1984,10 +2081,10 @@
       "home": "Tunísia",
       "away": "Países Baixos",
       "venue": "Kansas City",
-      "status": "live",
+      "status": "finished",
       "espnId": "760472",
       "homeScore": 1,
-      "awayScore": 2,
+      "awayScore": 3,
       "scorers": [
         {
           "player": "Brian Brobbey",
@@ -1996,6 +2093,10 @@
         {
           "player": "Hazem Mastouri",
           "team": "Tunísia"
+        },
+        {
+          "player": "Jan Paul van Hecke",
+          "team": "Países Baixos"
         }
       ],
       "events": [
@@ -2022,8 +2123,17 @@
           "minute": "54'",
           "period": null,
           "detail": ""
+        },
+        {
+          "type": "goal",
+          "player": "Jan Paul van Hecke",
+          "team": "Países Baixos",
+          "minute": "62'",
+          "period": null,
+          "detail": ""
         }
-      ]
+      ],
+      "detailsFetched": true
     },
     {
       "id": 37,

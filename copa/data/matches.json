@@ -1971,9 +1971,11 @@
       "home": "Japão",
       "away": "Suécia",
       "venue": "Arlington",
-      "status": "scheduled",
-      "time": "19h",
-      "espnId": "760471"
+      "status": "live",
+      "espnId": "760471",
+      "homeScore": 0,
+      "awayScore": 0,
+      "scorers": []
     },
     {
       "id": 36,
@@ -1982,9 +1984,46 @@
       "home": "Tunísia",
       "away": "Países Baixos",
       "venue": "Kansas City",
-      "status": "scheduled",
-      "time": "19h",
-      "espnId": "760472"
+      "status": "live",
+      "espnId": "760472",
+      "homeScore": 1,
+      "awayScore": 2,
+      "scorers": [
+        {
+          "player": "Brian Brobbey",
+          "team": "Países Baixos"
+        },
+        {
+          "player": "Hazem Mastouri",
+          "team": "Tunísia"
+        }
+      ],
+      "events": [
+        {
+          "type": "goal",
+          "player": "Ellyes Skhiri",
+          "team": "Países Baixos",
+          "minute": "3'",
+          "period": null,
+          "detail": "gol contra"
+        },
+        {
+          "type": "goal",
+          "player": "Brian Brobbey",
+          "team": "Países Baixos",
+          "minute": "7'",
+          "period": null,
+          "detail": ""
+        },
+        {
+          "type": "goal",
+          "player": "Hazem Mastouri",
+          "team": "Tunísia",
+          "minute": "54'",
+          "period": null,
+          "detail": ""
+        }
+      ]
     },
     {
       "id": 37,
@@ -2978,7 +3017,8 @@
       "away": "Áustria",
       "venue": "Kansas City",
       "status": "scheduled",
-      "time": "22h ET"
+      "time": "22h ET",
+      "espnId": "760484"
     },
     {
       "id": 60,
@@ -2988,7 +3028,8 @@
       "away": "Argentina",
       "venue": "Dallas",
       "status": "scheduled",
-      "time": "—"
+      "time": "—",
+      "espnId": "760483"
     },
     {
       "id": 61,
@@ -3254,7 +3295,8 @@
       "away": "Portugal",
       "venue": "Miami",
       "status": "scheduled",
-      "time": "19h30 ET"
+      "time": "19h30 ET",
+      "espnId": "760481"
     },
     {
       "id": 66,
@@ -3264,7 +3306,8 @@
       "away": "Uzbequistão",
       "venue": "Atlanta",
       "status": "scheduled",
-      "time": "—"
+      "time": "—",
+      "espnId": "760482"
     },
     {
       "id": 67,
@@ -3459,7 +3502,8 @@
       "away": "Inglaterra",
       "venue": "East Rutherford",
       "status": "scheduled",
-      "time": "17h"
+      "time": "17h",
+      "espnId": "760485"
     },
     {
       "id": 72,
@@ -3469,7 +3513,8 @@
       "away": "Gana",
       "venue": "Filadélfia",
       "status": "scheduled",
-      "time": "17h"
+      "time": "17h",
+      "espnId": "760480"
     }
   ],
   "knockout": {

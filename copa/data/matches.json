@@ -2369,7 +2369,7 @@
       "home": "Egito",
       "away": "Irã",
       "venue": "Seattle",
-      "status": "live",
+      "status": "finished",
       "espnId": "760476",
       "homeScore": 1,
       "awayScore": 1,
@@ -2400,7 +2400,8 @@
           "period": null,
           "detail": ""
         }
-      ]
+      ],
+      "detailsFetched": true
     },
     {
       "id": 42,
@@ -2409,13 +2410,33 @@
       "home": "Nova Zelândia",
       "away": "Bélgica",
       "venue": "Vancouver",
-      "status": "live",
+      "status": "finished",
       "espnId": "760477",
-      "homeScore": 0,
-      "awayScore": 1,
+      "homeScore": 1,
+      "awayScore": 5,
       "scorers": [
         {
           "player": "Leandro Trossard",
+          "team": "Bélgica"
+        },
+        {
+          "player": "Leandro Trossard",
+          "team": "Bélgica"
+        },
+        {
+          "player": "Kevin De Bruyne",
+          "team": "Bélgica"
+        },
+        {
+          "player": "Elijah Just",
+          "team": "Nova Zelândia"
+        },
+        {
+          "player": "Romelu Lukaku",
+          "team": "Bélgica"
+        },
+        {
+          "player": "Alexis Saelemaekers",
           "team": "Bélgica"
         }
       ],
@@ -2427,8 +2448,49 @@
           "minute": "28'",
           "period": null,
           "detail": ""
+        },
+        {
+          "type": "goal",
+          "player": "Leandro Trossard",
+          "team": "Bélgica",
+          "minute": "50'",
+          "period": null,
+          "detail": ""
+        },
+        {
+          "type": "goal",
+          "player": "Kevin De Bruyne",
+          "team": "Bélgica",
+          "minute": "66'",
+          "period": null,
+          "detail": ""
+        },
+        {
+          "type": "goal",
+          "player": "Elijah Just",
+          "team": "Nova Zelândia",
+          "minute": "84'",
+          "period": null,
+          "detail": ""
+        },
+        {
+          "type": "goal",
+          "player": "Romelu Lukaku",
+          "team": "Bélgica",
+          "minute": "86'",
+          "period": null,
+          "detail": ""
+        },
+        {
+          "type": "goal",
+          "player": "Alexis Saelemaekers",
+          "team": "Bélgica",
+          "minute": "90'+4'",
+          "period": null,
+          "detail": ""
         }
-      ]
+      ],
+      "detailsFetched": true
     },
     {
       "id": 43,

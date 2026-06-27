@@ -2369,9 +2369,38 @@
       "home": "Egito",
       "away": "Irã",
       "venue": "Seattle",
-      "status": "scheduled",
-      "time": "23h ET",
-      "espnId": "760476"
+      "status": "live",
+      "espnId": "760476",
+      "homeScore": 1,
+      "awayScore": 1,
+      "scorers": [
+        {
+          "player": "Mahmoud Saber",
+          "team": "Egito"
+        },
+        {
+          "player": "Ramin Rezaeian",
+          "team": "Irã"
+        }
+      ],
+      "events": [
+        {
+          "type": "goal",
+          "player": "Mahmoud Saber",
+          "team": "Egito",
+          "minute": "5'",
+          "period": null,
+          "detail": ""
+        },
+        {
+          "type": "goal",
+          "player": "Ramin Rezaeian",
+          "team": "Irã",
+          "minute": "14'",
+          "period": null,
+          "detail": ""
+        }
+      ]
     },
     {
       "id": 42,
@@ -2380,9 +2409,26 @@
       "home": "Nova Zelândia",
       "away": "Bélgica",
       "venue": "Vancouver",
-      "status": "scheduled",
-      "time": "23h ET",
-      "espnId": "760477"
+      "status": "live",
+      "espnId": "760477",
+      "homeScore": 0,
+      "awayScore": 1,
+      "scorers": [
+        {
+          "player": "Leandro Trossard",
+          "team": "Bélgica"
+        }
+      ],
+      "events": [
+        {
+          "type": "goal",
+          "player": "Leandro Trossard",
+          "team": "Bélgica",
+          "minute": "28'",
+          "period": null,
+          "detail": ""
+        }
+      ]
     },
     {
       "id": 43,
@@ -2598,9 +2644,12 @@
       "home": "Cabo Verde",
       "away": "Arábia Saudita",
       "venue": "Houston",
-      "status": "scheduled",
-      "time": "20h",
-      "espnId": "760478"
+      "status": "finished",
+      "espnId": "760478",
+      "homeScore": 0,
+      "awayScore": 0,
+      "scorers": [],
+      "detailsFetched": true
     },
     {
       "id": 48,
@@ -2609,9 +2658,39 @@
       "home": "Uruguai",
       "away": "Espanha",
       "venue": "Guadalajara",
-      "status": "scheduled",
-      "time": "20h",
-      "espnId": "760479"
+      "status": "finished",
+      "espnId": "760479",
+      "homeScore": 0,
+      "awayScore": 1,
+      "cards": {
+        "home": -4,
+        "away": 0
+      },
+      "scorers": [
+        {
+          "player": "Álex Baena",
+          "team": "Espanha"
+        }
+      ],
+      "events": [
+        {
+          "type": "goal",
+          "player": "Álex Baena",
+          "team": "Espanha",
+          "minute": "42'",
+          "period": null,
+          "detail": ""
+        },
+        {
+          "type": "red",
+          "player": "Agustín Canobbio",
+          "team": "Uruguai",
+          "minute": "90'+5'",
+          "period": null,
+          "detail": ""
+        }
+      ],
+      "detailsFetched": true
     },
     {
       "id": 49,
